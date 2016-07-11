@@ -12,6 +12,9 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'modules' => [],
+
+    'homeUrl' => '/admin',
+
     'components' => [
         'user' => [
             'identityClass' => 'common\models\User',
@@ -29,14 +32,15 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
+
+        'request' => [
+            'baseUrl' => '/admin',
+        ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [
-            ],
         ],
-        */
+       
     ],
     'params' => $params,
 ];
