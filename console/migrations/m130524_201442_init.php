@@ -24,10 +24,31 @@ class m130524_201442_init extends Migration
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
         ], $tableOptions);
+
+        $this->createTable('{{%user_data}}', [
+            'id' => $this->primaryKey(),
+            'firstname' => $this->string()->notNull(),
+            'lastname' => $this->string()->notNull(),
+            'username' => $this->string()->notNull(),
+            'password_hash' => $this->string()->notNull(),
+            'password_reset_token' => $this->string()->unique(),
+            'email' => $this->string()->notNull()->unique(),
+            'phone' => $this->string(256)->notNull(),
+            'social_network_id' => $this->integer()->defaultValue(null),
+            'device_id' => $this->string()->notNull()->unique(),
+        ], $tableOptions);
+
+        $this->createTable('{{%device_matrix}}', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string(256)->notNull(),
+            'serial_number' => $this->string(256)->notNull(),
+            'description' => $this->text(),
+        ], $tableOptions);
     }
 
     public function down()
     {
-        $this->dropTable('{{%user}}');
+        $this->dropTable('{{%user_data}}');
+        $this->dropTable('{{%device_matrix}}');
     }
 }
