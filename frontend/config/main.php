@@ -32,12 +32,21 @@ return [
             'errorAction' => 'site/error',
         ],
 
-        'request' => [
-            'baseUrl' => '',
-        ],
+
         'urlManager' => [
             'enablePrettyUrl' => true,
+//            'enableStrictParsing' => true,
             'showScriptName' => false,
+            'rules' => [
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'user'],
+            ],
+        ],
+
+        'request' => [
+            'baseUrl' => '',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]
         ],
    
     ],

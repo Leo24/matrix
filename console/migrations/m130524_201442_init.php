@@ -9,7 +9,7 @@ class m130524_201442_init extends Migration
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
-            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
         }
 
         $this->createTable('{{%user}}', [
@@ -43,6 +43,11 @@ class m130524_201442_init extends Migration
             'name' => $this->string(256)->notNull(),
             'serial_number' => $this->string(256)->notNull(),
             'description' => $this->text(),
+        ], $tableOptions);
+
+        $this->createTable('{{%vital_params}}', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string(256)->notNull(),
         ], $tableOptions);
     }
 
