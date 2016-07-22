@@ -21,15 +21,7 @@
         "fxp/composer-asset-plugin": "v1.1.3",
         "yiisoft/yii2": "2.0.8",
         "notamedia/yii2-sentry": "1.0.0",
-        "mos-libs/yii2-queue": "1.1",
         "notamedia/yii2-relation": "dev-master",
-        "mos/yii2-rest": "v3.3.0",
-        "mos/infra-lib": "v1.6.1",
-        "mos/yii2-uploader": "2.0.0",
-        "mos-markup/universal-editor": "v2.2.2",
-        "mos/yii2-authorize": "v2.2.0",
-        "mos-libs/yii2-search": "1.1.6",
-        "mos-libs/yii2-trp-crawler": "1.2.2",
         "sebastian/object-enumerator": "~1.0"
     },
     "require-dev": {
