@@ -116,7 +116,10 @@ return [
             'rules' => [
                 [
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => 'api/v1/note/note',
+                    'controller' => [
+                        'api/v1/note/note',
+                        'api/v1/notification/notification'
+                    ],
                     'tokens' => [
                         '{id}' => '<id:\\w+>',
                         '{count}' => '<count:\\w+>',
