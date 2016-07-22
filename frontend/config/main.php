@@ -11,7 +11,6 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
-//    'controllerNamespace' => 'common\modules\api\v1',
 
 
     'homeUrl' => '/',
@@ -27,17 +26,17 @@ return [
                         'authorization' => [
                             'class' => 'common\modules\api\v1\authorization\Module'
                         ],
-                        'alarms' => [
-                            'class' => 'common\modules\api\v1\alarms\Module'
+                        'alarm' => [
+                            'class' => 'common\modules\api\v1\alarm\Module'
                         ],
-                        'awakenings' => [
-                            'class' => 'common\modules\api\v1\awakenings\Module'
+                        'awakening' => [
+                            'class' => 'common\modules\api\v1\awakening\Module'
                         ],
                         'breathing' => [
                             'class' => 'common\modules\api\v1\breathing\Module'
                         ],
-                        'devices' => [
-                            'class' => 'common\modules\api\v1\devices\Module'
+                        'device' => [
+                            'class' => 'common\modules\api\v1\device\Module'
                         ],
                         'heartflex' => [
                             'class' => 'common\modules\api\v1\heartflex\Module'
@@ -45,42 +44,36 @@ return [
                         'heartrate' => [
                             'class' => 'common\modules\api\v1\heartrate\Module'
                         ],
-                        'movements' => [
-                            'class' => 'common\modules\api\v1\movements\Module'
+                        'movement' => [
+                            'class' => 'common\modules\api\v1\movement\Module'
                         ],
-                        'notes' => [
-                            'class' => 'common\modules\api\v1\notes\Module'
+                        'note' => [
+                            'class' => 'common\modules\api\v1\note\Module'
                         ],
-                        'notifications' => [
-                            'class' => 'common\modules\api\v1\notifications\Module'
+                        'notification' => [
+                            'class' => 'common\modules\api\v1\notification\Module'
                         ],
-                        'profiles' => [
-                            'class' => 'common\modules\api\v1\profiles\Module'
+                        'profile' => [
+                            'class' => 'common\modules\api\v1\profile\Module'
                         ],
-                        'settings' => [
-                            'class' => 'common\modules\api\v1\settings\Module'
+                        'setting' => [
+                            'class' => 'common\modules\api\v1\setting\Module'
                         ],
-                        'sleepcycles' => [
-                            'class' => 'common\modules\api\v1\sleepcycles\Module'
+                        'sleepcycle' => [
+                            'class' => 'common\modules\api\v1\sleepcycle\Module'
                         ],
                         'sleepquality' => [
                             'class' => 'common\modules\api\v1\sleepquality\Module'
                         ],
-                        'socialnetworks' => [
-                            'class' => 'common\modules\api\v1\socialnetworks\Module'
+                        'socialnetwork' => [
+                            'class' => 'common\modules\api\v1\socialnetwork\Module'
                         ],
                         'stress' => [
                             'class' => 'common\modules\api\v1\stress\Module'
                         ],
-                        'users' => [
-                            'class' => 'common\modules\api\v1\users\Module'
+                        'user' => [
+                            'class' => 'common\modules\api\v1\user\Module'
                         ],
-
-
-
-
-
-
                     ]
                 ],
             ],
@@ -123,11 +116,19 @@ return [
             'rules' => [
                 [
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => [
-                        'v1/alarms' => '/api/v1/alarms/alarms',
-                        'v1/login' => '/api/v1/authorization/authorization/'
+                    'controller' => 'api/v1/note/note',
+                    'tokens' => [
+                        '{id}' => '<id:\\w+>',
+                        '{count}' => '<count:\\w+>',
                     ],
-                    'prefix' => 'api/',
+                    'extraPatterns' => [
+                        'POST' => 'create', // 'xxxxx' refers to 'actionXxxxx'
+                        'PUT {id}' => 'update',
+                        'PATCH {id}' => 'update',
+                        'DELETE {id}' => 'delete',
+                        'GET {id}' => 'view',
+                        'GET {count}' => 'index',
+                    ],
                 ],
 
             ],
