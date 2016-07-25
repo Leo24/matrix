@@ -2,33 +2,30 @@
 namespace common\modules\api\v1\user\controllers;
 
 use Yii;
-use yii\base\InvalidParamException;
-use yii\web\BadRequestHttpException;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
-use common\models\LoginForm;
-use frontend\models\PasswordResetRequestForm;
-use frontend\models\ResetPasswordForm;
-use frontend\models\SignupForm;
-use frontend\models\ContactForm;
+use yii\rest\ActiveController;
 
 /**
  * Site controller
  */
-class UserController extends Controller
+class UserController extends ActiveController
 {
+
+    /**
+     * @inheritdoc
+     */
+    public $modelClass = 'app\models\User';
+
 
     /**
      * Displays test json.
      *
      * @return mixed
      */
-    public function actionIndex()
-    {
-//        return $this->render('html');
-        return "{\"id\":\"UserController \"}";
-
-    }
+//    public function actionIndex()
+//    {
+////        return $this->render('html');
+//        return "{\"id\":\"UserController \"}";
+//
+//    }
 
 }
