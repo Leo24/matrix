@@ -119,7 +119,20 @@ return [
                     'controller' => [
                         'api/v1/note/note',
                         'api/v1/notification/notification',
-                        'api/v1/user/user'
+                        'api/v1/user/alarm',
+                        'api/v1/user/awakening',
+                        'api/v1/user/breathing',
+                        'api/v1/user/device',
+                        'api/v1/user/heartflex',
+                        'api/v1/user/heartrate',
+                        'api/v1/user/movement',
+                        'api/v1/user/profile',
+                        'api/v1/user/setting',
+                        'api/v1/user/sleepcycle',
+                        'api/v1/user/sleepquality',
+                        'api/v1/user/socialnetwork',
+                        'api/v1/user/stress',
+                        'api/v1/user/user',
                     ],
                     'tokens' => [
                         '{id}' => '<id:\\w+>',
