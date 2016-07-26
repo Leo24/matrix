@@ -26,7 +26,7 @@ class Block extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%block}}';
+        return '{{%blocks}}';
     }
 
     /**
