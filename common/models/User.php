@@ -9,13 +9,16 @@ use Yii;
 
 /**
  * Class User
- * @package common\modules\api\v1\authorization\models
+ * @package common\models
  */
 class User extends ActiveRecord implements IdentityInterface
 {
 
     const UNAUTHORIZED_INCORRECT_CODE = 12;
     const UNAUTHORIZED_EXPIRED_CODE = 13;
+
+    const SCENARIO_LOGIN = 'login';
+    const SCENARIO_REGISTER = 'register';
 
     /**
      * Token expire
@@ -206,7 +209,6 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Finds user by id
-     *
      * @param int|string $id
      * @return null|static
      */
@@ -217,7 +219,6 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Finds user by username
-     *
      * @param string $username
      * @return static|null
      */
@@ -228,7 +229,6 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Returns id user
-     *
      * @return mixed
      */
     public function getId()
@@ -238,7 +238,6 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Returns AuthKey user
-     *
      * @return mixed
      */
     public function getAuthKey()
@@ -248,7 +247,6 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Validates user token
-     *
      * @param string $token
      * @return bool
      */
@@ -259,7 +257,6 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Validates password
-     *
      * @param  string $password password to validate
      * @return boolean if password provided is valid for current user
      */
@@ -270,7 +267,6 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Generates password hash from password and sets it to the model
-     *
      * @param string $password
      */
     public function setPassword($password)
@@ -284,6 +280,44 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function tableName()
     {
-        return '{{%user}}';
+        return '{{%users}}';
+    }
+
+    /**
+     * Attribute labels
+     * @return array
+     */
+    public function attributeLabels()
+    {
+        return [
+            'username' => 'User name',
+            'email' => 'Email',
+            'password' => 'Password',
+            'created_at' => 'Created at',
+            'updated_at' => 'Updated at',
+            'last_login' => 'Last login',
+        ];
+    }
+
+    public function scenarios()
+    {
+        return [
+            self::SCENARIO_LOGIN => ['email', 'password'],
+            self::SCENARIO_REGISTER => ['email', 'username', 'password'],
+        ];
+    }
+
+    public function rules()
+    {
+        return [
+            [['email', 'password', 'username'], 'required', 'on' => 'register'],
+            [['email', 'password'], 'required', 'on' => 'login'],
+
+            [['username', 'password', 'email'], 'string', 'max' => 255],
+
+            [['username', 'email', 'created_at', 'updated_at', 'last_login'], 'safe'],
+            ['email', 'email'],
+            ['email', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('app', 'ERROR_EMAIL_EXISTS')],
+        ];
     }
 }

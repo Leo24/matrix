@@ -1,5 +1,4 @@
 <?php
-
 namespace common\modules\api\v1\authorization\controllers;
 
 use common\models\User;
