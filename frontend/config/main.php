@@ -85,9 +85,20 @@ return [
 
 
     'components' => [
+        'request' => [
+            'class' => '\yii\web\Request',
+            'enableCookieValidation' => false,
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ],
+        ],
+        'response' => [
+            'format' => yii\web\Response::FORMAT_JSON,
+            'charset' => 'UTF-8',
+        ],
         'user' => [
-            'identityClass' => 'common\models\User',
-            'enableAutoLogin' => true,
+            'identityClass' => 'common\modules\api\v1\auth\models\User',
+            'enableSession' => false,
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -98,22 +109,29 @@ return [
                 ],
             ],
         ],
-//        'errorHandler' => [
-//            'errorAction' => 'site/error',
-//        ],
-
-//        'user' => [
-//            'identityClass' => 'common\modules\api\v1\authorization\models\auth',
-//            'enableAutoLogin' => false,
-            // Set to null to not redirect unathorized requests
-            //'loginUrl' => null,
-//        ],
-
         'urlManager' => [
             'enablePrettyUrl' => true,
-//            'enableStrictParsing' => true,
+            'enableStrictParsing' => true,
             'showScriptName' => false,
             'rules' => [
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'prefix' => 'api/v1/',
+                    'controller' => ['user/logout' => 'api/v1/authorization/authorization'],
+                    'patterns' => ['GET' => 'logout']
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'prefix' => 'api/v1/',
+                    'controller' => ['user/login' => 'api/v1/authorization/authorization'],
+                    'patterns' => ['POST' => 'login']
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'prefix' => 'api/v1/',
+                    'controller' => ['user/refresh' => 'api/v1/authorization/authorization'],
+                    'patterns' => ['GET' => 'refresh']
+                ],
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => [
@@ -151,12 +169,6 @@ return [
             ],
         ],
 
-        'request' => [
-            'baseUrl' => '',
-            'parsers' => [
-                'application/json' => 'yii\web\JsonParser',
-            ]
-        ],
 
     ],
     'params' => $params,
