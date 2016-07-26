@@ -47,10 +47,10 @@ class Block extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'user_id' => 'ID пользователя',
-            'token' => 'Маркер',
-            'created_at' => 'Создано',
-            'expired_at' => 'Истекает',
+            'user_id' => 'User ID',
+            'token' => 'AuthKey',
+            'created_at' => 'Created at',
+            'expired_at' => 'Expired at',
         ];
     }
 
