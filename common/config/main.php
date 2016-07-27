@@ -5,12 +5,12 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
-    ],
-    'db' => [
-        'class' => 'yii\db\Connection',
-        'dsn' => 'mysql:host=localhost;dbname=matrix',
-        'username' => 'matrix',
-        'password' => 'matrix123321',
-        'charset' => 'utf8',
+        'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=localhost;dbname=matrix',
+            'username' => 'matrix',
+            'password' => 'matrix123321',
+            'charset' => 'utf8',
+        ],
     ],
 ];
