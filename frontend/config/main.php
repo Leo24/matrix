@@ -74,6 +74,9 @@ return [
                         'user' => [
                             'class' => 'common\modules\api\v1\user\Module'
                         ],
+                        'emfitdata' => [
+                            'class' => 'common\modules\api\v1\emfitdata\Module'
+                        ],
                     ]
                 ],
             ],
@@ -85,13 +88,7 @@ return [
 
 
     'components' => [
-        'request' => [
-            'class' => '\yii\web\Request',
-            'enableCookieValidation' => false,
-            'parsers' => [
-                'application/json' => 'yii\web\JsonParser',
-            ],
-        ],
+
         'response' => [
             'format' => yii\web\Response::FORMAT_JSON,
             'charset' => 'UTF-8',
@@ -134,6 +131,12 @@ return [
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
+                    'prefix' => 'api/v1/',
+                    'controller' => ['emfit/emfitdata' => 'api/v1/emfitdata/emfitdata'],
+                    'patterns' => ['GET' => 'getdata']
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
                     'controller' => [
                         'api/v1/note/note',
                         'api/v1/notification/notification',
@@ -151,6 +154,7 @@ return [
                         'api/v1/user/socialnetwork',
                         'api/v1/user/stress',
                         'api/v1/user/user',
+                        'api/v1/emfitdata/emfitdata',
                     ],
                     'tokens' => [
                         '{id}' => '<id:\\w+>',
@@ -169,6 +173,13 @@ return [
             ],
         ],
 
+        'request' => [
+            'class' => '\yii\web\Request',
+            'enableCookieValidation' => false,
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ],
+        ],
 
     ],
     'params' => $params,
