@@ -20,6 +20,13 @@ return [
                 ],
             ],
         ],
+        'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=localhost;dbname=matrix',
+            'username' => 'matrix',
+            'password' => 'matrix123321',
+            'charset' => 'utf8',
+        ],
     ],
     'params' => $params,
 ];
