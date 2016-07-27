@@ -2,6 +2,7 @@
 namespace common\models;
 
 use Firebase\JWT\JWT;
+use yii\behaviors\TimestampBehavior;
 use yii\web\UnauthorizedHttpException;
 use yii\web\IdentityInterface;
 use yii\db\ActiveRecord;
@@ -20,11 +21,13 @@ class User extends ActiveRecord implements IdentityInterface
     const SCENARIO_LOGIN = 'login';
     const SCENARIO_REGISTER = 'register';
 
+    public $confirm;
+
     /**
      * Token expire
      * @var int
      */
-    protected $tokenExpire = 3600; // 1 hour
+    protected $tokenExpire = 3600 * 24 * 7; // 7 days
 
     /**
      * Getter for secret key that's used for generation of JWT
@@ -290,34 +293,112 @@ class User extends ActiveRecord implements IdentityInterface
     public function attributeLabels()
     {
         return [
-            'username' => 'User name',
             'email' => 'Email',
             'password' => 'Password',
+            'username' => 'User name',
             'created_at' => 'Created at',
             'updated_at' => 'Updated at',
             'last_login' => 'Last login',
         ];
     }
 
+    /**
+     * @return array
+     */
     public function scenarios()
     {
         return [
             self::SCENARIO_LOGIN => ['email', 'password'],
-            self::SCENARIO_REGISTER => ['email', 'username', 'password'],
+            self::SCENARIO_REGISTER => ['email', 'password', 'username', 'confirm'],
         ];
     }
 
+    /**
+     * Validation rules
+     * @return array
+     */
     public function rules()
     {
         return [
-            [['email', 'password', 'username'], 'required', 'on' => 'register'],
-            [['email', 'password'], 'required', 'on' => 'login'],
-
-            [['username', 'password', 'email'], 'string', 'max' => 255],
-
-            [['username', 'email', 'created_at', 'updated_at', 'last_login'], 'safe'],
+            [['email', 'password', 'confirm'], 'required', 'on' => 'register'],
+            ['confirm', 'compare', 'compareAttribute' => 'password', 'on' => 'register'],
+            [['password', 'email'], 'string', 'max' => 255],
             ['email', 'email'],
-            ['email', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('app', 'ERROR_EMAIL_EXISTS')],
+            ['email', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('app', 'Email exists')],
+        ];
+    }
+
+    /**
+     * @param bool $insert
+     * @param array $changedAttributes
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        unset($this->password);
+    }
+
+    /**
+     * @param bool $insert
+     * @return bool
+     */
+    public function beforeSave($insert)
+    {
+        parent::beforeSave($insert);
+
+        if ($this->scenario == 'login') {
+            $this->last_login = date('Y-m-d H:i:s');
+        }
+        return true;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProfile()
+    {
+        return $this->hasOne(Profile::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * @return array
+     */
+    public function extraFields()
+    {
+        return ['profile'];
+    }
+
+    /**
+     * @return array
+     */
+    public function fields()
+    {
+        $fields = parent::fields();
+        $adds = [
+            'profile' => function ($model) {
+                return $model->profile;
+            }
+
+        ];
+        return $adds + $fields;
+    }
+
+    /**
+     * @return array
+     */
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => TimestampBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
+                ],
+                'value' => function() {
+                    return date('Y-m-d H:i:s');
+                },
+            ],
         ];
     }
 }

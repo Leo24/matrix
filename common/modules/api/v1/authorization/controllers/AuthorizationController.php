@@ -34,7 +34,7 @@ class AuthorizationController extends Controller
     protected $authorizationToken = null;
 
     /**
-     * UserController constructor.
+     * AuthorizationController constructor.
      * @param string $id
      * @param \yii\base\Module $module
      * @param array $config
@@ -64,8 +64,11 @@ class AuthorizationController extends Controller
         if (empty($model)) {
             throw new NotFoundHttpException('User not found', self::USER_NOT_FOUND_CODE);
         }
-        if ($model->validatePassword(Yii::$app->getRequest()->getBodyParam('password'))) {
-            $model->last_login = Yii::$app->formatter->asTimestamp(date_create());
+
+        $password = Yii::$app->getRequest()->getBodyParam('password');
+        if (!empty($password) && $model->validatePassword($password)) {
+            $model->scenario = 'login';
+            $model->save();
             return ['token' => $model->getJWT()];
         } else {
             throw new ForbiddenHttpException('Access denied', self::FORBIDDEN_ACCESS_CODE);

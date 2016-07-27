@@ -134,6 +134,12 @@ return [
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
+                    'prefix' => 'api/v1/',
+                    'controller' => ['user/register' => 'api/v1/user/user'],
+                    'patterns' => ['POST' => 'register']
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
                     'controller' => [
                         'api/v1/note/note',
                         'api/v1/notification/notification',
