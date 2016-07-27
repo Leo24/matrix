@@ -4,9 +4,9 @@ use yii\db\mysql\Schema;
 use yii\db\Migration;
 
 /**
- * Handles the creation for table `user`.
+ * Handles the creation for table `users`.
  */
-class m160726_073652_create_user_table extends Migration
+class m160726_073652_create_users_table extends Migration
 {
     /**
      * @inheritdoc
@@ -19,7 +19,7 @@ class m160726_073652_create_user_table extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
         }
 
-        $this->createTable('{{%user}}', [
+        $this->createTable('{{%users}}', [
             'id' => $this->primaryKey(11),
             'username' => $this->string(255)->notNull(),
             'password' => $this->string(255)->notNull(),
@@ -29,8 +29,14 @@ class m160726_073652_create_user_table extends Migration
             'last_login' => Schema::TYPE_TIMESTAMP. ' NULL',
         ], $tableOptions);
 
-        $this->createIndex('idx-user-username', '{{%user}}', 'username');
-        $this->createIndex('idx-user-email', '{{%user}}', 'email');
+        $this->insert('{{%users}}', [
+            'email'=>'test@test.com',
+            'username' =>'Testname',
+            'password' => Yii::$app->security->generatePasswordHash('test'),
+        ]);
+
+        $this->createIndex('idx-users-username', '{{%users}}', 'username');
+        $this->createIndex('idx-users-email', '{{%users}}', 'email');
     }
 
     /**
@@ -38,9 +44,9 @@ class m160726_073652_create_user_table extends Migration
      */
     public function down()
     {
-        $this->dropIndex('idx-user-username', '{{%user}}');
-        $this->dropIndex('idx-user-email', '{{%user}}');
+        $this->dropIndex('idx-users-username', '{{%users}}');
+        $this->dropIndex('idx-users-email', '{{%users}}');
 
-        $this->dropTable('{{%user}}');
+        $this->dropTable('{{%users}}');
     }
 }
