@@ -133,7 +133,7 @@ return [
                     'class' => 'yii\rest\UrlRule',
                     'prefix' => 'api/v1/',
                     'controller' => ['emfit/emfitdata' => 'api/v1/emfitdata/emfitdata'],
-                    'patterns' => ['GET' => 'getdata']
+                    'patterns' => ['POST' => 'getdata']
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
@@ -174,6 +174,7 @@ return [
         ],
 
         'request' => [
+            'baseUrl' => '',
             'class' => '\yii\web\Request',
             'enableCookieValidation' => false,
             'parsers' => [

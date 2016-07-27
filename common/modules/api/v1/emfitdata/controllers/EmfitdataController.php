@@ -17,8 +17,6 @@ class EmfitdataController extends ActiveController
      */    
     public function actionGetdata()
     {
-        $foo = false;
-        return "ReceavedataController";
         $request = Yii::$app->request;
         if ($request->isPost) {
             $data = json_encode($request->bodyParams);
