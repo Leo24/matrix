@@ -112,6 +112,14 @@ return [
                     'controller' => ['emfit/emfitdata' => 'api/v1/emfitdata/emfitdata'],
                     'patterns' => ['POST' => 'getdata']
                 ],
+
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'prefix' => 'api/v1/',
+                    'controller' => ['emfit/emfitdata' => 'api/v1/emfitdata/emfitdata'],
+                    'patterns' => ['GET' => 'parse-data']
+                ],
+                
                 [
                     'class' => 'yii\rest\UrlRule',
                     'pluralize' => false,
