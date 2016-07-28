@@ -3,6 +3,7 @@ namespace common\modules\api\v1\emfitdata\controllers;
 
 use Yii;
 use yii\rest\ActiveController;
+use common\models\Post;
 
 /**
  * Class EmfitdataController
@@ -36,7 +37,6 @@ class EmfitdataController extends ActiveController
      */
     public function actionParseData()
     {
-//        $str = file_get_contents(getcwd() . '/tmp/Emfit_data.txt');
         $str = file_get_contents(getcwd() . '/tmp/2016:07:28-09:06:52.txt');
 
         $json = json_decode($str, true);
@@ -44,7 +44,6 @@ class EmfitdataController extends ActiveController
         $jsonCalcData = json_decode($json['calc_data'], true);
         $jsonHrvData = json_decode($json['hrv_data'], true);
         $jsonHrvRmssdData = json_decode($json['hrv_rmssd_data'], true);
-        $jsonHrvRmssdDataNestedArr = $jsonHrvRmssdData[0][0][4];
         $jsonTossnTurnData = json_decode($json['tossnturn_data'], true);
 
         var_dump($json, 'json');
@@ -52,7 +51,6 @@ class EmfitdataController extends ActiveController
         var_dump($jsonCalcData, 'jsonCalcData');
         var_dump($jsonHrvData, 'jsonHrvData');
         var_dump($jsonHrvRmssdData, 'jsonHrvRmssdData');
-        var_dump($jsonHrvRmssdDataNestedArr, 'jsonHrvRmssdDataNestedArr');
         var_dump($jsonTossnTurnData, 'jsonTossnTurnData');
 
     }
