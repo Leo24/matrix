@@ -141,6 +141,12 @@ return [
                     'controller' => ['emfit/emfitdata' => 'api/v1/emfitdata/emfitdata'],
                     'patterns' => ['POST' => 'getdata']
                 ],
+
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'prefix' => 'api/v1/',
+                    'controller' => ['user/socialnetwork' => 'api/v1/socialnetwork/socialnetwork'],
+                ],
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => [

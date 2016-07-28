@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "107525320a386d3b3b6d1fd677a2ed55",
-    "content-hash": "28f08a3c429cd6b4f7d0366ad2352389",
+    "hash": "012bad1208b013c5fd06dc70715fd61a",
+    "content-hash": "8edea7d9c71c6fdaada4ead5554056fb",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -341,6 +341,56 @@
             "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
             "homepage": "https://github.com/firebase/php-jwt",
             "time": "2016-07-18 04:51:16"
+        },
+        {
+            "name": "kfreiman/yii2-json-attribute-behavior",
+            "version": "v0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kfreiman/yii2-json-attribute-behavior.git",
+                "reference": "f4ef1e03d06ddaaa637475edc15e819c53962cf4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kfreiman/yii2-json-attribute-behavior/zipball/f4ef1e03d06ddaaa637475edc15e819c53962cf4",
+                "reference": "f4ef1e03d06ddaaa637475edc15e819c53962cf4",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "kfreiman\\yii\\behaviors\\model\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kirill Freiman",
+                    "email": "k.freiman@ya.ru"
+                }
+            ],
+            "description": "Yii2 Behavior for encode and decode json stored attributes",
+            "homepage": "https://github.com/kfreiman/yii2-json-attribute-behavior",
+            "keywords": [
+                "Behavior",
+                "array",
+                "attribute",
+                "attributes",
+                "decode",
+                "encode",
+                "json",
+                "serialize",
+                "serialized",
+                "yii",
+                "yii2"
+            ],
+            "time": "2016-02-10 11:01:46"
         },
         {
             "name": "swiftmailer/swiftmailer",
