@@ -10,10 +10,6 @@ use yii\rest\ActiveController;
 class SocialnetworkController extends ActiveController
 {
 
-    public $modelClass = 'app\models\SocialNetworks';
-    /**
-     * Displays test json.
-     *
-     * @return mixed
-     */
+    public $modelClass = 'common\models\SocialNetworks';
+
 }
