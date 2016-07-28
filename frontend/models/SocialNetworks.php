@@ -9,9 +9,10 @@ use Yii;
  *
  * @property integer $id
  * @property integer $user_id
- * @property string $title
- * @property string $link
- * @property string $hash
+ * @property string $social_network_type
+ * @property string $data
+ *
+ * @property User $user
  */
 class SocialNetworks extends \yii\db\ActiveRecord
 {
@@ -29,11 +30,10 @@ class SocialNetworks extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id'], 'required'],
+            [['user_id', 'social_network_type', 'data'], 'required'],
             [['user_id'], 'integer'],
-            [['hash'], 'string'],
-            [['title'], 'string', 'max' => 128],
-            [['link'], 'string', 'max' => 256],
+            [['social_network_type', 'data'], 'string'],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -45,9 +45,16 @@ class SocialNetworks extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
-            'title' => 'Title',
-            'link' => 'Link',
-            'hash' => 'Hash',
+            'social_network_type' => 'Social Network Type',
+            'data' => 'Data',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 }
