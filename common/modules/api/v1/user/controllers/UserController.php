@@ -1,6 +1,7 @@
 <?php
 namespace common\modules\api\v1\user\controllers;
 
+use common\models\SocialNetworks;
 use Yii;
 use yii\rest\ActiveController;
 use common\models\User;
@@ -28,33 +29,53 @@ class UserController extends ActiveController
     public function actionRegister()
     {
         $userModel = new User;
-        $userModel->scenario = 'register';
+        $profileModel = new Profile;
+
+        $userModel->scenario = $profileModel->scenario = 'register';
         $userModel->attributes = Yii::$app->request->post();
+        $profileModel->attributes = Yii::$app->request->post();
 
         $userModel->username = ucfirst(strtolower(Yii::$app->request->post('firstname')))
-                    . ucfirst(strtolower(Yii::$app->request->post('lastname')));
-
-        $profileModel = new Profile;
-        $profileModel->scenario = 'register';
-        $profileModel->attributes = Yii::$app->request->post();
+            . ucfirst(strtolower(Yii::$app->request->post('lastname')));
 
         if ($userModel->validate() && $profileModel->validate()) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 $userModel->setPassword($userModel->password);
-                if($userModel->save(false)) {
+                if ($userModel->save(false)) {
                     $profileModel->user_id = $userModel->id;
                 }
                 $profileModel->save(false);
+
+                $socialNetworksModel = new SocialNetworks;
+                $socialNetworksModel->scenario = 'register';
+                $socialNetworks = Yii::$app->request->post('social_networks');
+
+                $socialNetworksResponseData = [];
+                if ($socialNetworks) {
+                    foreach ($socialNetworks as $socialNetwork) {
+                        $socialNetworksModel->attributes = $socialNetwork;
+                        $socialNetworksModel->user_id = $userModel->id;
+
+                        if ($socialNetworksModel->validate()
+                            && !SocialNetworks::existSocialNetwork($userModel->id, $socialNetwork['social_network_type']))
+                        {
+                            if ($socialNetworksModel->save(false)) {
+                                $socialNetworksResponseData[] = $socialNetworksModel;
+                            }
+                        }
+                    }
+                }
                 $transaction->commit();
 
                 return [
                     'token' => $userModel->getJWT(),
-                    'user' => $userModel
+                    'user' => $userModel,
+                    'profile' => $profileModel,
+                    'social_networks' => $socialNetworksResponseData
                 ];
             } catch (\Exception $e) {
                 $transaction->rollBack();
-
                 throw new HttpException(422, $e->getMessage(), self::INTERNAL_ERROR_CODE);
             }
         } else {

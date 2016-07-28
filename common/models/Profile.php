@@ -1,4 +1,5 @@
 <?php
+
 namespace common\models;
 
 use yii\behaviors\TimestampBehavior;
@@ -71,15 +72,43 @@ class Profile extends ActiveRecord
         ];
     }
 
-    /**
-     *
-     */
-    public function afterFind() {
-        $this->sleeping_position = json_decode($this->sleeping_position);
-        $this->reason_using_matrix = json_decode($this->reason_using_matrix);
+    public function fields()
+    {
+        $fields = parent::fields();
+        $fields['sleeping_position'] = function($model) {
+            return $model->getSleepingPosition();
+        };
+        $fields['reason_using_matrix'] = function($model) {
+            return $model->getReasonUsingMatrix();
+        };
 
-        return parent::afterFind();
+        if($this->scenario == self::SCENARIO_REGISTER) {
+            unset($fields['user_id']);
+        }
+
+        return $fields;
     }
+
+    public function getSleepingPosition()
+    {
+        return json_decode($this->sleeping_position);
+    }
+
+    public function getReasonUsingMatrix()
+    {
+        return json_decode($this->reason_using_matrix);
+    }
+
+//    /**
+//     *
+//     */
+//    public function afterFind()
+//    {
+//        $this->sleeping_position = getSleepingPosition();
+//        $this->reason_using_matrix = json_decode($this->reason_using_matrix);
+//
+//        return parent::afterFind();
+//    }
 
     /**
      * @param bool $insert
@@ -106,10 +135,11 @@ class Profile extends ActiveRecord
                 'attributes' => [
                     ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
                 ],
-                'value' => function() {
+                'value' => function () {
                     return date('Y-m-d H:i:s');
                 },
             ],
         ];
     }
+
 }

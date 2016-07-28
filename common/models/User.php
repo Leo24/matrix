@@ -372,21 +372,6 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @return array
      */
-    public function fields()
-    {
-        $fields = parent::fields();
-        $adds = [
-            'profile' => function ($model) {
-                return $model->profile;
-            }
-
-        ];
-        return $adds + $fields;
-    }
-
-    /**
-     * @return array
-     */
     public function behaviors()
     {
         return [
