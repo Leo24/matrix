@@ -52,7 +52,7 @@ class Profile extends ActiveRecord
         return [
             self::SCENARIO_REGISTER => [
                 'firstname', 'lastname', 'gender', 'state', 'city', 'profession_interest',
-                'sleeping_position', 'average_hours_sleep', 'reason_using_matrix', 'user_id'
+                'sleeping_position', 'average_hours_sleep', 'reason_using_matrix', 'user_id', 'average_hours_sleep'
             ],
         ];
     }
@@ -67,7 +67,7 @@ class Profile extends ActiveRecord
             [['firstname', 'lastname', 'state', 'city', 'profession_interest'], 'required', 'on' => 'register'],
             [['firstname', 'lastname'], 'string', 'max' => 30],
             [['city', 'state'], 'string', 'max' => 20],
-            [['profession_interest'], 'string', 'max' => 255],
+            [['profession_interest', 'average_hours_sleep'], 'string', 'max' => 255],
             ['gender', 'in', 'range' => ['female', 'male']],
             ['user_id', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('app', 'Profile exists')],
         ];

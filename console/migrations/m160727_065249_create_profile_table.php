@@ -28,7 +28,7 @@ class m160727_065249_create_profile_table extends Migration
             'city' => $this->string(20)->notNull(),
             'profession_interest' => $this->string(255)->notNull(),
             'sleeping_position' => $this->text(),
-            'average_hours_sleep' => $this->integer(11),
+            'average_hours_sleep' => $this->string(255),
             'reason_using_matrix' => $this->text(),
             'updated_at' => Schema::TYPE_TIMESTAMP. ' NULL',
             'PRIMARY KEY(user_id)'
