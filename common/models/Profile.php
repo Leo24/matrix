@@ -36,8 +36,8 @@ class Profile extends ActiveRecord
             'firstname' => 'First name',
             'lastname' => 'Last name',
             'gender' => 'Gender',
-            'state_id' => 'State Id',
-            'city_id' => 'City Id',
+            'state' => 'State',
+            'city' => 'City',
             'profession_interest' => 'Profession interest',
             'sleeping_position' => 'Sleeping position',
             'average_hours_sleep' => 'Average hours sleep',
@@ -51,7 +51,7 @@ class Profile extends ActiveRecord
     {
         return [
             self::SCENARIO_REGISTER => [
-                'firstname', 'lastname', 'gender', 'state_id', 'city_id', 'profession_interest',
+                'firstname', 'lastname', 'gender', 'state', 'city', 'profession_interest',
                 'sleeping_position', 'average_hours_sleep', 'reason_using_matrix', 'user_id'
             ],
         ];
@@ -63,9 +63,10 @@ class Profile extends ActiveRecord
     public function rules()
     {
         return [
-            [['firstname', 'lastname', 'profession_interest'], 'trim'],
-            [['firstname', 'lastname', 'state_id', 'city_id', 'profession_interest'], 'required', 'on' => 'register'],
+            [['firstname', 'lastname', 'profession_interest', 'state', 'city'], 'trim'],
+            [['firstname', 'lastname', 'state', 'city', 'profession_interest'], 'required', 'on' => 'register'],
             [['firstname', 'lastname'], 'string', 'max' => 30],
+            [['city', 'state'], 'string', 'max' => 20],
             [['profession_interest'], 'string', 'max' => 255],
             ['gender', 'in', 'range' => ['female', 'male']],
             ['user_id', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('app', 'Profile exists')],
