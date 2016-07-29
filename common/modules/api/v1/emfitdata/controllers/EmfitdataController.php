@@ -64,8 +64,8 @@ class EmfitdataController extends ActiveController
         $jsonCalcData = json_decode($json['calc_data'], true);
 
         $currentStep = $jsonCalcData[0][0];
-        foreach($jsonCalcData as $m){
-            if($m[0] - $currentStep === 6000 ){
+        foreach($jsonCalcData as $k=>$m){
+            if($m[0] - $currentStep === 6000  || $k == 0){
                 $currentStep = $m[0];
                 $CalcDataModel->id = null;
                 $CalcDataModel->user_id = $json['user_id'];
@@ -77,23 +77,13 @@ class EmfitdataController extends ActiveController
                 $CalcDataModel->save();
             }
         }
-
-        foreach($jsonSleepData as $m){
-            if($m[0] - $currentStep === 6000 ){
-                $currentStep = $m[0];
+        foreach($jsonSleepData as $k=>$m){
                 $SleepDataModel->id = null;
-                
-                
-                $CalcDataModel->user_id = $json['user_id'];
-                $CalcDataModel->timestamp = $m[0];
-                $CalcDataModel->heart_rate = $m[1];
-                $CalcDataModel->respiration_rate = $m[2];
-                $CalcDataModel->activity = $m[3];
-                $CalcDataModel->isNewRecord = true;
-                $CalcDataModel->save();
-                $foo = false;
-            }
-
+                $SleepDataModel->user_id = $json['user_id'];
+                $SleepDataModel->timestamp = $m[0];
+                $SleepDataModel->sleep_type = $m[1];
+                $SleepDataModel->isNewRecord = true;
+                $SleepDataModel->save();
 
         }
         

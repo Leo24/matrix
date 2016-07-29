@@ -33,7 +33,7 @@ class SleepData extends \yii\db\ActiveRecord
             [['user_id'], 'required'],
             [['user_id', 'timestamp'], 'integer'],
             [['sleep_type'], 'number'],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -55,6 +55,6 @@ class SleepData extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(Users::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 }
