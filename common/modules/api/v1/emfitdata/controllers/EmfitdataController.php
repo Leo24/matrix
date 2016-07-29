@@ -7,7 +7,7 @@ use common\models\Awakening;
 use common\models\CalcData;
 use common\models\HeartFlex;
 use common\models\HrvData;
-use common\models\HrvRnssdData;
+use common\models\HrvRmssdData;
 use common\models\SleepData;
 use common\models\Movement;
 use common\models\SleepCycle;
@@ -50,7 +50,7 @@ class EmfitdataController extends ActiveController
     $AwakeningsModel = new Awakening;
     $CalcDataModel = new CalcData;
     $HrvDataModel = new HrvData;
-    $HrvRnssdDataModel = new HrvRnssdData;
+    $HrvRmssdDataModel = new HrvRmssdData;
     $SleepDataModel = new SleepData;
     $MovementsModel = new Movement;
     $SleepCyclesModel = new SleepCycle;
@@ -62,43 +62,58 @@ class EmfitdataController extends ActiveController
         $json = json_decode($str, true);
         $jsonSleepData = json_decode($json['sleep_data'], true);
         $jsonCalcData = json_decode($json['calc_data'], true);
+        $jsonHrvData = json_decode($json['hrv_data'], true);
+        $jsonHrvRmssdData = json_decode($json['hrv_rmssd_data'], true);
 
         $currentStep = $jsonCalcData[0][0];
-        foreach($jsonCalcData as $k=>$m){
-            if($m[0] - $currentStep === 6000  || $k == 0){
+        foreach($jsonCalcData as $k => $m){
+            if($m[0] - $currentStep >= 6000  || $k == 0){
                 $currentStep = $m[0];
                 $CalcDataModel->id = null;
                 $CalcDataModel->user_id = $json['user_id'];
-                $CalcDataModel->timestamp = $m[0];
-                $CalcDataModel->heart_rate = $m[1];
-                $CalcDataModel->respiration_rate = $m[2];
-                $CalcDataModel->activity = $m[3];
+                $CalcDataModel->timestamp = $this->checkData($m[0]) ? $m[0] : null;
+                $CalcDataModel->heart_rate = $this->checkData($m[1]) ? $m[1] : null;
+                $CalcDataModel->respiration_rate = $this->checkData($m[2]) ? $m[2] : null;
+                $CalcDataModel->activity = $this->checkData($m[3]) ? $m[3] : null;
                 $CalcDataModel->isNewRecord = true;
                 $CalcDataModel->save();
             }
         }
-        foreach($jsonSleepData as $k=>$m){
+        foreach($jsonSleepData as $k => $m){
                 $SleepDataModel->id = null;
                 $SleepDataModel->user_id = $json['user_id'];
-                $SleepDataModel->timestamp = $m[0];
-                $SleepDataModel->sleep_type = $m[1];
+                $SleepDataModel->timestamp = $this->checkData($m[0]) ? $m[0] : null;
+                $SleepDataModel->sleep_type = $this->checkData($m[1]) ? $m[1] : null;
                 $SleepDataModel->isNewRecord = true;
                 $SleepDataModel->save();
-
         }
-        
-        
 
-        $jsonHrvData = json_decode($json['hrv_data'], true);
-        $jsonHrvRmssdData = json_decode($json['hrv_rmssd_data'], true);
-        $jsonTossnTurnData = json_decode($json['tossnturn_data'], true);
+        foreach($jsonHrvData as $k => $m){
+            $HrvDataModel->id = null;
+            $HrvDataModel->user_id = $json['user_id'];
+            $HrvDataModel->start_rmssd = $this->checkData($m[0]) ? $m[0] : null;
+            $HrvDataModel->end_rmssd = $this->checkData($m[1]) ? $m[1] : null;
+            $HrvDataModel->total_recovery = $this->checkData($m[2]) ? $m[2] : null;
+            $HrvDataModel->recovery_ratio = $this->checkData($m[3]) ? $m[3] : null;
+            $HrvDataModel->recovery_rate = $this->checkData($m[4]) ? $m[4] : null;
+            $HrvDataModel->isNewRecord = true;
+            $HrvDataModel->save();
+        }
 
-//        var_dump($json, 'json');
-//        var_dump($jsonSleepData, 'jsonSleepData');
-//        var_dump($jsonCalcData, 'jsonCalcData');
-//        var_dump($jsonHrvData, 'jsonHrvData');
-//        var_dump($jsonHrvRmssdData, 'jsonHrvRmssdData');
-//        var_dump($jsonTossnTurnData, 'jsonTossnTurnData');
+        $currentStep = $jsonHrvRmssdData [0][0];
+        foreach($jsonHrvRmssdData as $k => $m){
+            if($m[0] - $currentStep >= 6000  || $k == 0) {
+                $currentStep = $m[0];
+                $HrvRmssdDataModel->id = null;
+                $HrvRmssdDataModel->user_id = $json['user_id'];
+                $HrvRmssdDataModel->timestamp = $this->checkData($m[0]) ? $m[0] : null;
+                $HrvRmssdDataModel->rmssd = $this->checkData($m[1]) ? $m[1] : null;
+                $HrvRmssdDataModel->low_frequency = $this->checkData($m[2]) ? $m[2] : null;
+                $HrvRmssdDataModel->high_frequency = $this->checkData($m[3]) ? $m[3] : null;
+                $HrvRmssdDataModel->isNewRecord = true;
+                $HrvRmssdDataModel->save();
+            }
+        }
 
 
 //        $request = Yii::$app->request;
@@ -108,4 +123,12 @@ class EmfitdataController extends ActiveController
 //        }
     }
 
+
+
+    protected function checkData($data){
+        if(!empty($data) && !is_null($data) && isset($data)){
+            return $data;
+        }
+        return false;
+    }
 }
