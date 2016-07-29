@@ -5,14 +5,14 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "hrv_rmssd_data".
+ * This is the model class for table "hrv_rnssd_data".
  *
  * @property integer $id
  * @property integer $user_id
  * @property string $timestamp
- * @property double $heart_rate
- * @property double $respiration_rate
- * @property integer $activity
+ * @property integer $rmssd
+ * @property integer $low_frequency
+ * @property integer $high_frequency
  *
  * @property Users $user
  */
@@ -23,7 +23,7 @@ class HrvRnssdData extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'hrv_rmssd_data';
+        return 'hrv_rnssd_data';
     }
 
     /**
@@ -33,10 +33,9 @@ class HrvRnssdData extends \yii\db\ActiveRecord
     {
         return [
             [['user_id'], 'required'],
-            [['user_id', 'activity'], 'integer'],
+            [['user_id', 'rmssd', 'low_frequency', 'high_frequency'], 'integer'],
             [['timestamp'], 'safe'],
-            [['heart_rate', 'respiration_rate'], 'number'],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -49,9 +48,9 @@ class HrvRnssdData extends \yii\db\ActiveRecord
             'id' => 'ID',
             'user_id' => 'User ID',
             'timestamp' => 'Timestamp',
-            'heart_rate' => 'Heart Rate',
-            'respiration_rate' => 'Respiration Rate',
-            'activity' => 'Activity',
+            'rmssd' => 'Rmssd',
+            'low_frequency' => 'Low Frequency',
+            'high_frequency' => 'High Frequency',
         ];
     }
 
@@ -60,6 +59,6 @@ class HrvRnssdData extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(Users::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 }
