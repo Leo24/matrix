@@ -35,8 +35,7 @@ class HrvData extends \yii\db\ActiveRecord
     {
         return [
             [['user_id'], 'required'],
-            [['user_id'], 'integer'],
-            [['timestamp'], 'safe'],
+            [['user_id', 'timestamp'], 'integer'],
             [['start_rmssd', 'end_rmssd', 'total_recovery', 'recovery_ratio', 'recovery_rate'], 'number'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];

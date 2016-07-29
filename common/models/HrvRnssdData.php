@@ -33,8 +33,7 @@ class HrvRnssdData extends \yii\db\ActiveRecord
     {
         return [
             [['user_id'], 'required'],
-            [['user_id', 'rmssd', 'low_frequency', 'high_frequency'], 'integer'],
-            [['timestamp'], 'safe'],
+            [['user_id', 'rmssd', 'low_frequency', 'high_frequency', 'timestamp'], 'integer'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }

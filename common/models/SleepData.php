@@ -31,8 +31,7 @@ class SleepData extends \yii\db\ActiveRecord
     {
         return [
             [['user_id'], 'required'],
-            [['user_id'], 'integer'],
-            [['timestamp'], 'safe'],
+            [['user_id', 'timestamp'], 'integer'],
             [['sleep_type'], 'number'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];

@@ -19,7 +19,7 @@ class m160729_083033_calc_data_table extends Migration
         $this->createTable('{{%calc_data}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer(11)->notNull(),
-            'timestamp' => $this->timestamp()->notNull(),
+            'timestamp' => $this->bigInteger(),
             'heart_rate' => $this->float(),
             'respiration_rate' => $this->float(),
             'activity' => $this->integer(),

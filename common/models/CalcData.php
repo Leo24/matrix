@@ -34,7 +34,7 @@ class CalcData extends \yii\db\ActiveRecord
         return [
             [['user_id'], 'required'],
             [['user_id', 'activity'], 'integer'],
-            [['timestamp'], 'safe'],
+            [['timestamp'], 'integer'],
             [['heart_rate', 'respiration_rate'], 'number'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];

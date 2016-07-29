@@ -20,7 +20,7 @@ class m160729_085150_hrv_rmssd_data_table extends Migration
 
             'id' => $this->primaryKey(),
             'user_id' => $this->integer(11)->notNull(),
-            'timestamp' => $this->timestamp()->notNull(),
+            'timestamp' => $this->bigInteger(),
             'rmssd' => $this->integer(),
             'low_frequency' => $this->integer(),
             'high_frequency' => $this->integer(),

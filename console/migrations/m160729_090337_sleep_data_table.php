@@ -17,7 +17,7 @@ class m160729_090337_sleep_data_table extends Migration
         $this->createTable('{{%sleep_data}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer(11)->notNull(),
-            'timestamp' => $this->timestamp()->notNull(),
+            'timestamp' => $this->bigInteger(),
             'sleep_type' => $this->float(),
         ], $tableOptions);
         $this->addForeignKey('fk_tbl_sleep_data_tbl_users',

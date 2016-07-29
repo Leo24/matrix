@@ -17,7 +17,7 @@ class m160729_090619_hrv_data_table extends Migration
         $this->createTable('{{%hrv_data}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer(11)->notNull(),
-            'timestamp' => $this->timestamp()->notNull(),
+            'timestamp' => $this->bigInteger(),
             'start_rmssd' => $this->float(),
             'end_rmssd' => $this->float(),
             'total_recovery' => $this->float(),
