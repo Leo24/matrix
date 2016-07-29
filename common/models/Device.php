@@ -3,58 +3,25 @@
 namespace common\models;
 
 use Yii;
-use yii\db\ActiveRecord;
-use yii\behaviors\TimestampBehavior;
 
 /**
- * This is the model class for table "device".
+ * This is the model class for table "devices".
  *
- * @package common\models
+ * @property integer $id
+ * @property integer $user_id
+ * @property string $name
+ * @property string $serial
+ * @property string $description
+ * @property string $software_version
  */
-class Device extends ActiveRecord
+class Device extends \yii\db\ActiveRecord
 {
     /**
-     * Table name
-     *
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%device}}';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function fields()
-    {
-        return [
-            'id',
-            'user_id',
-            'name',
-            'position',
-            'pin',
-            'sn',
-            'pw',
-            'updated_at',
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => null,
-                'updatedAtAttribute' => 'updated_at',
-                'value' => function () {
-                    return time();
-                },
-            ],
-        ];
+        return 'devices';
     }
 
     /**
@@ -63,28 +30,26 @@ class Device extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'name', 'position', 'pin', 'sn', 'pw'], 'safe'],
-            [['name', 'pin', 'sn', 'pw'], 'string', 'max' => 255],
-            [['user_id', 'updated_at'], 'integer'],
-            [['user_id', 'name', 'position', 'pin', 'sn', 'pw'], 'required'],
-            ['position', 'in', 'range' => ['left', 'right', 'middle']],
+            [['user_id'], 'required'],
+            [['user_id'], 'integer'],
+            [['description'], 'string'],
+            [['name', 'serial'], 'string', 'max' => 255],
+            [['software_version'], 'string', 'max' => 128],
         ];
     }
 
     /**
-     * Attributes labels
-     *
      * @inheritdoc
      */
     public function attributeLabels()
     {
         return [
-            'user_id' => Yii::t('app', 'User ID'),
-            'name' => Yii::t('app', 'Device name'),
-            'pin' => Yii::t('app', 'Device PIN'),
-            'sn' => Yii::t('app', 'Device SN'),
-            'pw' => Yii::t('app', 'Device PW'),
-            'updated_at' => Yii::t('app', 'Updated at'),
+            'id' => 'ID',
+            'user_id' => 'User ID',
+            'name' => 'Name',
+            'serial' => 'Serial',
+            'description' => 'Description',
+            'software_version' => 'Software Version',
         ];
     }
 }

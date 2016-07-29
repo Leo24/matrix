@@ -5,24 +5,22 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "sleep_cycles".
+ * This is the model class for table "awakenings".
  *
  * @property integer $id
  * @property integer $user_id
  * @property string $date
  * @property string $timestamp
- * @property string $sleep_epoch_datapoint
- * @property integer $sleep_duration
- * @property integer $time_to_fall_asleep
+ * @property integer $duration
  */
-class SleepCycles extends \yii\db\ActiveRecord
+class Awakening extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'sleep_cycles';
+        return 'awakenings';
     }
 
     /**
@@ -32,9 +30,8 @@ class SleepCycles extends \yii\db\ActiveRecord
     {
         return [
             [['user_id'], 'required'],
-            [['user_id', 'sleep_duration', 'time_to_fall_asleep'], 'integer'],
+            [['user_id', 'duration'], 'integer'],
             [['date', 'timestamp'], 'safe'],
-            [['sleep_epoch_datapoint'], 'string'],
         ];
     }
 
@@ -48,9 +45,7 @@ class SleepCycles extends \yii\db\ActiveRecord
             'user_id' => 'User ID',
             'date' => 'Date',
             'timestamp' => 'Timestamp',
-            'sleep_epoch_datapoint' => 'Sleep Epoch Datapoint',
-            'sleep_duration' => 'Sleep Duration',
-            'time_to_fall_asleep' => 'Time To Fall Asleep',
+            'duration' => 'Duration',
         ];
     }
 }

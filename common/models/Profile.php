@@ -1,11 +1,8 @@
 <?php
-
 namespace common\models;
-
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
-
 /**
  * Class Profile
  * @package common\models
@@ -13,16 +10,13 @@ use yii\behaviors\TimestampBehavior;
 class Profile extends ActiveRecord
 {
     public $sleeping_position;
-
     const SCENARIO_REGISTER = 'register';
-
     /**
      * Primary key name
      *
      * @inheritdoc
      */
     public $primaryKey = 'user_id';
-
     /**
      * Table name
      *
@@ -32,7 +26,6 @@ class Profile extends ActiveRecord
     {
         return '{{%profile}}';
     }
-
     /**
      * Attribute labels
      *
@@ -50,7 +43,6 @@ class Profile extends ActiveRecord
             'profession_interest' => Yii::t('app', 'Profession interest'),
         ];
     }
-
     /**
      * @inheritdoc
      */
@@ -70,7 +62,6 @@ class Profile extends ActiveRecord
         ];
         return $scenarion;
     }
-
     /**
      * @inheritdoc
      */
@@ -87,7 +78,6 @@ class Profile extends ActiveRecord
             ],
         ];
     }
-
     /**
      * @inheritdoc
      */
@@ -107,7 +97,6 @@ class Profile extends ActiveRecord
             ['user_id', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('app', 'Profile exists')],
         ];
     }
-
     /**
      * @inheritdoc
      */
@@ -115,7 +104,6 @@ class Profile extends ActiveRecord
     {
         return ['user'];
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */

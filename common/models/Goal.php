@@ -5,22 +5,24 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "social_networks".
+ * This is the model class for table "goals".
  *
  * @property integer $id
  * @property integer $user_id
- * @property string $title
+ * @property string $created_at
+ * @property string $updated_at
+ * @property string $type
+ * @property string $status
  * @property string $link
- * @property string $hash
  */
-class SocialNetworks extends \yii\db\ActiveRecord
+class Goal extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'social_networks';
+        return 'goals';
     }
 
     /**
@@ -29,10 +31,10 @@ class SocialNetworks extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id'], 'required'],
-            [['user_id'], 'integer'],
-            [['hash'], 'string'],
-            [['title'], 'string', 'max' => 128],
+            [['id'], 'required'],
+            [['id', 'user_id'], 'integer'],
+            [['created_at', 'updated_at'], 'safe'],
+            [['type', 'status'], 'string'],
             [['link'], 'string', 'max' => 256],
         ];
     }
@@ -45,9 +47,11 @@ class SocialNetworks extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
-            'title' => 'Title',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'type' => 'Type',
+            'status' => 'Status',
             'link' => 'Link',
-            'hash' => 'Hash',
         ];
     }
 }

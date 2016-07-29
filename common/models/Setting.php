@@ -21,7 +21,7 @@ use Yii;
  * @property integer $social_media_buttons_on_off
  * @property string $brightness
  */
-class Settings extends \yii\db\ActiveRecord
+class Setting extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
@@ -37,9 +37,9 @@ class Settings extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['user_id', 'timezome', 'timeformat'], 'required'],
             [['user_id', 'text_size', 'notifications', 'progress_notifications', 'experiment_notifications', 'goal_notifications', 'social_media_buttons_on_off'], 'integer'],
-            [['timezome', 'timeformat'], 'required'],
-            [['timezome', 'timeformat', 'region', 'language', 'app_sounds', 'brightness'], 'string', 'max' => 256],
+            [['timezome', 'timeformat', 'region', 'language', 'app_sounds', 'brightness'], 'string', 'max' => 255],
         ];
     }
 

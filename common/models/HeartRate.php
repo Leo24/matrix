@@ -30,7 +30,8 @@ class HeartRate extends \yii\db\ActiveRecord
     {
         return [
             [['user_id'], 'required'],
-            [['user_id', 'heart_rate'], 'integer'],
+            [['user_id'], 'integer'],
+            [['heart_rate'], 'number'],
             [['date', 'timestamp'], 'safe'],
         ];
     }

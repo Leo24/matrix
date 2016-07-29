@@ -30,7 +30,8 @@ class Breathing extends \yii\db\ActiveRecord
     {
         return [
             [['user_id'], 'required'],
-            [['user_id', 'breathing_rate'], 'integer'],
+            [['user_id'], 'integer'],
+            [['breathing_rate'], 'number'],
             [['date', 'timestamp'], 'safe'],
         ];
     }

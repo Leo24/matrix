@@ -5,22 +5,23 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "movements".
+ * This is the model class for table "notes".
  *
  * @property integer $id
  * @property integer $user_id
- * @property string $date
- * @property string $timestamp
- * @property string $movement_type
+ * @property string $created_at
+ * @property string $updated_at
+ * @property string $body
+ * @property string $order
  */
-class Movements extends \yii\db\ActiveRecord
+class Note extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'movements';
+        return 'notes';
     }
 
     /**
@@ -31,8 +32,9 @@ class Movements extends \yii\db\ActiveRecord
         return [
             [['user_id'], 'required'],
             [['user_id'], 'integer'],
-            [['date', 'timestamp'], 'safe'],
-            [['movement_type'], 'string'],
+            [['created_at', 'updated_at'], 'safe'],
+            [['body'], 'string'],
+            [['order'], 'string', 'max' => 255],
         ];
     }
 
@@ -44,9 +46,10 @@ class Movements extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
-            'date' => 'Date',
-            'timestamp' => 'Timestamp',
-            'movement_type' => 'Movement Type',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'body' => 'Body',
+            'order' => 'Order',
         ];
     }
 }

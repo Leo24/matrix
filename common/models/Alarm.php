@@ -17,7 +17,7 @@ use Yii;
  * @property integer $snooze
  * @property string $snooze_option
  */
-class Alarms extends \yii\db\ActiveRecord
+class Alarm extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
@@ -37,7 +37,7 @@ class Alarms extends \yii\db\ActiveRecord
             [['user_id', 'snooze'], 'integer'],
             [['date'], 'safe'],
             [['range', 'sound'], 'string'],
-            [['frecuency', 'label', 'snooze_option'], 'string', 'max' => 128],
+            [['frecuency', 'label', 'snooze_option'], 'string', 'max' => 255],
         ];
     }
 

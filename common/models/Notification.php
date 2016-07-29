@@ -2,75 +2,56 @@
 
 namespace common\models;
 
-use yii\base\Exception;
-use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
 use Yii;
 
 /**
- * Class Notification
- * @package common\models
+ * This is the model class for table "notifications".
+ *
+ * @property integer $id
+ * @property integer $user_id
+ * @property string $date
+ * @property string $title
+ * @property string $body
+ * @property string $type
+ * @property string $icon
  */
-class Notification extends ActiveRecord
+class Notification extends \yii\db\ActiveRecord
 {
-
-    public $sleeping_position;
-
-    const SCENARIO_REGISTER = 'register';
-
-    public $primaryKey = 'user_id';
-
     /**
-     * Table name
-     * @return string
+     * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%notification}}';
+        return 'notifications';
     }
 
     /**
-     * Attribute labels
-     * @return array
-     */
-    public function attributeLabels()
-    {
-        return [
-            'user_id' => 'User Id',
-            'title' => 'Title',
-            'description' => 'Description',
-            'viewed' => 'Viewed',
-            'type' => 'Type',
-            'tag' => 'Tag',
-            'created_at' => 'Created at',
-            'updated_at' => 'Updated at',
-        ];
-    }
-
-    /**
-     * @return array
+     * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['title', 'description', 'type', 'tag'], 'trim'],
-            [['title', 'type', 'tag'], 'string', 'max' => 255],
-            [['viewed'], 'boolean'],
-        ];
-    }
-    
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => null,
-                'updatedAtAttribute' => 'updated_at',
-                'value' => function () {
-                    return time();
-                },
-            ],
+            [['user_id'], 'required'],
+            [['user_id'], 'integer'],
+            [['date'], 'safe'],
+            [['body'], 'string'],
+            [['title', 'type', 'icon'], 'string', 'max' => 255],
         ];
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'user_id' => 'User ID',
+            'date' => 'Date',
+            'title' => 'Title',
+            'body' => 'Body',
+            'type' => 'Type',
+            'icon' => 'Icon',
+        ];
+    }
 }
