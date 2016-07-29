@@ -62,14 +62,22 @@ class EmfitdataController extends ActiveController
 
         $currentStep = $jsonCalcData[0][0];
         foreach($jsonCalcData as $m){
-            if($m[0] - $currentStep === 6000 && $m[2] != null){
+            if($m[0] - $currentStep === 6000 ){
                 $currentStep = $m[0];
+                $BreathingModel->id = null;
                 $BreathingModel->user_id = $json['user_id'];
                 $BreathingModel->timestamp = gmdate("Y-m-d H:i:s", $m[0]);
                 $BreathingModel->breathing_rate = $m[2];
-//                $BreathingModel->isNewRecord = true;
+                $BreathingModel->isNewRecord = true;
                 $BreathingModel->save();
-                $foo=false;
+
+                $HeartRateModel->id = null;
+                $HeartRateModel->user_id = $json['user_id'];
+                $HeartRateModel->timestamp = gmdate("Y-m-d H:i:s", $m[0]);
+                $HeartRateModel->heart_rate = $m[1];
+                $HeartRateModel->isNewRecord = true;
+                $HeartRateModel->save();
+                
             }
         }
 
