@@ -5,7 +5,7 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "hrv_rnssd_data".
+ * This is the model class for table "hrv_rmssd_data".
  *
  * @property integer $id
  * @property integer $user_id
@@ -16,14 +16,14 @@ use Yii;
  *
  * @property Users $user
  */
-class HrvRnssdData extends \yii\db\ActiveRecord
+class HrvRmssdData extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'hrv_rnssd_data';
+        return 'hrv_rmssd_data';
     }
 
     /**
