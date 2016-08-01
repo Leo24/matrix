@@ -4,9 +4,9 @@ use yii\db\Migration;
 use yii\db\mysql\Schema;
 
 /**
- * Handles the creation for table `social_networks`.
+ * Handles the creation for table `social_network`.
  */
-class m160728_111504_create_social_networks_table extends Migration
+class m160728_111504_create_social_network_table extends Migration
 {
     /**
      * @inheritdoc
@@ -19,17 +19,17 @@ class m160728_111504_create_social_networks_table extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
         }
 
-        $this->createTable('{{%social_networks}}', [
+        $this->createTable('{{%social_network}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer(11)->notNull(),
             'social_network_type' => "enum('facebook','instagram','pinterest','twitter') NOT NULL",
             'data' => $this->text()->notNull(),
-            'created_at' => Schema::TYPE_TIMESTAMP . ' DEFAULT CURRENT_TIMESTAMP',
+            'created_at' => $this->integer(11)->unsigned()->defaultValue(null),
         ], $tableOptions);
 
-        $this->addForeignKey('fk_tbl_social_networks_tbl_users',
-            '{{%social_networks}}', 'user_id',
-            '{{%users}}', 'id',
+        $this->addForeignKey('fk_tbl_social_network_tbl_user',
+            '{{%social_network}}', 'user_id',
+            '{{%user}}', 'id',
             'CASCADE', 'CASCADE');
     }
 
@@ -38,7 +38,7 @@ class m160728_111504_create_social_networks_table extends Migration
      */
     public function down()
     {
-        $this->dropForeignKey('fk_tbl_social_networks_tbl_users', '{{%social_networks}}');
-        $this->dropTable('{{%social_networks}}');
+        $this->dropForeignKey('fk_tbl_social_network_tbl_user', '{{%social_network}}');
+        $this->dropTable('{{%social_network}}');
     }
 }

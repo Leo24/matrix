@@ -3,6 +3,7 @@ namespace common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * Class Block
@@ -26,7 +27,7 @@ class Block extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%blocks}}';
+        return '{{%block}}';
     }
 
     /**
@@ -54,17 +55,17 @@ class Block extends ActiveRecord
         ];
     }
 
-    /**
-     * Set the date create a new row
-     * @param bool $insert
-     * @return bool
-     */
-    public function beforeSave($insert)
+    public function behaviors()
     {
-        if (parent::beforeSave($insert)) {
-            $this->created_at = date('Y-m-d H:i:s');
-            return true;
-        }
-        return false;
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => null,
+                'value' => function () {
+                    return time();
+                },
+            ],
+        ];
     }
 }

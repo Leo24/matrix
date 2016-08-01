@@ -6,7 +6,7 @@ use Yii;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "social_networks".
+ * This is the model class for table "social_network".
  *
  * @property integer $id
  * @property integer $user_id
@@ -15,7 +15,7 @@ use yii\db\ActiveRecord;
  *
  * @property User $user
  */
-class SocialNetworks extends ActiveRecord
+class SocialNetwork extends ActiveRecord
 {
 
     const SCENARIO_REGISTER = 'register';
@@ -27,7 +27,7 @@ class SocialNetworks extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%social_networks}}';
+        return '{{%social_network}}';
     }
 
     /**
@@ -96,8 +96,7 @@ class SocialNetworks extends ActiveRecord
 
     public static function existSocialNetwork($user_id, $type)
     {
-        return (bool) SocialNetworks::findOne(['user_id' => $user_id, 'social_network_type' => $type]);
-
+        return (bool) SocialNetwork::findOne(['user_id' => $user_id, 'social_network_type' => $type]);
     }
 
     /**

@@ -1,11 +1,14 @@
 <?php
+
 namespace common\models;
 
 use Firebase\JWT\JWT;
+use yii\base\Exception;
 use yii\behaviors\TimestampBehavior;
 use yii\web\UnauthorizedHttpException;
 use yii\web\IdentityInterface;
 use yii\db\ActiveRecord;
+use yii\web\HttpException;
 use Yii;
 
 /**
@@ -17,17 +20,245 @@ class User extends ActiveRecord implements IdentityInterface
 
     const UNAUTHORIZED_INCORRECT_CODE = 12;
     const UNAUTHORIZED_EXPIRED_CODE = 13;
+    const UNAUTHORIZED_BLOCK_CODE = 14;
+
+    const INTERNAL_ERROR_CODE = 22;
+    const VALIDATION_EXCEPTION_CODE = 21;
 
     const SCENARIO_LOGIN = 'login';
     const SCENARIO_REGISTER = 'register';
 
     public $confirm;
+    public $firstname;
+    public $lastname;
 
     /**
      * Token expire
      * @var int
      */
     protected $tokenExpire = 3600 * 24 * 7; // 7 days
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['email', 'password', 'confirm'], 'required', 'on' => 'register'],
+            ['confirm', 'compare', 'compareAttribute' => 'password', 'on' => 'register'],
+            [['password', 'email'], 'string', 'max' => 255],
+            ['email', 'email'],
+            ['email', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('app', 'Email exists')],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value' => function () {
+                    return time();
+                },
+            ],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function scenarios()
+    {
+        return [
+            self::SCENARIO_LOGIN => ['email', 'password'],
+            self::SCENARIO_REGISTER => ['email', 'password', 'username', 'confirm', 'firstname', 'lastname'],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function fields()
+    {
+        $fields = parent::fields();
+        unset($fields['password']);
+
+        return $fields;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function extraFields()
+    {
+        return ['userProfile', 'sleepPosition'];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSleepPosition()
+    {
+        return $this->hasOne(SleepingPosition::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserProfile()
+    {
+        return $this->hasOne(Profile::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeSave($insert)
+    {
+        parent::beforeSave($insert);
+
+        if ($this->scenario == self::SCENARIO_REGISTER) {
+            $this->username = $this->getUsername();
+        }
+        if ($this->scenario == self::SCENARIO_LOGIN) {
+            $this->last_login = time();
+        }
+        return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        unset($this->password);
+    }
+
+    /**
+     * Table name
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return '{{%user}}';
+    }
+
+    /**
+     * Attribute labels
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'email' => 'Email',
+            'password' => 'Password',
+            'username' => 'User name',
+            'created_at' => 'Created at',
+            'updated_at' => 'Updated at',
+            'last_login' => 'Last login',
+            'sleeping_position' => 'Sleeping position'
+        ];
+    }
+
+    /**
+     * Register a new user
+     *
+     * @param $data
+     * @return array
+     * @throws HttpException
+     * @throws \yii\db\Exception
+     */
+    public static function registerUser($data)
+    {
+        $userModel = new User;
+        $userModel->setScenario(self::SCENARIO_REGISTER);
+        $userModel->attributes = $data;
+
+        $sleepingPositionModel = new SleepingPosition;
+        $sleepingPositionModel->attributes = isset($data['sleeping_position']) ? $data['sleeping_position'] : null;
+
+        $reasonUsingMatrixModel = new ReasonUsingMatrix;
+        $reasonUsingMatrixModel->attributes = isset($data['reason_using_matrix']) ? $data['reason_using_matrix'] : null;
+
+        $profileModel = new Profile;
+        $profileModel->attributes = $data;
+
+
+        if ($userModel->validate()
+            && $sleepingPositionModel->validate()
+            && $reasonUsingMatrixModel->validate()
+            && $profileModel->validate()
+        ) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                if ($userModel->save(false)) {
+                    $sleepingPositionModel->user_id = $userModel->id;
+                    $sleepingPositionModel->save(false);
+
+                    $reasonUsingMatrixModel->user_id = $userModel->id;
+                    $reasonUsingMatrixModel->save(false);
+
+                    $profileModel->user_id = $userModel->id;
+                    $profileModel->save(false);
+
+                    $socialNetworksResponseData = [];
+                    if (isset($data['social_networks'])) {
+                        foreach ($data['social_networks'] as $socialNetwork) {
+                            $socialNetworkModel = new SocialNetwork;
+                            $socialNetworkModel->setScenario(self::SCENARIO_REGISTER);
+                            $socialNetworkModel->attributes = $socialNetwork;
+                            $socialNetworkModel->user_id = $userModel->id;
+
+                            if (!SocialNetwork::existSocialNetwork($userModel->id, $socialNetwork['social_network_type'])) {
+                                if ($socialNetworkModel->save()) {
+                                    $socialNetworksResponseData[] = $socialNetworkModel;
+                                }
+                            }
+                        }
+                    }
+                    $transaction->commit();
+
+                    return [
+                        'token' => $userModel->getJWT(),
+                        'user' => $userModel,
+                        'profile' => $profileModel,
+                        'sleeping_position' => $sleepingPositionModel,
+                        'reason_using_matrix' => $reasonUsingMatrixModel,
+                        'social_network' => $socialNetworksResponseData
+                    ];
+                }
+            } catch (Exception $e) {
+                $transaction->rollBack();
+                throw new HttpException(422, $e->getMessage(), self::INTERNAL_ERROR_CODE);
+            }
+        } else {
+            // Validation errors
+            /*
+            return array_merge(
+                $userModel->errors,
+                $reasonUsingMatrixModel->errors,
+                $sleepingPositionModel->errors
+            );*/
+            throw new HttpException(422, 'Validation exception', self::VALIDATION_EXCEPTION_CODE);
+        }
+    }
+
+    /**
+     * Returns username
+     *
+     * @return string
+     */
+    public function getUsername()
+    {
+        return ucfirst(strtolower($this->firstname)) . ucfirst(strtolower($this->lastname));
+    }
 
     /**
      * Getter for secret key that's used for generation of JWT
@@ -61,6 +292,9 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findIdentityByAccessToken($token, $type = null)
     {
         $decodedArray = static::decodeJWT($token);
+        if (self::isBlocked($token)) {
+            throw new UnauthorizedHttpException('Token is blocked', self::UNAUTHORIZED_BLOCK_CODE);
+        }
         // If there's no jti param - exception
         if (!isset($decodedArray['jti'])) {
             throw new UnauthorizedHttpException('Unauthorized');
@@ -68,6 +302,7 @@ class User extends ActiveRecord implements IdentityInterface
         // JTI is unique identifier of user.
         // For more details: https://tools.ietf.org/html/rfc7519#section-4.1.7
         $id = $decodedArray['jti'];
+
         return static::findByJTI($id);
     }
 
@@ -187,7 +422,7 @@ class User extends ActiveRecord implements IdentityInterface
             $block = new Block();
             $values = [
                 'user_id' => User::getPayload($token, 'jti'),
-                'expired_at' => date('Y-m-d H:i:s', User::getPayload($token, 'exp')),
+                'expired_at' => User::getPayload($token, 'exp'),
                 'token' => $token
             ];
             $block->attributes = $values;
@@ -245,7 +480,13 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getAuthKey()
     {
-        return $this->token;
+        $headerAuthorizationKey = Yii::$app->getRequest()->getHeaders()->get('Authorization');
+        if ($headerAuthorizationKey !== null && preg_match("/^Bearer\\s+(.*?)$/", $headerAuthorizationKey, $matches)) {
+            if (isset($matches[1])) {
+                return $matches[1];
+            }
+        }
+        return false;
     }
 
     /**
@@ -255,7 +496,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function validateAuthKey($token)
     {
-        return $this->getAuthKey() === $token;
+        return (bool)JWT::decode($token, self::getSecretKey(), [static::getAlgo()]);
     }
 
     /**
@@ -277,113 +518,4 @@ class User extends ActiveRecord implements IdentityInterface
         $this->password = Yii::$app->security->generatePasswordHash($password);
     }
 
-    /**
-     * Table name
-     * @return string
-     */
-    public static function tableName()
-    {
-        return '{{%users}}';
-    }
-
-    /**
-     * Attribute labels
-     * @return array
-     */
-    public function attributeLabels()
-    {
-        return [
-            'email' => 'Email',
-            'password' => 'Password',
-            'username' => 'User name',
-            'created_at' => 'Created at',
-            'updated_at' => 'Updated at',
-            'last_login' => 'Last login',
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function scenarios()
-    {
-        return [
-            self::SCENARIO_LOGIN => ['email', 'password'],
-            self::SCENARIO_REGISTER => ['email', 'password', 'username', 'confirm'],
-        ];
-    }
-
-    /**
-     * Validation rules
-     * @return array
-     */
-    public function rules()
-    {
-        return [
-            [['email', 'password', 'confirm'], 'required', 'on' => 'register'],
-            ['confirm', 'compare', 'compareAttribute' => 'password', 'on' => 'register'],
-            [['password', 'email'], 'string', 'max' => 255],
-            ['email', 'email'],
-            ['email', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('app', 'Email exists')],
-        ];
-    }
-
-    /**
-     * @param bool $insert
-     * @param array $changedAttributes
-     */
-    public function afterSave($insert, $changedAttributes)
-    {
-        parent::afterSave($insert, $changedAttributes);
-
-        unset($this->password);
-    }
-
-    /**
-     * @param bool $insert
-     * @return bool
-     */
-    public function beforeSave($insert)
-    {
-        parent::beforeSave($insert);
-
-        if ($this->scenario == 'login') {
-            $this->last_login = date('Y-m-d H:i:s');
-        }
-        return true;
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProfile()
-    {
-        return $this->hasOne(Profile::className(), ['user_id' => 'id']);
-    }
-
-    /**
-     * @return array
-     */
-    public function extraFields()
-    {
-        return ['profile'];
-    }
-
-    /**
-     * @return array
-     */
-    public function behaviors()
-    {
-        return [
-            'timestamp' => [
-                'class' => TimestampBehavior::className(),
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
-                ],
-                'value' => function() {
-                    return date('Y-m-d H:i:s');
-                },
-            ],
-        ];
-    }
 }

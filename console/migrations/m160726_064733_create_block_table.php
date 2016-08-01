@@ -4,9 +4,9 @@ use yii\db\Schema;
 use yii\db\Migration;
 
 /**
- * Handles the creation for table `blocks`.
+ * Handles the creation for table `block`.
  */
-class m160726_064733_create_blocks_table extends Migration
+class m160726_064733_create_block_table extends Migration
 {
     /**
      * @inheritdoc
@@ -19,11 +19,11 @@ class m160726_064733_create_blocks_table extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
         }
 
-        $this->createTable('{{%blocks}}', [
+        $this->createTable('{{%block}}', [
             'token' => $this->string(255),
             'user_id' => $this->integer(11)->unsigned()->defaultValue(null),
-            'created_at' => Schema::TYPE_TIMESTAMP . ' DEFAULT CURRENT_TIMESTAMP',
-            'expired_at' => Schema::TYPE_TIMESTAMP. ' NULL',
+            'created_at' => $this->integer(11)->unsigned()->defaultValue(null),
+            'expired_at' => $this->integer(11)->unsigned()->defaultValue(null),
             'PRIMARY KEY(token)'
         ], $tableOptions);
     }
@@ -33,6 +33,6 @@ class m160726_064733_create_blocks_table extends Migration
      */
     public function down()
     {
-        $this->dropTable('{{%blocks}}');
+        $this->dropTable('{{%block}}');
     }
 }
