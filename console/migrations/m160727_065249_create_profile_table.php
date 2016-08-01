@@ -4,7 +4,7 @@ use yii\db\mysql\Schema;
 use yii\db\Migration;
 
 /**
- * Handles the creation for table `profiles`.
+ * Handles the creation for table `profile`.
  */
 class m160727_065249_create_profile_table extends Migration
 {
@@ -19,7 +19,7 @@ class m160727_065249_create_profile_table extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
         }
 
-        $this->createTable('{{%profiles}}', [
+        $this->createTable('{{%profile}}', [
             'user_id' => $this->integer(11)->notNull(),
             'firstname' => $this->string(30)->notNull(),
             'lastname' => $this->string(30)->notNull(),
@@ -27,16 +27,15 @@ class m160727_065249_create_profile_table extends Migration
             'state' => $this->string(20)->notNull(),
             'city' => $this->string(20)->notNull(),
             'profession_interest' => $this->string(255)->notNull(),
-            'sleeping_position' => $this->text(),
             'average_hours_sleep' => $this->string(255),
             'reason_using_matrix' => $this->text(),
-            'updated_at' => Schema::TYPE_TIMESTAMP. ' NULL',
+            'updated_at' => $this->integer(11)->unsigned()->defaultValue(null),
             'PRIMARY KEY(user_id)'
         ], $tableOptions);
 
-        $this->addForeignKey('fk_tbl_profiles_tbl_users',
-            '{{%profiles}}', 'user_id',
-            '{{%users}}', 'id',
+        $this->addForeignKey('fk_tbl_profile_tbl_user',
+            '{{%profile}}', 'user_id',
+            '{{%user}}', 'id',
             'CASCADE', 'CASCADE');
     }
 
@@ -45,7 +44,7 @@ class m160727_065249_create_profile_table extends Migration
      */
     public function down()
     {
-        $this->dropForeignKey('fk_tbl_profiles_tbl_users', '{{%profiles}}');
-        $this->dropTable('{{%profiles}}');
+        $this->dropForeignKey('fk_tbl_profile_tbl_user', '{{%profile}}');
+        $this->dropTable('{{%profile}}');
     }
 }

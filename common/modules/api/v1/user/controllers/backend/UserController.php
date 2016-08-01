@@ -1,19 +1,20 @@
 <?php
-namespace common\modules\api\v1\socialnetwork\controllers;
+namespace common\modules\api\v1\user\controllers\backend;
 
-use common\models\SocialNetwork;
-use yii\filters\auth\HttpBearerAuth;
+use common\models\User;
 use yii\rest\ActiveController;
+use yii\filters\auth\HttpBearerAuth;
 
 /**
- * Socialnetworks controller
+ * Class UserController
+ * @package common\modules\api\v1\user\controllers
  */
-class SocialnetworkController extends ActiveController
+class UserController extends ActiveController
 {
     /**
      * @inheritdoc
      */
-    public $modelClass = SocialNetwork::class;
+    public $modelClass = User::class;
 
     /**
      * @inheritdoc

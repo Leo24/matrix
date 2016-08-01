@@ -12,7 +12,7 @@ class m160728_112638_insert_test_user extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
         }
 
-        $this->insert('{{%users}}', [
+        $this->insert('{{%user}}', [
             'email' => 'test@test.com',
             'username' =>'Testname',
             'password' => Yii::$app->security->generatePasswordHash('test'),
@@ -21,6 +21,6 @@ class m160728_112638_insert_test_user extends Migration
 
     public function down()
     {
-        $this->delete('{{%users}}', ['email' => 'test@test.com']);
+        $this->delete('{{%user}}', ['email' => 'test@test.com']);
     }
 }

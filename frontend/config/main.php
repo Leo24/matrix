@@ -11,12 +11,8 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
-
-
     'homeUrl' => '/',
-
-
-    'modules'             => [
+    'modules' => [
         'api' => [
             'class'   => 'common\modules\api\Module',
             'modules' => [
@@ -81,21 +77,24 @@ return [
                 ],
             ],
         ],
-        'Module' => [
-            'class' => 'common\modules\api\v2\Module',
-        ],
     ],
-
-
     'components' => [
-
         'response' => [
             'format' => yii\web\Response::FORMAT_JSON,
             'charset' => 'UTF-8',
         ],
+        'request' => [
+            'baseUrl' => '',
+            'class' => '\yii\web\Request',
+            'enableCookieValidation' => false,
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ],
+        ],
         'user' => [
-            'identityClass' => 'common\modules\api\v1\auth\models\User',
+            'identityClass' => 'common\models\User',
             'enableSession' => false,
+            'enableAutoLogin' => false,
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -108,31 +107,30 @@ return [
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,
-            'enableStrictParsing' => true,
+            'enableStrictParsing' => false,
             'showScriptName' => false,
             'rules' => [
                 [
                     'class' => 'yii\rest\UrlRule',
                     'prefix' => 'api/v1/',
-                    'controller' => ['user/logout' => 'api/v1/authorization/authorization'],
-                    'patterns' => ['GET' => 'logout']
+                    'controller' => ['user' => 'api/v1/authorization/frontend/authorization'],
+                    'patterns' => [
+                        'POST login' => 'login',
+                    ]
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
                     'prefix' => 'api/v1/',
-                    'controller' => ['user/login' => 'api/v1/authorization/authorization'],
-                    'patterns' => ['POST' => 'login']
+                    'controller' => ['user' => 'api/v1/authorization/backend/authorization'],
+                    'patterns' => [
+                        'GET logout' => 'logout',
+                        'GET refresh' => 'refresh'
+                    ]
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
                     'prefix' => 'api/v1/',
-                    'controller' => ['user/refresh' => 'api/v1/authorization/authorization'],
-                    'patterns' => ['GET' => 'refresh']
-                ],
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'prefix' => 'api/v1/',
-                    'controller' => ['user/register' => 'api/v1/user/user'],
+                    'controller' => ['user/register' => 'api/v1/user/frontend/user'],
                     'patterns' => ['POST' => 'register']
                 ],
                 [
@@ -141,59 +139,17 @@ return [
                     'controller' => ['emfit/emfitdata' => 'api/v1/emfitdata/emfitdata'],
                     'patterns' => ['POST' => 'getdata']
                 ],
-
                 [
                     'class' => 'yii\rest\UrlRule',
+                    'pluralize' => false,
                     'prefix' => 'api/v1/',
-                    'controller' => ['user/socialnetwork' => 'api/v1/socialnetwork/socialnetwork'],
-                ],
-                [
-                    'class' => 'yii\rest\UrlRule',
                     'controller' => [
-                        'api/v1/note/note',
-                        'api/v1/notification/notification',
-                        'api/v1/user/alarm',
-                        'api/v1/user/awakening',
-                        'api/v1/user/breathing',
-                        'api/v1/user/device',
-                        'api/v1/user/heartflex',
-                        'api/v1/user/heartrate',
-                        'api/v1/user/movement',
-                        'api/v1/user/profile',
-                        'api/v1/user/setting',
-                        'api/v1/user/sleepcycle',
-                        'api/v1/user/sleepquality',
-                        'api/v1/user/socialnetwork',
-                        'api/v1/user/stress',
-                        'api/v1/user/user',
-                        'api/v1/emfitdata/emfitdata',
-                    ],
-                    'tokens' => [
-                        '{id}' => '<id:\\w+>',
-                        '{count}' => '<count:\\w+>',
-                    ],
-                    'extraPatterns' => [
-                        'POST' => 'create', // 'xxxxx' refers to 'actionXxxxx'
-                        'PUT {id}' => 'update',
-                        'PATCH {id}' => 'update',
-                        'DELETE {id}' => 'delete',
-                        'GET {id}' => 'view',
-                        'GET {count}' => 'index',
+                        'profiles' => 'api/v1/profile/backend/profile',
+                        'users' => 'api/v1/user/backend/user',
                     ],
                 ],
-
             ],
         ],
-
-        'request' => [
-            'baseUrl' => '',
-            'class' => '\yii\web\Request',
-            'enableCookieValidation' => false,
-            'parsers' => [
-                'application/json' => 'yii\web\JsonParser',
-            ],
-        ],
-
     ],
     'params' => $params,
 ];
