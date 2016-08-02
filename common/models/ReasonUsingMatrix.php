@@ -6,6 +6,10 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use Yii;
 
+/**
+ * Class ReasonUsingMatrix
+ * @package common\models
+ */
 class ReasonUsingMatrix extends ActiveRecord
 {
 
@@ -19,7 +23,7 @@ class ReasonUsingMatrix extends ActiveRecord
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function rules()
     {
@@ -57,6 +61,9 @@ class ReasonUsingMatrix extends ActiveRecord
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
