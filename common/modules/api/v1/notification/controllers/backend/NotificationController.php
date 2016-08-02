@@ -31,7 +31,7 @@ class NotificationController extends ActiveController
             'actions' => [
                 'index'  => ['get'],
                 'view'   => ['get'],
-                'create' => [''],
+                'create' => ['post'],
                 'update' => ['post'],
                 'delete' => ['post','delete'],
             ]
@@ -42,41 +42,19 @@ class NotificationController extends ActiveController
 
 
     /**
-     * @inheritdoc
-     */
-    public $allowedMethods = [
-        'POST'    => ['needAuth' => 1],
-        'PUT'     => ['needAuth' => 1],
-        'PATCH'   => ['needAuth' => 1],
-        'DELETE'  => ['needAuth' => 1],
-        'GET'     => ['needAuth' => 1],
-        'HEAD'    => ['needAuth' => 1],
-        'OPTIONS' => ['needAuth' => 1]
-    ];
-
-    /**
      * @return array
      */
     public function actions()
     {
         $actions = parent::actions();
 
-        $actions['index']['class'] = IndexAction::class;
+        // disable actions
+        unset($actions['create']);
 
         return $actions;
     }
 
-    /**
-     * @inheritdoc
-     */
-    protected function verbs()
-    {
-        return [
-            'update' => ['POST'],
-            'delete' => ['DELETE'],
-            'view'   => ['GET'],
-        ];
-    }
+
 
 
 }

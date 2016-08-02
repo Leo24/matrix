@@ -17,12 +17,13 @@ class m160802_074416_notification_table extends Migration
         $this->createTable('{{%notification}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer(11),
-            'created_at' => $this->integer(11)->unsigned()->defaultValue(null),
             'title' => $this->string(255),
             'description' => $this->text()->defaultValue(null),
             'viewed'=>$this->boolean()->defaultValue(false),
-            'type' => $this->string(255)->defaultValue(null),
-            'tag' => $this->string(255)->defaultValue(null),
+            'type' => "ENUM('positivity', 'negativity', 'neutrality') NOT NULL DEFAULT 'neutrality'",
+            'tag' => "ENUM('report', 'experiment', 'tip', 'matrix', 'goal') NOT NULL DEFAULT 'report'",
+            'created_at' => $this->integer(11)->unsigned()->defaultValue(null),
+            'updated_at' => $this->integer(11)->unsigned()->defaultValue(null),
         ], $tableOptions);
 
         $this->addForeignKey('fk_tbl_notification_tbl_user',

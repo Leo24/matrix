@@ -38,11 +38,12 @@ class Notification extends ActiveRecord
         return [
             'user_id' => 'User Id',
             'title' => 'Title',
-            'created_at' => 'Created at',
             'description' => 'Description',
             'viewed' => 'Viewed',
             'type' => 'Type',
             'tag' => 'Tag',
+            'created_at' => 'Created at',
+            'updated_at' => 'Updated at',
         ];
     }
 
@@ -56,16 +57,6 @@ class Notification extends ActiveRecord
             [['title', 'type', 'tag'], 'string', 'max' => 255],
         ];
     }
-
-    /**
-     * @return array
-     */
-    public function fields()
-    {
-        $fields = parent::fields();
-        return $fields;
-    }
-
     
     public function behaviors()
     {
