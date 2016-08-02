@@ -1,12 +1,13 @@
 <?php
-namespace common\modules\api\v1\socialnetwork\controllers;
+namespace common\modules\api\v1\socialnetwork\controllers\backend;
 
 use common\models\SocialNetwork;
-use yii\filters\auth\HttpBearerAuth;
+use Yii;
 use yii\rest\ActiveController;
+use yii\filters\auth\HttpBearerAuth;
 
 /**
- * Socialnetworks controller
+ * Profile controller
  */
 class SocialnetworkController extends ActiveController
 {
