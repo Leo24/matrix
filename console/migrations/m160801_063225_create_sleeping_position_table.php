@@ -28,7 +28,8 @@ class m160801_063225_create_sleeping_position_table extends Migration
 
         $this->addForeignKey('fk_tbl_sleeping_position_tbl_user',
             '{{%sleeping_position}}', 'user_id',
-            '{{%user}}', 'id');
+            '{{%user}}', 'id',
+            'CASCADE', 'CASCADE');
     }
 
     /**

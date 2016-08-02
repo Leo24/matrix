@@ -30,7 +30,8 @@ class m160801_121813_create_reason_using_matrix_table extends Migration
 
         $this->addForeignKey('fk_tbl_reason_using_matrix_tbl_user',
             '{{%reason_using_matrix}}', 'user_id',
-            '{{%user}}', 'id');
+            '{{%user}}', 'id',
+            'CASCADE', 'CASCADE');
     }
 
     /**
