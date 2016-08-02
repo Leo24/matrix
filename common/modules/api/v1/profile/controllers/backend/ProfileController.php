@@ -28,4 +28,17 @@ class ProfileController extends ActiveController
 
         return $behaviors;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function actions()
+    {
+        $actions = parent::actions();
+
+        // disable actions
+         unset($actions['delete'], $actions['create']);
+
+        return $actions;
+    }
 }

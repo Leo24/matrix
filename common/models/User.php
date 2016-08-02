@@ -205,6 +205,7 @@ class User extends ActiveRecord implements IdentityInterface
         ) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
+                $userModel->setPassword($data['password']);
                 if ($userModel->save(false)) {
                     $sleepingPositionModel->user_id = $userModel->id;
                     $sleepingPositionModel->save(false);
