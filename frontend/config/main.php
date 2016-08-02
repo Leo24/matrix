@@ -146,6 +146,7 @@ return [
                     'controller' => [
                         'profiles' => 'api/v1/profile/backend/profile',
                         'users' => 'api/v1/user/backend/user',
+                        'notifications' => 'api/v1/notification/backend/notification',
                     ],
                 ],
             ],

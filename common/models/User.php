@@ -116,6 +116,15 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserNotifications()
+    {
+        return $this->hasMany(Notification::className(), ['id' => 'user_id']);
+    }
+
+
+    /**
      * @inheritdoc
      */
     public function beforeSave($insert)
