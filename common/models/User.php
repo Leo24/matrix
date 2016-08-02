@@ -96,7 +96,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function extraFields()
     {
-        return ['userProfile', 'sleepPosition'];
+        return ['userProfile', 'sleepPosition', 'reasonUsingMatrix'];
     }
 
     /**
@@ -113,6 +113,14 @@ class User extends ActiveRecord implements IdentityInterface
     public function getUserProfile()
     {
         return $this->hasOne(Profile::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReasonUsingMatrix()
+    {
+        return $this->hasOne(ReasonUsingMatrix::class, ['user_id' => 'id']);
     }
 
     /**
@@ -189,7 +197,6 @@ class User extends ActiveRecord implements IdentityInterface
 
         $profileModel = new Profile;
         $profileModel->attributes = $data;
-
 
         if ($userModel->validate()
             && $sleepingPositionModel->validate()

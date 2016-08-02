@@ -2,7 +2,6 @@
 
 namespace common\models;
 
-use yii\base\Exception;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use Yii;
@@ -18,11 +17,17 @@ class Profile extends ActiveRecord
 
     const SCENARIO_REGISTER = 'register';
 
+    /**
+     * Primary key name
+     *
+     * @inheritdoc
+     */
     public $primaryKey = 'user_id';
 
     /**
      * Table name
-     * @return string
+     *
+     * @inheritdoc
      */
     public static function tableName()
     {
@@ -31,7 +36,8 @@ class Profile extends ActiveRecord
 
     /**
      * Attribute labels
-     * @return array
+     *
+     * @inheritdoc
      */
     public function attributeLabels()
     {
@@ -46,20 +52,20 @@ class Profile extends ActiveRecord
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function scenarios()
     {
         $scenarion = parent::scenarios();
         $scenarion[self::SCENARIO_REGISTER] = [
                 'firstname', 'lastname', 'gender', 'state', 'city', 'profession_interest',
-                'average_hours_sleep','user_id', 'average_hours_sleep'
+                'average_hours_sleep','user_id', 'average_hours_sleep', 'device_name', 'device_position'
             ];
         return $scenarion;
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function rules()
     {
@@ -68,41 +74,32 @@ class Profile extends ActiveRecord
             [['firstname', 'lastname', 'state', 'city', 'profession_interest'], 'required', 'on' => 'register'],
             [['firstname', 'lastname'], 'string', 'max' => 30],
             [['city', 'state'], 'string', 'max' => 20],
-            [['profession_interest', 'average_hours_sleep'], 'string', 'max' => 255],
+            [['profession_interest', 'average_hours_sleep', 'device_name'], 'string', 'max' => 255],
             ['gender', 'in', 'range' => ['female', 'male']],
+            ['device_position', 'in', 'range' => ['left','right','middle']],
             ['user_id', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('app', 'Profile exists')],
         ];
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
-    public function fields()
+    public function extraFields()
     {
-        $fields = parent::fields();
-//        $fields['sleeping_position'] = function($model) {
-//            return $model->getSleepingPosition();
-//        };
-//        $fields['reason_using_matrix'] = function($model) {
-//            return $model->getReasonUsingMatrix();
-//        };
-//        $fields['sleeping_positions'] = function($model) {
-//            return $model->getSleepingPosition();
-//        };
-
-        return $fields;
+        return ['user'];
     }
-
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSleepingPosition()
+    public function getUser()
     {
-        return $this->hasOne(SleepingPosition::className(), ['id' => 'profile_id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
-
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
