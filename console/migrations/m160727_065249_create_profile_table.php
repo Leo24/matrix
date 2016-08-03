@@ -13,11 +13,8 @@ class m160727_065249_create_profile_table extends Migration
      */
     public function up()
     {
-        $tableOptions = null;
-        if ($this->db->driverName === 'mysql') {
-            // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
-            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
-        }
+        $options = ($this->db->driverName === 'mysql')
+            ? 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB' : null;
 
         $this->createTable('{{%profile}}', [
             'user_id' => $this->integer(11)->notNull(),
@@ -32,7 +29,7 @@ class m160727_065249_create_profile_table extends Migration
             'device_position' => "enum('left','right','middle') DEFAULT NULL",
             'updated_at' => $this->integer(11)->unsigned()->defaultValue(null),
             'PRIMARY KEY(user_id)'
-        ], $tableOptions);
+        ], $options);
 
         $this->addForeignKey('fk_tbl_profile_tbl_user',
             '{{%profile}}', 'user_id',

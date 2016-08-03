@@ -12,10 +12,8 @@ class m160801_063225_create_sleeping_position_table extends Migration
      */
     public function up()
     {
-        if ($this->db->driverName === 'mysql') {
-            // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
-            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
-        }
+        $options = ($this->db->driverName === 'mysql')
+            ? 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB' : null;
 
         $this->createTable('{{%sleeping_position}}', [
             'user_id' => $this->integer(11)->unique(),
@@ -24,7 +22,7 @@ class m160801_063225_create_sleeping_position_table extends Migration
             'stomach_sleeper' => $this->boolean()->defaultValue(false),
             'updated_at' => $this->integer(11)->unsigned()->defaultValue(null),
             'PRIMARY KEY(user_id)'
-        ], $tableOptions);
+        ], $options);
 
         $this->addForeignKey('fk_tbl_sleeping_position_tbl_user',
             '{{%sleeping_position}}', 'user_id',

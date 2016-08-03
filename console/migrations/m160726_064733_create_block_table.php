@@ -13,11 +13,8 @@ class m160726_064733_create_block_table extends Migration
      */
     public function up()
     {
-        $tableOptions = null;
-        if ($this->db->driverName === 'mysql') {
-            // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
-            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
-        }
+        $options = ($this->db->driverName === 'mysql')
+            ? 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB' : null;
 
         $this->createTable('{{%block}}', [
             'token' => $this->string(255),
@@ -25,7 +22,7 @@ class m160726_064733_create_block_table extends Migration
             'created_at' => $this->integer(11)->unsigned()->defaultValue(null),
             'expired_at' => $this->integer(11)->unsigned()->defaultValue(null),
             'PRIMARY KEY(token)'
-        ], $tableOptions);
+        ], $options);
     }
 
     /**
