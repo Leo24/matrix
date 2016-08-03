@@ -97,7 +97,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function extraFields()
     {
-        return ['userProfile', 'sleepPosition', 'reasonUsingMatrix'];
+        return ['userProfile', 'sleepPosition', 'reasonUsingMatrix', 'UserNotifications'];
     }
 
     /**
@@ -123,6 +123,15 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->hasOne(ReasonUsingMatrix::class, ['user_id' => 'id']);
     }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserNotifications()
+    {
+        return $this->hasMany(Notification::className(), ['id' => 'user_id']);
+    }
+
 
     /**
      * @inheritdoc

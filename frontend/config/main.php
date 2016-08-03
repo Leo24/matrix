@@ -108,7 +108,7 @@ return [
                         'profiles' => 'api/v1/profile/backend/profile',
                         'users' => 'api/v1/user/backend/user',
                         'socialnetworks' => 'api/v1/socialnetwork/backend/socialnetwork',
-                    ],
+                        'notifications' => 'api/v1/notification/backend/notification',                    ],
                 ],
             ],
         ],
