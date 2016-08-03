@@ -7,11 +7,11 @@ use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 
 /**
- * This is the model class for table "block".
+ * This is the model class for table "device".
  *
  * @package common\models
  */
-class Block extends ActiveRecord
+class Device extends ActiveRecord
 {
     /**
      * Table name
@@ -19,7 +19,7 @@ class Block extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%block}}';
+        return '{{%device}}';
     }
 
     /**
@@ -28,7 +28,7 @@ class Block extends ActiveRecord
      */
     public static function primaryKey()
     {
-        return 'token';
+        return 'user_id';
     }
 
     /**
@@ -37,10 +37,13 @@ class Block extends ActiveRecord
     public function fields()
     {
         return [
-            'token',
             'user_id',
-            'created_at',
-            'expired_at',
+            'name',
+            'position',
+            'pin',
+            'sn',
+            'pw',
+            'updated_at',
         ];
     }
 
@@ -50,10 +53,11 @@ class Block extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'token', 'expired_at'], 'safe'],
-            [['token'], 'string', 'max' => 255],
-            [['expired_at'], 'integer'],
-            [['user_id', 'token', 'expired_at'], 'required'],
+            [['user_id', 'name', 'position', 'pin', 'sn', 'pw'], 'safe'],
+            [['name', 'pin', 'sn', 'pw'], 'string', 'max' => 255],
+            [['user_id', 'updated_at'], 'integer'],
+            [['user_id', 'name', 'position', 'pin', 'sn', 'pw'], 'required'],
+            ['position', 'in', 'range' => ['left', 'right', 'middle']],
         ];
     }
 
@@ -65,8 +69,8 @@ class Block extends ActiveRecord
         return [
             [
                 'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'created_at',
-                'updatedAtAttribute' => null,
+                'createdAtAttribute' => null,
+                'updatedAtAttribute' => 'updated_at',
                 'value' => function () {
                     return time();
                 },
@@ -82,9 +86,11 @@ class Block extends ActiveRecord
     {
         return [
             'user_id' => Yii::t('app', 'User ID'),
-            'token' =>  Yii::t('app', 'Token'),
-            'created_at' =>  Yii::t('app', 'Created at'),
-            'expired_at' =>  Yii::t('app', 'Expired at'),
+            'name' =>  Yii::t('app', 'Device name'),
+            'pin' =>  Yii::t('app', 'Device PIN'),
+            'sn' =>  Yii::t('app', 'Device SN'),
+            'pw' =>  Yii::t('app', 'Device PW'),
+            'updated_at' =>  Yii::t('app', 'Updated at'),
         ];
     }
 }

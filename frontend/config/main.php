@@ -22,50 +22,11 @@ return [
                         'authorization' => [
                             'class' => 'common\modules\api\v1\authorization\Module'
                         ],
-                        'alarm' => [
-                            'class' => 'common\modules\api\v1\alarm\Module'
-                        ],
-                        'awakening' => [
-                            'class' => 'common\modules\api\v1\awakening\Module'
-                        ],
-                        'breathing' => [
-                            'class' => 'common\modules\api\v1\breathing\Module'
-                        ],
-                        'device' => [
-                            'class' => 'common\modules\api\v1\device\Module'
-                        ],
-                        'heartflex' => [
-                            'class' => 'common\modules\api\v1\heartflex\Module'
-                        ],
-                        'heartrate' => [
-                            'class' => 'common\modules\api\v1\heartrate\Module'
-                        ],
-                        'movement' => [
-                            'class' => 'common\modules\api\v1\movement\Module'
-                        ],
-                        'note' => [
-                            'class' => 'common\modules\api\v1\note\Module'
-                        ],
-                        'notification' => [
-                            'class' => 'common\modules\api\v1\notification\Module'
-                        ],
                         'profile' => [
                             'class' => 'common\modules\api\v1\profile\Module'
                         ],
-                        'setting' => [
-                            'class' => 'common\modules\api\v1\setting\Module'
-                        ],
-                        'sleepcycle' => [
-                            'class' => 'common\modules\api\v1\sleepcycle\Module'
-                        ],
-                        'sleepquality' => [
-                            'class' => 'common\modules\api\v1\sleepquality\Module'
-                        ],
                         'socialnetwork' => [
                             'class' => 'common\modules\api\v1\socialnetwork\Module'
-                        ],
-                        'stress' => [
-                            'class' => 'common\modules\api\v1\stress\Module'
                         ],
                         'user' => [
                             'class' => 'common\modules\api\v1\user\Module'
@@ -147,8 +108,7 @@ return [
                         'profiles' => 'api/v1/profile/backend/profile',
                         'users' => 'api/v1/user/backend/user',
                         'socialnetworks' => 'api/v1/socialnetwork/backend/socialnetwork',
-                        'notifications' => 'api/v1/notification/backend/notification',
-                    ],
+                        'notifications' => 'api/v1/notification/backend/notification',                    ],
                 ],
             ],
         ],

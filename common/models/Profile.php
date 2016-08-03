@@ -2,7 +2,6 @@
 
 namespace common\models;
 
-use yii\base\Exception;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use Yii;
@@ -18,11 +17,17 @@ class Profile extends ActiveRecord
 
     const SCENARIO_REGISTER = 'register';
 
+    /**
+     * Primary key name
+     *
+     * @inheritdoc
+     */
     public $primaryKey = 'user_id';
 
     /**
      * Table name
-     * @return string
+     *
+     * @inheritdoc
      */
     public static function tableName()
     {
@@ -31,7 +36,8 @@ class Profile extends ActiveRecord
 
     /**
      * Attribute labels
-     * @return array
+     *
+     * @inheritdoc
      */
     public function attributeLabels()
     {
@@ -46,7 +52,7 @@ class Profile extends ActiveRecord
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function scenarios()
     {
@@ -59,7 +65,7 @@ class Profile extends ActiveRecord
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function rules()
     {
@@ -75,34 +81,24 @@ class Profile extends ActiveRecord
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
-    public function fields()
+    public function extraFields()
     {
-        $fields = parent::fields();
-//        $fields['sleeping_position'] = function($model) {
-//            return $model->getSleepingPosition();
-//        };
-//        $fields['reason_using_matrix'] = function($model) {
-//            return $model->getReasonUsingMatrix();
-//        };
-//        $fields['sleeping_positions'] = function($model) {
-//            return $model->getSleepingPosition();
-//        };
-
-        return $fields;
+        return ['user'];
     }
-
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSleepingPosition()
+    public function getUser()
     {
-        return $this->hasOne(SleepingPosition::className(), ['id' => 'profile_id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
-
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
