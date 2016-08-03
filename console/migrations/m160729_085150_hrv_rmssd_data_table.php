@@ -27,9 +27,9 @@ class m160729_085150_hrv_rmssd_data_table extends Migration
             
             
         ], $tableOptions);
-        $this->addForeignKey('fk_tbl_hrv_rmssd_data_tbl_users',
+        $this->addForeignKey('fk_tbl_hrv_rmssd_data_tbl_user',
             '{{%hrv_rmssd_data}}', 'user_id',
-            '{{%users}}', 'id',
+            '{{%user}}', 'id',
             'CASCADE', 'CASCADE');
     }
     /**
@@ -37,7 +37,7 @@ class m160729_085150_hrv_rmssd_data_table extends Migration
      */
     public function down()
     {
-        $this->dropForeignKey('fk_tbl_hrv_rmssd_data_tbl_users', '{{%hrv_rmssd_data}}');
+        $this->dropForeignKey('fk_tbl_hrv_rmssd_data_tbl_user', '{{%hrv_rmssd_data}}');
         $this->dropTable('{{%hrv_rmssd_data}}');
     }
 }
