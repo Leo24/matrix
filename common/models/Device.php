@@ -42,6 +42,7 @@ class Device extends ActiveRecord
             'position',
             'pin',
             'sn',
+            'pw',
             'updated_at',
         ];
     }
@@ -52,10 +53,10 @@ class Device extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'name', 'position', 'pin', 'sn'], 'safe'],
-            [['name', 'pin', 'sn'], 'string', 'max' => 255],
+            [['user_id', 'name', 'position', 'pin', 'sn', 'pw'], 'safe'],
+            [['name', 'pin', 'sn', 'pw'], 'string', 'max' => 255],
             [['user_id', 'updated_at'], 'integer'],
-            [['user_id', 'name', 'position', 'pin', 'sn'], 'required'],
+            [['user_id', 'name', 'position', 'pin', 'sn', 'pw'], 'required'],
             ['position', 'in', 'range' => ['left', 'right', 'middle']],
         ];
     }
@@ -88,6 +89,7 @@ class Device extends ActiveRecord
             'name' =>  Yii::t('app', 'Device name'),
             'pin' =>  Yii::t('app', 'Device PIN'),
             'sn' =>  Yii::t('app', 'Device SN'),
+            'pw' =>  Yii::t('app', 'Device PW'),
             'updated_at' =>  Yii::t('app', 'Updated at'),
         ];
     }
