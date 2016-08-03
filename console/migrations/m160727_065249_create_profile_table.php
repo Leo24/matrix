@@ -25,8 +25,6 @@ class m160727_065249_create_profile_table extends Migration
             'city' => $this->string(20)->notNull(),
             'profession_interest' => $this->string(255)->notNull(),
             'average_hours_sleep' => $this->string(255),
-            'device_name' => $this->string(255),
-            'device_position' => "enum('left','right','middle') DEFAULT NULL",
             'updated_at' => $this->integer(11)->unsigned()->defaultValue(null),
             'PRIMARY KEY(user_id)'
         ], $options);
