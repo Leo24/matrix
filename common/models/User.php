@@ -118,6 +118,14 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getReasonUsingMatrix()
+    {
+        return $this->hasOne(ReasonUsingMatrix::class, ['user_id' => 'id']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getUserNotifications()
     {
         return $this->hasMany(Notification::className(), ['id' => 'user_id']);
