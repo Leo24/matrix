@@ -55,6 +55,7 @@ class Notification extends ActiveRecord
         return [
             [['title', 'description', 'type', 'tag'], 'trim'],
             [['title', 'type', 'tag'], 'string', 'max' => 255],
+            [['viewed'], 'boolean'],
         ];
     }
     

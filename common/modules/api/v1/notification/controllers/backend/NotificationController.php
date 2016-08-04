@@ -33,9 +33,8 @@ class NotificationController extends ActiveController
                 'index'  => ['get'],
                 'view'   => ['get'],
                 'create' => ['post'],
-                'update' => ['post'],
+                'update' => ['patch'],
                 'delete' => ['post','delete'],
-                'markviewed' => ['post'],
             ]
         ];
 
@@ -50,9 +49,7 @@ class NotificationController extends ActiveController
     {
         $actions = parent::actions();
 
-//        $actions['index']['class'] = IndexAction::class;
         $actions['view']['class'] = ViewAction::class;
-        $actions['markviewed']['class'] = MarkviewedAction::class;;
 
         // disable actions
         unset($actions['create']);
