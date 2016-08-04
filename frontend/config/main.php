@@ -113,13 +113,6 @@ return [
                         'socialnetworks' => 'api/v1/socialnetwork/backend/socialnetwork',
                         'notifications' => 'api/v1/notification/backend/notification',                    ],
                 ],
-
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'prefix' => 'api/v1/',
-                    'controller' => ['notifications' => 'api/v1/notification/backend/notification',                    ],
-                    'patterns' => ['POST markviewed' => 'markviewed']
-                ],
             ],
         ],
     ],

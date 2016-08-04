@@ -13,7 +13,7 @@ use yii\web\HttpException;
  * @package common\modules\api\v1\notification\controllers\backend\actions
  */
 
-class ViewAction extends \yii\rest\ViewAction
+class CreateAction extends \yii\rest\CreateAction
 {
 
     /**
@@ -24,15 +24,17 @@ class ViewAction extends \yii\rest\ViewAction
     /**
      * Displays a model.
      *
-     * @param string $id the primary key of the model.
-     *
      * @return \yii\db\ActiveRecordInterface the model being displayed
      * @throws HttpException
      * @throws \yii\web\NotFoundHttpException
      */
-    public function run($id)
+    public function run()
     {
-        $model = $this->modelClass;
-        return $model::find()->where(['user_id' => $id])->all();
+        $request = Yii::$app->request;
+        if ($request->isPost) {
+            $data = $request->bodyParams;
+            $model = $this->modelClass;
+            return $model::find()->where(['>=', 'created_at', $data['date']])->andWhere(['user_id' => $data['user_id']])->all();
+        }
     }
 }
