@@ -24,6 +24,8 @@ class m160728_111504_create_social_network_table extends Migration
             'created_at' => $this->integer(11)->unsigned()->defaultValue(null),
         ], $options);
 
+        $this->createIndex('idx-social-network-user-id', '{{%social_network}}', 'user_id');
+
         $this->addForeignKey('fk_tbl_social_network_tbl_user',
             '{{%social_network}}', 'user_id',
             '{{%user}}', 'id',
@@ -36,6 +38,7 @@ class m160728_111504_create_social_network_table extends Migration
     public function down()
     {
         $this->dropForeignKey('fk_tbl_social_network_tbl_user', '{{%social_network}}');
+        $this->dropIndex('idx-social-network-user-id', '{{%social_network}}');
         $this->dropTable('{{%social_network}}');
     }
 }

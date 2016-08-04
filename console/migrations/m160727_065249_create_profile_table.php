@@ -23,11 +23,14 @@ class m160727_065249_create_profile_table extends Migration
             'gender' => "enum('female','male') NOT NULL DEFAULT 'male'",
             'state' => $this->string(20)->notNull(),
             'city' => $this->string(20)->notNull(),
+            'phone' => $this->string(20)->defaultValue(null),
             'profession_interest' => $this->string(255)->notNull(),
             'average_hours_sleep' => $this->string(255),
             'updated_at' => $this->integer(11)->unsigned()->defaultValue(null),
             'PRIMARY KEY(user_id)'
         ], $options);
+
+        $this->createIndex('idx-profile-user-id', '{{%profile}}', 'user_id');
 
         $this->addForeignKey('fk_tbl_profile_tbl_user',
             '{{%profile}}', 'user_id',
@@ -40,6 +43,7 @@ class m160727_065249_create_profile_table extends Migration
      */
     public function down()
     {
+        $this->dropIndex('idx-profile-user-id', '{{%profile}}');
         $this->dropForeignKey('fk_tbl_profile_tbl_user', '{{%profile}}');
         $this->dropTable('{{%profile}}');
     }

@@ -24,6 +24,8 @@ class m160801_063225_create_sleeping_position_table extends Migration
             'PRIMARY KEY(user_id)'
         ], $options);
 
+        $this->createIndex('idx-sleeping-position-user-id', '{{%sleeping_position}}', 'user_id');
+
         $this->addForeignKey('fk_tbl_sleeping_position_tbl_user',
             '{{%sleeping_position}}', 'user_id',
             '{{%user}}', 'id',
@@ -35,6 +37,7 @@ class m160801_063225_create_sleeping_position_table extends Migration
      */
     public function down()
     {
+        $this->dropIndex('idx-sleeping-position-user-id', '{{%sleeping_position}}');
         $this->dropForeignKey('fk_tbl_sleeping_position_tbl_user', '{{%sleeping_position}}');
         $this->dropTable('{{%sleeping_position}}');
     }

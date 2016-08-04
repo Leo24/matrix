@@ -26,6 +26,8 @@ class m160801_121813_create_reason_using_matrix_table extends Migration
             'PRIMARY KEY(user_id)'
         ], $options);
 
+        $this->createIndex('idx-reason-using-matrix-user-id', '{{%reason_using_matrix}}', 'user_id');
+
         $this->addForeignKey('fk_tbl_reason_using_matrix_tbl_user',
             '{{%reason_using_matrix}}', 'user_id',
             '{{%user}}', 'id',
@@ -37,6 +39,7 @@ class m160801_121813_create_reason_using_matrix_table extends Migration
      */
     public function down()
     {
+        $this->dropIndex('idx-reason-using-matrix-user-id', '{{%reason_using_matrix}}');
         $this->dropForeignKey('fk_tbl_reason_using_matrix_tbl_user', '{{%reason_using_matrix}}');
         $this->dropTable('{{%reason_using_matrix}}');
     }
