@@ -97,6 +97,12 @@ return [
                 [
                     'class' => 'yii\rest\UrlRule',
                     'prefix' => 'api/v1/',
+                    'controller' => ['user/password' => 'api/v1/user/backend/user'],
+                    'patterns' => ['PUT,PATCH' => 'password']
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'prefix' => 'api/v1/',
                     'controller' => ['emfit/emfitdata' => 'api/v1/emfitdata/emfitdata'],
                     'patterns' => ['POST' => 'getdata']
                 ],
