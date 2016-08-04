@@ -47,19 +47,6 @@ class Block extends ActiveRecord
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
-        return [
-            [['user_id', 'token', 'expired_at'], 'safe'],
-            [['token'], 'string', 'max' => 255],
-            [['expired_at'], 'integer'],
-            [['user_id', 'token', 'expired_at'], 'required'],
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function behaviors()
     {
         return [
@@ -75,6 +62,19 @@ class Block extends ActiveRecord
     }
 
     /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['user_id', 'token', 'expired_at'], 'safe'],
+            [['token'], 'string', 'max' => 255],
+            [['expired_at'], 'integer'],
+            [['user_id', 'token', 'expired_at'], 'required'],
+        ];
+    }
+
+    /**
      * Attributes labels
      * @inheritdoc
      */
@@ -82,9 +82,9 @@ class Block extends ActiveRecord
     {
         return [
             'user_id' => Yii::t('app', 'User ID'),
-            'token' =>  Yii::t('app', 'Token'),
-            'created_at' =>  Yii::t('app', 'Created at'),
-            'expired_at' =>  Yii::t('app', 'Expired at'),
+            'token' => Yii::t('app', 'Token'),
+            'created_at' => Yii::t('app', 'Created at'),
+            'expired_at' => Yii::t('app', 'Expired at'),
         ];
     }
 }

@@ -2,9 +2,9 @@
 
 namespace common\models;
 
-use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
 use Yii;
+use yii\db\ActiveRecord;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "reason_using_matrix".
@@ -56,6 +56,23 @@ class ReasonUsingMatrix extends ActiveRecord
     /**
      * @inheritdoc
      */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => null,
+                'updatedAtAttribute' => 'updated_at',
+                'value' => function () {
+                    return time();
+                },
+            ],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
@@ -79,26 +96,12 @@ class ReasonUsingMatrix extends ActiveRecord
                 ],
                 'safe'
             ],
-            ['user_id', 'unique', 'targetClass' => self::className(),
-                'message' => Yii::t('app', 'Sleeping position data exists')],
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
             [
-                'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => null,
-                'updatedAtAttribute' => 'updated_at',
-                'value' => function () {
-                    return time();
-                },
+                'user_id',
+                'unique',
+                'targetClass' => self::className(),
+                'message' => Yii::t('app', 'Sleeping position data exists')
             ],
         ];
     }
-
 }

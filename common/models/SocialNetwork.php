@@ -17,10 +17,7 @@ use yii\db\ActiveRecord;
  */
 class SocialNetwork extends ActiveRecord
 {
-
     const SCENARIO_REGISTER = 'register';
-
-    public $primaryKey = 'id';
 
     /**
      * @inheritdoc
@@ -28,6 +25,21 @@ class SocialNetwork extends ActiveRecord
     public static function tableName()
     {
         return '{{%social_network}}';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function scenarios()
+    {
+        return [
+            self::SCENARIO_REGISTER => [
+                'social_network_type',
+                'user_id',
+                'id',
+                'data',
+            ],
+        ];
     }
 
     /**
@@ -48,25 +60,16 @@ class SocialNetwork extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'user_id' => 'User ID',
-            'social_network_type' => 'Social Network Type',
-            'data' => 'Data',
+            'id' => Yii::t('app', 'ID'),
+            'user_id' => Yii::t('app', 'User ID'),
+            'social_network_type' => Yii::t('app', 'Social Network Type'),
+            'data' => Yii::t('app', 'Data'),
         ];
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
-    public function scenarios()
-    {
-        return [
-            self::SCENARIO_REGISTER => [
-                'social_network_type', 'user_id', 'id', 'data',
-            ],
-        ];
-    }
-
     public function fields()
     {
         $fields = parent::fields();
@@ -82,6 +85,14 @@ class SocialNetwork extends ActiveRecord
     }
 
     /**
+     * @inheritdoc
+     */
+    public function extraFields()
+    {
+        return ['user'];
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getUser()
@@ -89,19 +100,26 @@ class SocialNetwork extends ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
+    /**
+     * @return mixed
+     */
     public function getSocialNetworkData()
     {
         return json_decode($this->data);
     }
 
+    /**
+     * @param $user_id
+     * @param $type
+     * @return bool
+     */
     public static function existSocialNetwork($user_id, $type)
     {
-        return (bool) SocialNetwork::findOne(['user_id' => $user_id, 'social_network_type' => $type]);
+        return (bool)SocialNetwork::findOne(['user_id' => $user_id, 'social_network_type' => $type]);
     }
 
     /**
-     * @param bool $insert
-     * @return bool
+     * @inheritdoc
      */
     public function beforeSave($insert)
     {

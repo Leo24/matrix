@@ -2,9 +2,9 @@
 
 namespace common\models;
 
-use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
 use Yii;
+use yii\db\ActiveRecord;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * Class Profile
@@ -12,7 +12,6 @@ use Yii;
  */
 class Profile extends ActiveRecord
 {
-
     public $sleeping_position;
 
     const SCENARIO_REGISTER = 'register';
@@ -42,12 +41,13 @@ class Profile extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'firstname' => 'First name',
-            'lastname' => 'Last name',
-            'gender' => 'Gender',
-            'state' => 'State',
-            'city' => 'City',
-            'profession_interest' => 'Profession interest',
+            'firstname' => Yii::t('app', 'First name'),
+            'lastname' => Yii::t('app', 'Last name'),
+            'gender' => Yii::t('app', 'Gender'),
+            'state' => Yii::t('app', 'State'),
+            'city' => Yii::t('app', 'City'),
+            'phone' => Yii::t('app', 'Phone'),
+            'profession_interest' => Yii::t('app', 'Profession interest'),
         ];
     }
 
@@ -58,10 +58,34 @@ class Profile extends ActiveRecord
     {
         $scenarion = parent::scenarios();
         $scenarion[self::SCENARIO_REGISTER] = [
-                'firstname', 'lastname', 'gender', 'state', 'city', 'profession_interest',
-                'average_hours_sleep','user_id', 'average_hours_sleep'
-            ];
+            'firstname',
+            'lastname',
+            'gender',
+            'state',
+            'city',
+            'profession_interest',
+            'average_hours_sleep',
+            'user_id',
+            'average_hours_sleep'
+        ];
         return $scenarion;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => null,
+                'updatedAtAttribute' => 'updated_at',
+                'value' => function () {
+                    return time();
+                },
+            ],
+        ];
     }
 
     /**
@@ -70,10 +94,14 @@ class Profile extends ActiveRecord
     public function rules()
     {
         return [
-            [['firstname', 'lastname', 'profession_interest', 'state', 'city'], 'trim'],
-            [['firstname', 'lastname', 'state', 'city', 'profession_interest'], 'required', 'on' => 'register'],
+            [['firstname', 'lastname', 'profession_interest', 'state', 'city', 'phone'], 'trim'],
+            [
+                ['firstname', 'lastname', 'state', 'city', 'profession_interest'],
+                'required',
+                'on' => self::SCENARIO_REGISTER
+            ],
             [['firstname', 'lastname'], 'string', 'max' => 30],
-            [['city', 'state'], 'string', 'max' => 20],
+            [['city', 'state', 'phone'], 'string', 'max' => 20],
             [['profession_interest', 'average_hours_sleep'], 'string', 'max' => 255],
             ['gender', 'in', 'range' => ['female', 'male']],
             ['user_id', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('app', 'Profile exists')],
@@ -95,22 +123,4 @@ class Profile extends ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => null,
-                'updatedAtAttribute' => 'updated_at',
-                'value' => function () {
-                    return time();
-                },
-            ],
-        ];
-    }
-
 }

@@ -2,14 +2,14 @@
 
 namespace common\models;
 
-use Firebase\JWT\JWT;
+use Yii;
 use yii\base\Exception;
-use yii\behaviors\TimestampBehavior;
-use yii\web\UnauthorizedHttpException;
-use yii\web\IdentityInterface;
 use yii\db\ActiveRecord;
 use yii\web\HttpException;
-use Yii;
+use yii\web\IdentityInterface;
+use yii\web\UnauthorizedHttpException;
+use yii\behaviors\TimestampBehavior;
+use Firebase\JWT\JWT;
 
 /**
  * Class User
@@ -17,7 +17,6 @@ use Yii;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-
     const UNAUTHORIZED_INCORRECT_CODE = 12;
     const UNAUTHORIZED_EXPIRED_CODE = 13;
     const UNAUTHORIZED_BLOCK_CODE = 14;
@@ -27,30 +26,37 @@ class User extends ActiveRecord implements IdentityInterface
 
     const SCENARIO_LOGIN = 'login';
     const SCENARIO_REGISTER = 'register';
+    const SCENARIO_UPDATE_PASSWORD = 'password';
+
+    const TOKEN_EXPIRE_DAYS = 7;
+    const ALGORITHM = 'HS256';
+    const TYP = 'JWT';
 
     public $confirm;
+    public $current_password;
     public $firstname;
     public $lastname;
 
     /**
-     * Token expire
-     * @var int
+     * Table name
+     * @inheritdoc
      */
-    protected $tokenExpire = 3600 * 24 * 7; // 7 days
+    public static function tableName()
+    {
+        return '{{%user}}';
+    }
 
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function scenarios()
     {
-        return [
-            [['email', 'password', 'confirm'], 'required', 'on' => 'register'],
-            ['confirm', 'compare', 'compareAttribute' => 'password', 'on' => 'register'],
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_LOGIN] = ['email', 'password'];
+        $scenarios[self::SCENARIO_REGISTER] = ['email', 'password', 'username', 'confirm', 'firstname', 'lastname'];
+        $scenarios[self::SCENARIO_UPDATE_PASSWORD] = ['password', 'confirm', 'current_password'];
 
-            [['password', 'email'], 'string', 'max' => 255],
-            ['email', 'email'],
-            ['email', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('app', 'Email exists')],
-        ];
+        return $scenarios;
     }
 
     /**
@@ -73,11 +79,16 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @inheritdoc
      */
-    public function scenarios()
+    public function rules()
     {
         return [
-            self::SCENARIO_LOGIN => ['email', 'password'],
-            self::SCENARIO_REGISTER => ['email', 'password', 'username', 'confirm', 'firstname', 'lastname'],
+            [['email', 'password', 'confirm'], 'required', 'on' => self::SCENARIO_REGISTER],
+            [['current_password', 'password', 'confirm'], 'required', 'on' => self::SCENARIO_UPDATE_PASSWORD],
+            ['confirm', 'compare', 'compareAttribute' => 'password', 'on' => [self::SCENARIO_REGISTER, self::SCENARIO_UPDATE_PASSWORD]],
+            [['username', 'email'], 'safe'],
+            [['password', 'email'], 'string', 'max' => 255],
+            ['email', 'email'],
+            ['email', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('app', 'Email exists')],
         ];
     }
 
@@ -97,7 +108,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function extraFields()
     {
-        return ['userProfile', 'sleepPosition', 'reasonUsingMatrix'];
+        return ['userProfile', 'sleepPosition', 'reasonUsingMatrix', 'accountFields', 'socialNetwork'];
     }
 
     /**
@@ -119,9 +130,25 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getAccountFields()
+    {
+        return $this->hasOne(Profile::class, ['user_id' => 'id'])->select('phone');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getReasonUsingMatrix()
     {
         return $this->hasOne(ReasonUsingMatrix::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSocialNetwork()
+    {
+        return $this->hasOne(SocialNetwork::class, ['user_id' => 'id']);
     }
 
     /**
@@ -131,12 +158,15 @@ class User extends ActiveRecord implements IdentityInterface
     {
         parent::beforeSave($insert);
 
+        $this->setPassword($this->password);
+
         if ($this->scenario == self::SCENARIO_REGISTER) {
             $this->username = $this->getUsername();
         }
         if ($this->scenario == self::SCENARIO_LOGIN) {
             $this->last_login = time();
         }
+
         return true;
     }
 
@@ -151,36 +181,33 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Table name
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return '{{%user}}';
-    }
-
-    /**
      * Attribute labels
      * @inheritdoc
      */
     public function attributeLabels()
     {
         return [
-            'email' => 'Email',
-            'password' => 'Password',
-            'username' => 'User name',
-            'created_at' => 'Created at',
-            'updated_at' => 'Updated at',
-            'last_login' => 'Last login',
-            'sleeping_position' => 'Sleeping position'
+            'email' => Yii::t('app', 'Email'),
+            'password' => Yii::t('app', 'Password'),
+            'username' => Yii::t('app', 'User name'),
+            'created_at' => Yii::t('app', 'Created at'),
+            'updated_at' => Yii::t('app', 'Updated at'),
+            'last_login' => Yii::t('app', 'Last login'),
+            'sleeping_position' => Yii::t('app', 'Sleeping position'),
         ];
     }
 
+    /**
+     * @param $modelErrors
+     * @param bool $code
+     * @throws HttpException
+     */
     public static function validationExceptionFirstMessage($modelErrors, $code = false)
     {
         $fields = array_keys($modelErrors);
         $first_message = current($modelErrors[$fields[0]]);
-        throw new HttpException(422, "Validation exception: {$first_message}", $code ? self::VALIDATION_EXCEPTION_CODE : 0);
+        throw new HttpException(422, "Validation exception: {$first_message}",
+            $code ? self::VALIDATION_EXCEPTION_CODE : 0);
     }
 
     /**
@@ -198,7 +225,6 @@ class User extends ActiveRecord implements IdentityInterface
         $userModel->attributes = $data;
 
         if ($userModel->validate()) {
-            $userModel->setPassword($data['password']);
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 if ($userModel->save(false)) {
@@ -226,7 +252,9 @@ class User extends ActiveRecord implements IdentityInterface
                             $socialNetworkModel->attributes = $socialNetwork;
                             $socialNetworkModel->user_id = $data['user_id'];
 
-                            if (!SocialNetwork::existSocialNetwork($userModel->id, $socialNetwork['social_network_type'])) {
+                            if (!SocialNetwork::existSocialNetwork($userModel->id,
+                                $socialNetwork['social_network_type'])
+                            ) {
                                 if ($socialNetworkModel->save()) {
                                     $socialNetworksResponseData[] = $socialNetworkModel;
                                 }
@@ -268,7 +296,10 @@ class User extends ActiveRecord implements IdentityInterface
                 $transaction->rollBack();
                 throw new HttpException(422, $e->getMessage(), self::INTERNAL_ERROR_CODE);
             }
-        } else self::validationExceptionFirstMessage($userModel->errors);
+        } else {
+            self::validationExceptionFirstMessage($userModel->errors);
+        }
+        throw new HttpException(500, 'Internal server error.');
     }
 
     /**
@@ -276,45 +307,44 @@ class User extends ActiveRecord implements IdentityInterface
      *
      * @return string
      */
-    public
-    function getUsername()
+    public function getUsername()
     {
         return ucfirst(strtolower($this->firstname)) . ucfirst(strtolower($this->lastname));
     }
 
     /**
      * Getter for secret key that's used for generation of JWT
+     *
      * @return string secret key used to generate JWT
      */
-    protected
-    static function getSecretKey()
+    protected static function getSecretKey()
     {
         return Yii::$app->params['secretJWT'];
     }
 
     /**
      * Getter for "header" array that's used for generation of JWT
+     *
      * @return array JWT Header Token param, see http://jwt.io/ for details
      */
-    protected
-    static function getHeaderToken()
+    protected static function getHeaderToken()
     {
         return [
-            'typ' => 'JWT',
-            'alg' => self::getAlgo()
+            'typ' => self::TYP,
+            'alg' => self::getAlgorithm()
         ];
     }
 
     /**
      * Logins user by given JWT encoded string. If string is correctly decoded
      * - array (token) must contain 'jti' param - the id of existing user
+     *
      * @param string $token access token to decode
      * @param null $type
      * @return mixed|null User model or null if there's no user
      * @throws UnauthorizedHttpException if anything went wrong
      */
-    public
-    static function findIdentityByAccessToken($token, $type = null)
+    public static function findIdentityByAccessToken($token, $type = null)
     {
         $decodedArray = static::decodeJWT($token);
         if (self::isBlocked($token)) {
@@ -333,12 +363,12 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Decode JWT token
+     *
      * @param string $token access token to decode
      * @return array decoded token
      * @throws UnauthorizedHttpException
      */
-    public
-    static function decodeJWT($token)
+    public static function decodeJWT($token)
     {
         $secret = static::getSecretKey();
         $errorText = 'Incorrect token';
@@ -346,7 +376,7 @@ class User extends ActiveRecord implements IdentityInterface
         // Decode token and transform it into array.
         // Firebase\JWT\JWT throws exception if token can not be decoded
         try {
-            $decoded = JWT::decode($token, $secret, [static::getAlgo()]);
+            $decoded = JWT::decode($token, $secret, [static::getAlgorithm()]);
         } catch (\Exception $e) {
             if ($e->getMessage() == 'Expired token') {
                 $errorText = 'Expired token';
@@ -354,19 +384,20 @@ class User extends ActiveRecord implements IdentityInterface
             }
             throw new UnauthorizedHttpException($errorText, $code);
         }
-        $decodedArray = (array)$decoded;
+        $decodedArray = (array) $decoded;
+
         return $decodedArray;
     }
 
     /**
      * Finds User model using static method findOne
      * Override this method in model if you need to complicate id-management
+     *
      * @param integer $id if of user to search
      * @return mixed User model
      * @throws UnauthorizedHttpException if model is not found
      */
-    public
-    static function findByJTI($id)
+    public static function findByJTI($id)
     {
         $model = static::findOne($id);
         $errorText = "Incorrect token";
@@ -374,27 +405,28 @@ class User extends ActiveRecord implements IdentityInterface
         if (empty($model)) {
             throw new UnauthorizedHttpException($errorText);
         }
+
         return $model;
     }
 
     /**
-     * Getter for encryption algorytm used in JWT generation and decoding
+     * Getter for encryption algorithm used in JWT generation and decoding
      * Override this method to set up other algorytm.
-     * @return string needed algorytm
+     *
+     * @return string needed algorithm
      */
-    public
-    static function getAlgo()
+    public static function getAlgorithm()
     {
-        return 'HS256';
+        return self::ALGORITHM;
     }
 
     /**
      * Returns some 'id' to encode to token. By default is current model id.
+     *
      * If you override this method, be sure that findByJTI is updated too
      * @return integer any unique integer identifier of user
      */
-    public
-    function getJTI()
+    public function getJTI()
     {
         //use primary key for JTI
         return $this->getPrimaryKey();
@@ -402,11 +434,12 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Encodes model data to create custom JWT with model.id set in it
-     * @param  array $payloads payloads data to set, default value is empty array. See registered claim names for payloads at https://tools.ietf.org/html/rfc7519#section-4.1
+     *
+     * @param  array $payloads payloads data to set, default value is empty array.
+     * See registered claim names for payloads at https://tools.ietf.org/html/rfc7519#section-4.1
      * @return sting encoded JWT
      */
-    public
-    function getJWT($payloads = [])
+    public function getJWT($payloads = [])
     {
         $secret = static::getSecretKey();
         // Merge token with presets not to miss any params in custom
@@ -417,19 +450,29 @@ class User extends ActiveRecord implements IdentityInterface
         //set exp if not isset
         if (!isset($token['exp'])) {
             //default value is an hour from now
-            $token['exp'] = time() + $this->tokenExpire;
+            $token['exp'] = time() + $this->getTokenExpire();
         }
-        return JWT::encode($token, $secret, static::getAlgo());
+        return JWT::encode($token, $secret, static::getAlgorithm());
+    }
+
+    /**
+     * Returns token expire period
+     *
+     * @return int
+     */
+    public function getTokenExpire()
+    {
+        return 3600 * 24 * self::TOKEN_EXPIRE_DAYS;
     }
 
     /**
      * Get payload data in a JWT string
+     *
      * @param string $token
      * @param string|null $payload_id Payload ID that want to return, the default value is NULL. If NULL it will return all the payloads data
      * @return mixed payload data
      */
-    public
-    static function getPayload($token, $payload_id = null)
+    public static function getPayload($token, $payload_id = null)
     {
         $decoded_array = static::decodeJWT($token);
         if ($payload_id != null) {
@@ -440,12 +483,12 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Adds token in the black list;
+     * Adds token in the black list
+     *
      * @param $token
      * @return bool
      */
-    public
-    static function addBlackListToken($token)
+    public static function addBlackListToken($token)
     {
         if ($token) {
             if (Block::find()->where(['token' => $token])->one()) {
@@ -466,11 +509,11 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Check the token for the block
+     *
      * @param $token
      * @return bool
      */
-    public
-    static function isBlocked($token)
+    public static function isBlocked($token)
     {
         if (Block::find()->where(['token' => $token])->one()) {
             return true;
@@ -480,42 +523,42 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Finds user by id
+     *
      * @param int|string $id
      * @return null|static
      */
-    public
-    static function findIdentity($id)
+    public static function findIdentity($id)
     {
         return static::findOne(['id' => $id]);
     }
 
     /**
      * Finds user by username
+     *
      * @param string $username
      * @return static|null
      */
-    public
-    static function findByUsername($username)
+    public static function findByUsername($username)
     {
         return static::findOne(['username' => $username]);
     }
 
     /**
      * Returns id user
+     *
      * @return mixed
      */
-    public
-    function getId()
+    public function getId()
     {
         return $this->id;
     }
 
     /**
      * Returns AuthKey user
+     *
      * @return mixed
      */
-    public
-    function getAuthKey()
+    public function getAuthKey()
     {
         $headerAuthorizationKey = Yii::$app->getRequest()->getHeaders()->get('Authorization');
         if ($headerAuthorizationKey !== null && preg_match("/^Bearer\\s+(.*?)$/", $headerAuthorizationKey, $matches)) {
@@ -528,34 +571,44 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Validates user token
+     *
      * @param string $token
      * @return bool
      */
-    public
-    function validateAuthKey($token)
+    public function validateAuthKey($token)
     {
         return (bool)JWT::decode($token, self::getSecretKey(), [static::getAlgo()]);
     }
 
     /**
      * Validates password
-     * @param  string $password password to validate
+     *
+     * @param string $password password to validate
      * @return boolean if password provided is valid for current user
      */
-    public
-    function validatePassword($password)
+    public function validatePassword($password)
     {
-        return Yii::$app->getSecurity()->validatePassword($password, $this->password);
+        return Yii::$app->getSecurity()->validatePassword($password, $hash = $this->password);
     }
 
     /**
      * Generates password hash from password and sets it to the model
+     *
      * @param string $password
      */
-    public
-    function setPassword($password)
+    public function setPassword($password)
     {
         $this->password = Yii::$app->security->generatePasswordHash($password);
     }
 
+    /**
+     * Returns password hash
+     *
+     * @param string $password
+     * @return string
+     */
+    public function getPasswordHash($password)
+    {
+        return Yii::$app->security->generatePasswordHash($password);
+    }
 }
