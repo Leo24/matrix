@@ -2,14 +2,15 @@
 
 namespace common\modules\api\v1\authorization\controllers\frontend;
 
-use common\models\User;
-use yii\rest\Controller;
 use Yii;
+use yii\rest\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
+use common\models\User;
 
 /**
  * Class AuthorizationController
+ *
  * @package common\modules\api\v1\authorization\controllers\frontend
  */
 class AuthorizationController extends Controller

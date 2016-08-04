@@ -1,14 +1,13 @@
 <?php
 namespace common\modules\api\v1\authorization\controllers\backend;
 
-use common\models\User;
-
+use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
-use Yii;
-use yii\web\ForbiddenHttpException;
 use yii\web\HttpException;
+use yii\web\ForbiddenHttpException;
 use yii\web\ServerErrorHttpException;
+use common\models\User;
 
 /**
  * Class AuthorizationController
@@ -16,22 +15,23 @@ use yii\web\ServerErrorHttpException;
  */
 class AuthorizationController extends ActiveController
 {
-
     const SESSION_CLOSED_CODE = 15;
 
     /**
      * @inheritdoc
      */
-    public $modelClass = 'app\models\User';
+    public $modelClass = User::class;
 
     /**
      * Token
+     *
      * @var null
      */
     protected $authorizationToken = null;
 
     /**
      * AuthorizationController constructor.
+     *
      * @param string $id
      * @param \yii\base\Module $module
      * @param array $config
@@ -57,6 +57,7 @@ class AuthorizationController extends ActiveController
 
     /**
      * Refresh authorization token
+     *
      * @return array|null
      * @throws ForbiddenHttpException
      * @throws \yii\web\UnauthorizedHttpException
@@ -74,6 +75,7 @@ class AuthorizationController extends ActiveController
 
     /**
      * Logout user
+     *
      * @throws HttpException
      * @throws ServerErrorHttpException
      * @throws \yii\web\UnauthorizedHttpException
@@ -85,6 +87,7 @@ class AuthorizationController extends ActiveController
         if (User::addBlackListToken($this->authorizationToken)) {
             throw new HttpException(200, 'The session is successfully closed', self::SESSION_CLOSED_CODE);
         }
+
         throw new ServerErrorHttpException;
     }
 
