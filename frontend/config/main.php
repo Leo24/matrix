@@ -28,6 +28,9 @@ return [
                         'socialnetwork' => [
                             'class' => 'common\modules\api\v1\socialnetwork\Module'
                         ],
+                        'notification' => [
+                            'class' => 'common\modules\api\v1\notification\Module'
+                        ],
                         'user' => [
                             'class' => 'common\modules\api\v1\user\Module'
                         ],
