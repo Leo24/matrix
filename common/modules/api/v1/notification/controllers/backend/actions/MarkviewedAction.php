@@ -13,8 +13,14 @@ use yii\web\HttpException;
  * @package common\modules\api\v1\notification\controllers\backend\actions
  */
 
-class IndexAction extends \yii\rest\IndexAction
+class ViewAction extends \yii\rest\ViewAction
 {
+
+    /**
+     * @inheritdoc
+     */
+    public $modelClass = Notification::class;
+
     /**
      * Displays a model.
      *
@@ -24,8 +30,9 @@ class IndexAction extends \yii\rest\IndexAction
      * @throws HttpException
      * @throws \yii\web\NotFoundHttpException
      */
-    public function run()
+    public function run($id)
     {
-        
+        $model = $this->modelClass;
+        return $model::find()->where(['user_id' => $id])->all();
     }
 }
