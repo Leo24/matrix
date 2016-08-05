@@ -3,7 +3,7 @@ namespace common\modules\api\v1\notification\controllers\backend;
 
 use common\models\Notification;
 use common\modules\api\v1\notification\controllers\backend\actions\ViewAction;
-use common\modules\api\v1\notification\controllers\backend\actions\MarkviewedAction;
+use common\modules\api\v1\notification\controllers\backend\actions\CreateAction;
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
@@ -33,9 +33,8 @@ class NotificationController extends ActiveController
                 'index'  => ['get'],
                 'view'   => ['get'],
                 'create' => ['post'],
-                'update' => ['post'],
+                'update' => ['patch'],
                 'delete' => ['post','delete'],
-                'markviewed' => ['post'],
             ]
         ];
 
@@ -50,12 +49,11 @@ class NotificationController extends ActiveController
     {
         $actions = parent::actions();
 
-//        $actions['index']['class'] = IndexAction::class;
+        $actions['create']['class'] = CreateAction::class;
         $actions['view']['class'] = ViewAction::class;
-        $actions['markviewed']['class'] = MarkviewedAction::class;;
 
         // disable actions
-        unset($actions['create']);
+        unset($actions['index']);
 
         return $actions;
     }
