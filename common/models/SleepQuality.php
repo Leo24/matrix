@@ -21,12 +21,19 @@ use Yii;
  */
 class SleepQuality extends \yii\db\ActiveRecord
 {
+
+    /**
+     * Primary key name
+     *
+     * @inheritdoc
+     */
+    public $primaryKey = 'id';
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'sleep_quality';
+        return '{{%sleep_quality}}';
     }
 
     /**
@@ -36,9 +43,11 @@ class SleepQuality extends \yii\db\ActiveRecord
     {
         return [
             [['user_id'], 'required'],
-            [['user_id', 'sleep_class_awake_percent', 'sleep_class_deep_percent', 'sleep_class_light_percent', 'sleep_class_rem_percent', 'sleep_class_awake_duration', 'sleep_class_deep_duration', 'sleep_class_light_duration', 'sleep_class_rem_duration'], 'integer'],
-            [['date'], 'safe'],
+            [['user_id', 'date', 'sleep_score', 'duration', 'duration_in_bed', 'duration_awake', 'duration_in_sleep', 'duration_in_rem', 'duration_in_light', 'duration_in_deep', 'duration_sleep_onset', 'bedexit_duration', 'bedexit_count', 'tossnturn_count', 'fm_count', 'awakenings'], 'integer'],
+            [['from', 'to'], 'string'],
         ];
+
+
     }
 
     /**
@@ -47,17 +56,27 @@ class SleepQuality extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
+
             'id' => 'ID',
             'user_id' => 'User ID',
+            'from' => 'From',
+            'to' => 'To',
             'date' => 'Date',
-            'sleep_class_awake_percent' => 'Sleep Class Awake Percent',
-            'sleep_class_deep_percent' => 'Sleep Class Deep Percent',
-            'sleep_class_light_percent' => 'Sleep Class Light Percent',
-            'sleep_class_rem_percent' => 'Sleep Class Rem Percent',
-            'sleep_class_awake_duration' => 'Sleep Class Awake Duration',
-            'sleep_class_deep_duration' => 'Sleep Class Deep Duration',
-            'sleep_class_light_duration' => 'Sleep Class Light Duration',
-            'sleep_class_rem_duration' => 'Sleep Class Rem Duration',
+            'sleep_score' => 'Sleep Score',
+            'duration' => 'Duration',
+            'duration_in_bed' => 'Duration in Bed',
+            'duration_awake' => 'Duration Awake',
+            'duration_in_sleep' => 'Duration in Sleep',
+            'duration_in_rem' => 'Duration in REM',
+            'duration_in_light' => 'Duration in Light',
+            'duration_in_deep' => 'Duration in Deep',
+            'duration_sleep_onset' => 'Duration Sleep onset',
+            'bedexit_duration' => 'Bedexit Duration',
+            'bedexit_count' => 'Bedexit Count',
+            'tossnturn_count' => 'Tossnturn Count',
+            'fm_count' => 'FM Count',
+            'awakenings' => 'Awakenings',
+
         ];
     }
 }
