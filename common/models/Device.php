@@ -15,6 +15,7 @@ class Device extends ActiveRecord
 {
     /**
      * Table name
+     *
      * @inheritdoc
      */
     public static function tableName()
@@ -23,20 +24,12 @@ class Device extends ActiveRecord
     }
 
     /**
-     * Primary key
-     * @inheritdoc
-     */
-    public static function primaryKey()
-    {
-        return 'user_id';
-    }
-
-    /**
      * @inheritdoc
      */
     public function fields()
     {
         return [
+            'id',
             'user_id',
             'name',
             'position',
@@ -80,6 +73,7 @@ class Device extends ActiveRecord
 
     /**
      * Attributes labels
+     *
      * @inheritdoc
      */
     public function attributeLabels()

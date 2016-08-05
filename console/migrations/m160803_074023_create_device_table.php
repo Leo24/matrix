@@ -16,6 +16,7 @@ class m160803_074023_create_device_table extends Migration
             ? 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB' : null;
 
         $this->createTable('{{%device}}', [
+            'id' => $this->primaryKey(),
             'user_id' => $this->integer(11)->unique(),
             'name' => $this->string(255),
             'position' => "enum('left','right','middle') DEFAULT NULL",
@@ -23,7 +24,6 @@ class m160803_074023_create_device_table extends Migration
             'pw' => $this->string(255)->notNull(),
             'sn' => $this->string(255)->notNull(),
             'updated_at' => $this->integer(11)->unsigned()->defaultValue(null),
-            'PRIMARY KEY(user_id)'
         ], $options);
 
         $this->createIndex('idx-device-user-id', '{{%device}}', 'user_id');

@@ -1,10 +1,10 @@
 <?php
 namespace common\modules\api\v1\profile\controllers\backend;
 
-use common\models\Profile;
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
+use common\models\Profile;
 
 /**
  * Profile controller
