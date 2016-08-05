@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m160729_090337_sleep_data_table extends Migration
+class m160729_090619_create_hrv_data_table extends Migration
 {
     /**
      * @inheritdoc
@@ -14,14 +14,17 @@ class m160729_090337_sleep_data_table extends Migration
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
         }
-        $this->createTable('{{%sleep_data}}', [
+        $this->createTable('{{%hrv_data}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer(11)->notNull(),
-            'timestamp' => $this->bigInteger(),
-            'sleep_type' => $this->float(),
+            'start_rmssd' => $this->float(),
+            'end_rmssd' => $this->float(),
+            'total_recovery' => $this->float(),
+            'recovery_ratio' => $this->float(),
+            'recovery_rate' => $this->float(),
         ], $tableOptions);
-        $this->addForeignKey('fk_tbl_sleep_data_tbl_user',
-            '{{%sleep_data}}', 'user_id',
+        $this->addForeignKey('fk_tbl_hrv_data_tbl_user',
+            '{{%hrv_data}}', 'user_id',
             '{{%user}}', 'id',
             'CASCADE', 'CASCADE');
     }
@@ -30,7 +33,7 @@ class m160729_090337_sleep_data_table extends Migration
      */
     public function down()
     {
-        $this->dropForeignKey('fk_tbl_sleep_data_tbl_user', '{{%sleep_data}}');
-        $this->dropTable('{{%sleep_data}}');
+        $this->dropForeignKey('fk_tbl_hrv_data_tbl_user', '{{%hrv_data}}');
+        $this->dropTable('{{%hrv_data}}');
     }
 }

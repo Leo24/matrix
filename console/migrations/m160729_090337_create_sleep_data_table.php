@@ -1,10 +1,8 @@
 <?php
-use yii\db\Schema;
+
 use yii\db\Migration;
-/**
- * Handles the creation for table `profiles`.
- */
-class m160729_083033_calc_data_table extends Migration
+
+class m160729_090337_create_sleep_data_table extends Migration
 {
     /**
      * @inheritdoc
@@ -16,16 +14,14 @@ class m160729_083033_calc_data_table extends Migration
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
         }
-        $this->createTable('{{%calc_data}}', [
+        $this->createTable('{{%sleep_data}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer(11)->notNull(),
             'timestamp' => $this->bigInteger(),
-            'heart_rate' => $this->float(),
-            'respiration_rate' => $this->float(),
-            'activity' => $this->integer(),
+            'sleep_type' => $this->float(),
         ], $tableOptions);
-        $this->addForeignKey('fk_tbl_calc_data_tbl_user',
-            '{{%calc_data}}', 'user_id',
+        $this->addForeignKey('fk_tbl_sleep_data_tbl_user',
+            '{{%sleep_data}}', 'user_id',
             '{{%user}}', 'id',
             'CASCADE', 'CASCADE');
     }
@@ -34,7 +30,7 @@ class m160729_083033_calc_data_table extends Migration
      */
     public function down()
     {
-        $this->dropForeignKey('fk_tbl_calc_data_tbl_user', '{{%calc_data}}');
-        $this->dropTable('{{%calc_data}}');
+        $this->dropForeignKey('fk_tbl_sleep_data_tbl_user', '{{%sleep_data}}');
+        $this->dropTable('{{%sleep_data}}');
     }
 }
