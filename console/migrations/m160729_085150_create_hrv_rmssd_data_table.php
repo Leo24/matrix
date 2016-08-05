@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m160729_090619_hrv_data_table extends Migration
+class m160729_085150_create_hrv_rmssd_data_table extends Migration
 {
     /**
      * @inheritdoc
@@ -14,17 +14,21 @@ class m160729_090619_hrv_data_table extends Migration
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
         }
-        $this->createTable('{{%hrv_data}}', [
+        $this->createTable('{{%hrv_rmssd_data}}', [
+           
+
+
             'id' => $this->primaryKey(),
             'user_id' => $this->integer(11)->notNull(),
-            'start_rmssd' => $this->float(),
-            'end_rmssd' => $this->float(),
-            'total_recovery' => $this->float(),
-            'recovery_ratio' => $this->float(),
-            'recovery_rate' => $this->float(),
+            'timestamp' => $this->bigInteger(),
+            'rmssd' => $this->integer(),
+            'low_frequency' => $this->integer(),
+            'high_frequency' => $this->integer(),
+            
+            
         ], $tableOptions);
-        $this->addForeignKey('fk_tbl_hrv_data_tbl_users',
-            '{{%hrv_data}}', 'user_id',
+        $this->addForeignKey('fk_tbl_hrv_rmssd_data_tbl_user',
+            '{{%hrv_rmssd_data}}', 'user_id',
             '{{%user}}', 'id',
             'CASCADE', 'CASCADE');
     }
@@ -33,7 +37,7 @@ class m160729_090619_hrv_data_table extends Migration
      */
     public function down()
     {
-        $this->dropForeignKey('fk_tbl_hrv_data_tbl_user', '{{%hrv_data}}');
-        $this->dropTable('{{%hrv_data}}');
+        $this->dropForeignKey('fk_tbl_hrv_rmssd_data_tbl_user', '{{%hrv_rmssd_data}}');
+        $this->dropTable('{{%hrv_rmssd_data}}');
     }
 }

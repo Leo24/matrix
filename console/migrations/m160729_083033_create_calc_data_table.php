@@ -1,8 +1,10 @@
 <?php
-
+use yii\db\Schema;
 use yii\db\Migration;
-
-class m160729_085150_hrv_rmssd_data_table extends Migration
+/**
+ * Handles the creation for table `profiles`.
+ */
+class m160729_083033_create_calc_data_table extends Migration
 {
     /**
      * @inheritdoc
@@ -14,21 +16,16 @@ class m160729_085150_hrv_rmssd_data_table extends Migration
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
         }
-        $this->createTable('{{%hrv_rmssd_data}}', [
-           
-
-
+        $this->createTable('{{%calc_data}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer(11)->notNull(),
             'timestamp' => $this->bigInteger(),
-            'rmssd' => $this->integer(),
-            'low_frequency' => $this->integer(),
-            'high_frequency' => $this->integer(),
-            
-            
+            'heart_rate' => $this->float(),
+            'respiration_rate' => $this->float(),
+            'activity' => $this->integer(),
         ], $tableOptions);
-        $this->addForeignKey('fk_tbl_hrv_rmssd_data_tbl_user',
-            '{{%hrv_rmssd_data}}', 'user_id',
+        $this->addForeignKey('fk_tbl_calc_data_tbl_user',
+            '{{%calc_data}}', 'user_id',
             '{{%user}}', 'id',
             'CASCADE', 'CASCADE');
     }
@@ -37,7 +34,7 @@ class m160729_085150_hrv_rmssd_data_table extends Migration
      */
     public function down()
     {
-        $this->dropForeignKey('fk_tbl_hrv_rmssd_data_tbl_user', '{{%hrv_rmssd_data}}');
-        $this->dropTable('{{%hrv_rmssd_data}}');
+        $this->dropForeignKey('fk_tbl_calc_data_tbl_user', '{{%calc_data}}');
+        $this->dropTable('{{%calc_data}}');
     }
 }

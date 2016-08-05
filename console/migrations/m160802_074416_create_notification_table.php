@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m160802_074416_notification_table extends Migration
+class m160802_074416_create_notification_table extends Migration
 {
     /**
      * @inheritdoc
@@ -28,7 +28,8 @@ class m160802_074416_notification_table extends Migration
 
         $this->addForeignKey('fk_tbl_notification_tbl_user',
             '{{%notification}}', 'user_id',
-            '{{%user}}', 'id');
+            '{{%user}}', 'id',
+            'CASCADE', 'CASCADE');
     }
 
     /**
