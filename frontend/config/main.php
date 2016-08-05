@@ -28,6 +28,9 @@ return [
                         'socialnetwork' => [
                             'class' => 'common\modules\api\v1\socialnetwork\Module'
                         ],
+                        'device' => [
+                            'class' => 'common\modules\api\v1\device\Module'
+                        ],
                         'notification' => [
                             'class' => 'common\modules\api\v1\notification\Module'
                         ],
@@ -117,7 +120,9 @@ return [
                         'profiles' => 'api/v1/profile/backend/profile',
                         'users' => 'api/v1/user/backend/user',
                         'socialnetworks' => 'api/v1/socialnetwork/backend/socialnetwork',
-                        'notifications' => 'api/v1/notification/backend/notification',                    ],
+                        'notifications' => 'api/v1/notification/backend/notification',
+                        'devices' => 'api/v1/device/backend/device',
+                    ],
                 ],
             ],
         ],
