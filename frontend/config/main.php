@@ -106,22 +106,19 @@ return [
                     'controller' => ['user/password' => 'api/v1/user/backend/user'],
                     'patterns' => ['PUT,PATCH' => 'password']
                 ],
-//                [
-//                    'class' => 'yii\rest\UrlRule',
-//                    'prefix' => 'api/v1/',
-//                    'controller' => ['emfit/emfitdata' => 'api/v1/emfitdata/emfitdata'],
-//                    'patterns' => ['POST' => 'getdata']
-//                ],
-
                 [
                     'class' => 'yii\rest\UrlRule',
                     'prefix' => 'api/v1/',
                     'controller' => ['emfit/emfitdata' => 'api/v1/emfitdata/emfitdata'],
-                    'patterns' => [
-                                    'GET' => 'parse-data',
-//                                    'POST' => 'parse-data'
-                                  ]
+                    'patterns' => ['POST' => 'parse-data']
                 ],
+
+//                [
+//                    'class' => 'yii\rest\UrlRule',
+//                    'prefix' => 'api/v1/',
+//                    'controller' => ['emfitdata' => 'api/v1/emfitdata/emfitdata'],
+//                    'patterns' => [ 'GET' => 'parse-data',]
+//                ],
                 
                 [
                     'class' => 'yii\rest\UrlRule',
