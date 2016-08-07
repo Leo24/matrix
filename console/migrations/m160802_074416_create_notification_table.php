@@ -26,10 +26,15 @@ class m160802_074416_create_notification_table extends Migration
             'updated_at' => $this->integer(11)->unsigned()->defaultValue(null),
         ], $tableOptions);
 
-        $this->addForeignKey('fk_tbl_notification_tbl_user',
-            '{{%notification}}', 'user_id',
-            '{{%user}}', 'id',
-            'CASCADE', 'CASCADE');
+        $this->addForeignKey(
+            'fk_tbl_notification_tbl_user',
+            '{{%notification}}',
+            'user_id',
+            '{{%user}}',
+            'id',
+            'CASCADE',
+            'CASCADE'
+        );
     }
 
     /**

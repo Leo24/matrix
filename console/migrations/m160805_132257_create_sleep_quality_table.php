@@ -39,10 +39,15 @@ class m160805_132257_create_sleep_quality_table extends Migration
             'awakenings' => $this->integer(11),
         ], $tableOptions);
 
-        $this->addForeignKey('fk_tbl_sleep_quality_tbl_user',
-            '{{%sleep_quality}}', 'user_id',
-            '{{%user}}', 'id',
-            'CASCADE', 'CASCADE');
+        $this->addForeignKey(
+            'fk_tbl_sleep_quality_tbl_user',
+            '{{%sleep_quality}}',
+            'user_id',
+            '{{%user}}',
+            'id',
+            'CASCADE',
+            'CASCADE'
+        );
     }
 
     /**

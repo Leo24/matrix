@@ -23,10 +23,15 @@ class m160729_090619_hrv_data_table extends Migration
             'recovery_ratio' => $this->float(),
             'recovery_rate' => $this->float(),
         ], $tableOptions);
-        $this->addForeignKey('fk_tbl_hrv_data_tbl_users',
-            '{{%hrv_data}}', 'user_id',
-            '{{%user}}', 'id',
-            'CASCADE', 'CASCADE');
+        $this->addForeignKey(
+            'fk_tbl_hrv_data_tbl_users',
+            '{{%hrv_data}}',
+            'user_id',
+            '{{%user}}',
+            'id',
+            'CASCADE',
+            'CASCADE'
+        );
     }
     /**
      * @inheritdoc

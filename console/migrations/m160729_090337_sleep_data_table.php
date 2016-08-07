@@ -20,10 +20,15 @@ class m160729_090337_sleep_data_table extends Migration
             'timestamp' => $this->bigInteger(),
             'sleep_type' => $this->float(),
         ], $tableOptions);
-        $this->addForeignKey('fk_tbl_sleep_data_tbl_user',
-            '{{%sleep_data}}', 'user_id',
-            '{{%user}}', 'id',
-            'CASCADE', 'CASCADE');
+        $this->addForeignKey(
+            'fk_tbl_sleep_data_tbl_user',
+            '{{%sleep_data}}',
+            'user_id',
+            '{{%user}}',
+            'id',
+            'CASCADE',
+            'CASCADE'
+        );
     }
     /**
      * @inheritdoc
