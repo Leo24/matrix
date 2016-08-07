@@ -110,15 +110,15 @@ return [
                     'class' => 'yii\rest\UrlRule',
                     'prefix' => 'api/v1/',
                     'controller' => ['emfit/emfitdata' => 'api/v1/emfitdata/emfitdata'],
-                    'patterns' => ['POST' => 'parse-data']
+                    'patterns' => ['POST' => 'get-data']
                 ],
 
-//                [
-//                    'class' => 'yii\rest\UrlRule',
-//                    'prefix' => 'api/v1/',
-//                    'controller' => ['emfitdata' => 'api/v1/emfitdata/emfitdata'],
-//                    'patterns' => [ 'GET' => 'parse-data',]
-//                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'prefix' => 'api/v1/',
+                    'controller' => ['emfitdata' => 'api/v1/emfitdata/emfitdata'],
+                    'patterns' => [ 'GET' => 'parse-data',]
+                ],
                 
                 [
                     'class' => 'yii\rest\UrlRule',

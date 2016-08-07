@@ -57,8 +57,4 @@ class NotificationController extends ActiveController
 
         return $actions;
     }
-
-
-
-
 }

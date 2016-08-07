@@ -25,7 +25,7 @@ class EmfitdataController extends ActiveController
     /**
      * @parse data into database
      */
-    public function actionGetdata()
+    public function actionGetData()
     {
         $CalcDataModel = new CalcData;
         $HrvDataModel = new HrvData;
@@ -38,7 +38,7 @@ class EmfitdataController extends ActiveController
         if ($request->isPost) {
             $json = $request->bodyParams;
             $password = Yii::$app->security->generatePasswordHash('test');
-            if($UserModel->find()->where( [ 'id' => $json['user_id']] )->exists() == false){
+            if ($UserModel->find()->where([ 'id' => $json['user_id']])->exists() == false) {
                 $UserModel->id          = $json['user_id'];
                 $UserModel->email       = $json['device'] . '@test.com';
                 $UserModel->username    = $json['device'].'Testname';
@@ -69,7 +69,7 @@ class EmfitdataController extends ActiveController
             $SleepQualityModel->isNewRecord             = true;
             $SleepQualityModel->save();
 
-            if(!empty($json['calc_data'])) {
+            if (!empty($json['calc_data'])) {
                 $jsonCalcData = json_decode($json['calc_data'], true);
                 $currentStep = $jsonCalcData[0][0];
                 foreach ($jsonCalcData as $k => $m) {
@@ -87,7 +87,7 @@ class EmfitdataController extends ActiveController
                 }
             }
 
-            if(!empty($json['sleep_data'])) {
+            if (!empty($json['sleep_data'])) {
                 $jsonSleepData = json_decode($json['sleep_data'], true);
                 foreach ($jsonSleepData as $k => $m) {
                     $SleepDataModel->id             = null;
@@ -99,7 +99,7 @@ class EmfitdataController extends ActiveController
                 }
             }
 
-            if(!empty($json['hrv_data'])) {
+            if (!empty($json['hrv_data'])) {
                 $jsonHrvData = json_decode($json['hrv_data'], true);
                 foreach ($jsonHrvData as $k => $m) {
                     $HrvDataModel->id               = null;
@@ -114,12 +114,11 @@ class EmfitdataController extends ActiveController
                 }
             }
 
-            if(!empty($json['hrv_rmssd_data'])) {
-
+            if (!empty($json['hrv_rmssd_data'])) {
                 $jsonHrvRmssdData = json_decode($json['hrv_rmssd_data'], true);
                 $currentStep = $jsonHrvRmssdData [0][0];
                 foreach ($jsonHrvRmssdData as $k => $m) {
-                    if ((int)$m[0] - (int)$currentStep >= 6000 || $k < 10 ) { // Save data in 10 minutes interval
+                    if ((int)$m[0] - (int)$currentStep >= 6000 || $k < 10) { // Save data in 10 minutes interval
                         $currentStep = $m[0];
                         $HrvRmssdDataModel->id              = null;
                         $HrvRmssdDataModel->user_id         = $json['user_id'];
@@ -136,11 +135,6 @@ class EmfitdataController extends ActiveController
         }
     }
 
-    
-
-
-
-
     /**
      * @return array
      */
@@ -152,7 +146,6 @@ class EmfitdataController extends ActiveController
         $SleepCyclesModel = new SleepCycle;
         $StressModel = new Stress;
 
-
         $CalcDataModel = new CalcData;
         $HrvDataModel = new HrvData;
         $HrvRmssdDataModel = new HrvRmssdData;
@@ -162,29 +155,20 @@ class EmfitdataController extends ActiveController
 
         $path = getcwd() . '/tmp/';
         $dir = scandir($path);
-        foreach($dir as $key => $str){
-//            $file = file_get_contents($path . $str);
-            $file = file_get_contents($path . 'Emfit_data.txt');
-
-
+        foreach ($dir as $key => $str) {
+            $file = file_get_contents($path . $str);
+//            $file = file_get_contents($path . 'Emfit_data.txt');
             $file_parts = pathinfo($str);
-
-            if($file_parts['extension'] == 'txt') {
-
+            if ($file_parts['extension'] == 'txt') {
                 $json = json_decode($file, true);
-
-
                 $password = Yii::$app->security->generatePasswordHash('test');
-
-                if($UserModel->find()->where( [ 'id' => $json['user_id']] )->exists() == false){
-
+                if ($UserModel->find()->where([ 'id' => $json['user_id']])->exists() == false) {
                     $UserModel->id          = $json['user_id'];
                     $UserModel->email       = $json['device'] . '@test.com';
                     $UserModel->username    = $json['device'].'Testname';
                     $UserModel->password    = $password;
                     $UserModel->isNewRecord = true;
                     $UserModel->save();
-
                 }
 
                 $SleepQualityModel->id                      = null;
@@ -210,7 +194,7 @@ class EmfitdataController extends ActiveController
                 $SleepQualityModel->save();
 
 
-                if(!empty($json['calc_data'])) {
+                if (!empty($json['calc_data'])) {
                     $jsonCalcData = json_decode($json['calc_data'], true);
                     $currentStep = $jsonCalcData[0][0];
                     foreach ($jsonCalcData as $k => $m) {
@@ -226,11 +210,11 @@ class EmfitdataController extends ActiveController
                             $CalcDataModel->save();
                         }
                     }
-                }else{
+                } else {
                     continue;
                 }
 
-                if(!empty($json['sleep_data'])) {
+                if (!empty($json['sleep_data'])) {
                     $jsonSleepData = json_decode($json['sleep_data'], true);
                     foreach ($jsonSleepData as $k => $m) {
                         $SleepDataModel->id             = null;
@@ -240,11 +224,11 @@ class EmfitdataController extends ActiveController
                         $SleepDataModel->isNewRecord    = true;
                         $SleepDataModel->save();
                     }
-                }else{
+                } else {
                     continue;
                 }
 
-                if(!empty($json['hrv_data'])) {
+                if (!empty($json['hrv_data'])) {
                     $jsonHrvData = json_decode($json['hrv_data'], true);
                     foreach ($jsonHrvData as $k => $m) {
                         $HrvDataModel->id               = null;
@@ -257,12 +241,11 @@ class EmfitdataController extends ActiveController
                         $HrvDataModel->isNewRecord      = true;
                         $HrvDataModel->save();
                     }
-                }else{
+                } else {
                     continue;
                 }
 
-                if(!empty($json['hrv_rmssd_data'])) {
-
+                if (!empty($json['hrv_rmssd_data'])) {
                     $jsonHrvRmssdData = json_decode($json['hrv_rmssd_data'], true);
                     $currentStep = $jsonHrvRmssdData [0][0];
                     foreach ($jsonHrvRmssdData as $k => $m) {
@@ -278,18 +261,17 @@ class EmfitdataController extends ActiveController
                             $HrvRmssdDataModel->save();
                         }
                     }
-                }else{
+                } else {
                     continue;
                 }
-
             }
 
         }
-
     }
 
-    protected function checkData($data){
-        if(!empty($data) && !is_null($data) && isset($data)){
+    protected function checkData($data)
+    {
+        if (!empty($data) && !is_null($data) && isset($data)) {
             return $data;
         }
         return false;
