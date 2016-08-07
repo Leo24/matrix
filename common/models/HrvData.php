@@ -16,7 +16,7 @@ use Yii;
  * @property double $recovery_ratio
  * @property double $recovery_rate
  *
- * @property Users $user
+ * @property User $user
  */
 class HrvData extends \yii\db\ActiveRecord
 {

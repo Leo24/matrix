@@ -1,5 +1,7 @@
 <?php
+
 namespace common\models;
+
 use Yii;
 use yii\base\Exception;
 use yii\db\ActiveRecord;

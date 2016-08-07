@@ -14,7 +14,7 @@ use Yii;
  * @property integer $low_frequency
  * @property integer $high_frequency
  *
- * @property Users $user
+ * @property User $user
  */
 class HrvRmssdData extends \yii\db\ActiveRecord
 {

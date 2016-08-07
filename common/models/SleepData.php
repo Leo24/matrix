@@ -12,7 +12,7 @@ use Yii;
  * @property string $timestamp
  * @property double $sleep_type
  *
- * @property Users $user
+ * @property User $user
  */
 class SleepData extends \yii\db\ActiveRecord
 {
