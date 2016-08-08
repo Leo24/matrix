@@ -10,7 +10,6 @@ use yii\web\IdentityInterface;
 use yii\web\UnauthorizedHttpException;
 use yii\behaviors\TimestampBehavior;
 use Firebase\JWT\JWT;
-
 /**
  * Class User
  * @package common\models
@@ -20,23 +19,18 @@ class User extends ActiveRecord implements IdentityInterface
     const UNAUTHORIZED_INCORRECT_CODE = 12;
     const UNAUTHORIZED_EXPIRED_CODE = 13;
     const UNAUTHORIZED_BLOCK_CODE = 14;
-
     const INTERNAL_ERROR_CODE = 22;
     const VALIDATION_EXCEPTION_CODE = 21;
-
     const SCENARIO_LOGIN = 'login';
     const SCENARIO_REGISTER = 'register';
     const SCENARIO_UPDATE_PASSWORD = 'password';
-
     const TOKEN_EXPIRE_DAYS = 7;
     const ALGORITHM = 'HS256';
     const TYP = 'JWT';
-
     public $confirm;
     public $current_password;
     public $firstname;
     public $lastname;
-
     /**
      * Table name
      * @inheritdoc
@@ -45,7 +39,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return '{{%user}}';
     }
-
     /**
      * @inheritdoc
      */
@@ -55,10 +48,8 @@ class User extends ActiveRecord implements IdentityInterface
         $scenarios[self::SCENARIO_LOGIN] = ['email', 'password'];
         $scenarios[self::SCENARIO_REGISTER] = ['email', 'password', 'username', 'confirm', 'firstname', 'lastname'];
         $scenarios[self::SCENARIO_UPDATE_PASSWORD] = ['password', 'confirm', 'current_password'];
-
         return $scenarios;
     }
-
     /**
      * @inheritdoc
      */
@@ -75,7 +66,6 @@ class User extends ActiveRecord implements IdentityInterface
             ],
         ];
     }
-
     /**
      * @inheritdoc
      */
@@ -91,7 +81,6 @@ class User extends ActiveRecord implements IdentityInterface
             ['email', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('app', 'Email exists')],
         ];
     }
-
     /**
      * @inheritdoc
      */
@@ -99,10 +88,8 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $fields = parent::fields();
         unset($fields['password']);
-
         return $fields;
     }
-
     /**
      * @inheritdoc
      */
@@ -110,7 +97,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return ['userProfile', 'sleepPosition', 'reasonUsingMatrix', 'UserNotifications', 'accountFields', 'socialNetwork'];
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -118,7 +104,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->hasOne(SleepingPosition::class, ['user_id' => 'id']);
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -126,7 +111,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->hasOne(Profile::class, ['user_id' => 'id']);
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -134,7 +118,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->hasOne(Profile::class, ['user_id' => 'id'])->select('phone');
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -142,7 +125,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->hasOne(ReasonUsingMatrix::class, ['user_id' => 'id']);
     }
-    
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -150,8 +133,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->hasMany(Notification::className(), ['id' => 'user_id']);
     }
-
-
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -159,36 +140,29 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->hasOne(SocialNetwork::class, ['user_id' => 'id']);
     }
-
     /**
      * @inheritdoc
      */
     public function beforeSave($insert)
     {
         parent::beforeSave($insert);
-
         $this->setPassword($this->password);
-
         if ($this->scenario == self::SCENARIO_REGISTER) {
             $this->username = $this->getUsername();
         }
         if ($this->scenario == self::SCENARIO_LOGIN) {
             $this->last_login = time();
         }
-
         return true;
     }
-
     /**
      * @inheritdoc
      */
     public function afterSave($insert, $changedAttributes)
     {
         parent::afterSave($insert, $changedAttributes);
-
         unset($this->password);
     }
-
     /**
      * Attribute labels
      * @inheritdoc
@@ -205,7 +179,6 @@ class User extends ActiveRecord implements IdentityInterface
             'sleeping_position' => Yii::t('app', 'Sleeping position'),
         ];
     }
-
     /**
      * @param $modelErrors
      * @param bool $code
@@ -218,7 +191,6 @@ class User extends ActiveRecord implements IdentityInterface
         throw new HttpException(422, "Validation exception: {$first_message}",
             $code ? self::VALIDATION_EXCEPTION_CODE : 0);
     }
-
     /**
      * Register a new user
      *
@@ -232,7 +204,6 @@ class User extends ActiveRecord implements IdentityInterface
         $userModel = new User;
         $userModel->setScenario(self::SCENARIO_REGISTER);
         $userModel->attributes = $data;
-
         if ($userModel->validate()) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
@@ -241,18 +212,14 @@ class User extends ActiveRecord implements IdentityInterface
                     $sleepingPositionModel = new SleepingPosition;
                     $sleepingPositionModel->attributes = isset($data['sleeping_position']) ? $data['sleeping_position'] : null;
                     $sleepingPositionModel->user_id = $data['user_id'];
-
                     $reasonUsingMatrixModel = new ReasonUsingMatrix;
                     $reasonUsingMatrixModel->attributes = isset($data['reason_using_matrix']) ? $data['reason_using_matrix'] : null;
                     $reasonUsingMatrixModel->user_id = $data['user_id'];
-
                     $deviceModel = new Device;
                     $deviceModel->attributes = isset($data['device']) ? $data['device'] : null;
                     $deviceModel->user_id = $data['user_id'];
-
                     $profileModel = new Profile;
                     $profileModel->attributes = $data;
-
                     $socialNetworksResponseData = [];
                     if (isset($data['social_networks'])) {
                         foreach ($data['social_networks'] as $socialNetwork) {
@@ -260,7 +227,6 @@ class User extends ActiveRecord implements IdentityInterface
                             $socialNetworkModel->setScenario(self::SCENARIO_REGISTER);
                             $socialNetworkModel->attributes = $socialNetwork;
                             $socialNetworkModel->user_id = $data['user_id'];
-
                             if (!SocialNetwork::existSocialNetwork($userModel->id,
                                 $socialNetwork['social_network_type'])
                             ) {
@@ -270,7 +236,6 @@ class User extends ActiveRecord implements IdentityInterface
                             }
                         }
                     }
-
                     if ($sleepingPositionModel->validate()
                         && $reasonUsingMatrixModel->validate()
                         && $profileModel->validate()
@@ -290,7 +255,6 @@ class User extends ActiveRecord implements IdentityInterface
                         self::validationExceptionFirstMessage($errors);
                     }
                     $transaction->commit();
-
                     return [
                         'token' => $userModel->getJWT(),
                         'user' => $userModel,
@@ -310,7 +274,6 @@ class User extends ActiveRecord implements IdentityInterface
         }
         throw new HttpException(500, 'Internal server error.');
     }
-
     /**
      * Returns username
      *
@@ -320,7 +283,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return ucfirst(strtolower($this->firstname)) . ucfirst(strtolower($this->lastname));
     }
-
     /**
      * Getter for secret key that's used for generation of JWT
      *
@@ -330,7 +292,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return Yii::$app->params['secretJWT'];
     }
-
     /**
      * Getter for "header" array that's used for generation of JWT
      *
@@ -343,7 +304,6 @@ class User extends ActiveRecord implements IdentityInterface
             'alg' => self::getAlgorithm()
         ];
     }
-
     /**
      * Logins user by given JWT encoded string. If string is correctly decoded
      * - array (token) must contain 'jti' param - the id of existing user
@@ -366,10 +326,8 @@ class User extends ActiveRecord implements IdentityInterface
         // JTI is unique identifier of user.
         // For more details: https://tools.ietf.org/html/rfc7519#section-4.1.7
         $id = $decodedArray['jti'];
-
         return static::findByJTI($id);
     }
-
     /**
      * Decode JWT token
      *
@@ -394,10 +352,8 @@ class User extends ActiveRecord implements IdentityInterface
             throw new UnauthorizedHttpException($errorText, $code);
         }
         $decodedArray = (array) $decoded;
-
         return $decodedArray;
     }
-
     /**
      * Finds User model using static method findOne
      * Override this method in model if you need to complicate id-management
@@ -414,10 +370,8 @@ class User extends ActiveRecord implements IdentityInterface
         if (empty($model)) {
             throw new UnauthorizedHttpException($errorText);
         }
-
         return $model;
     }
-
     /**
      * Getter for encryption algorithm used in JWT generation and decoding
      * Override this method to set up other algorytm.
@@ -428,7 +382,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return self::ALGORITHM;
     }
-
     /**
      * Returns some 'id' to encode to token. By default is current model id.
      *
@@ -440,7 +393,6 @@ class User extends ActiveRecord implements IdentityInterface
         //use primary key for JTI
         return $this->getPrimaryKey();
     }
-
     /**
      * Encodes model data to create custom JWT with model.id set in it
      *
@@ -463,7 +415,6 @@ class User extends ActiveRecord implements IdentityInterface
         }
         return JWT::encode($token, $secret, static::getAlgorithm());
     }
-
     /**
      * Returns token expire period
      *
@@ -473,7 +424,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return 3600 * 24 * self::TOKEN_EXPIRE_DAYS;
     }
-
     /**
      * Get payload data in a JWT string
      *
@@ -490,7 +440,6 @@ class User extends ActiveRecord implements IdentityInterface
             return $decoded_array;
         }
     }
-
     /**
      * Adds token in the black list
      *
@@ -510,12 +459,10 @@ class User extends ActiveRecord implements IdentityInterface
                 'token' => $token
             ];
             $block->attributes = $values;
-
             return $block->save();
         }
         return false;
     }
-
     /**
      * Check the token for the block
      *
@@ -529,7 +476,6 @@ class User extends ActiveRecord implements IdentityInterface
         }
         return false;
     }
-
     /**
      * Finds user by id
      *
@@ -540,7 +486,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return static::findOne(['id' => $id]);
     }
-
     /**
      * Finds user by username
      *
@@ -551,7 +496,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return static::findOne(['username' => $username]);
     }
-
     /**
      * Returns id user
      *
@@ -561,7 +505,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->id;
     }
-
     /**
      * Returns AuthKey user
      *
@@ -577,7 +520,6 @@ class User extends ActiveRecord implements IdentityInterface
         }
         return false;
     }
-
     /**
      * Validates user token
      *
@@ -588,7 +530,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return (bool)JWT::decode($token, self::getSecretKey(), [static::getAlgo()]);
     }
-
     /**
      * Validates password
      *
@@ -599,7 +540,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return Yii::$app->getSecurity()->validatePassword($password, $hash = $this->password);
     }
-
     /**
      * Generates password hash from password and sets it to the model
      *
@@ -609,7 +549,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password = Yii::$app->security->generatePasswordHash($password);
     }
-
     /**
      * Returns password hash
      *

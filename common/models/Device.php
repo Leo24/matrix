@@ -5,14 +5,20 @@ namespace common\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
-
 /**
- * This is the model class for table "device".
- *
+ * Class Profile
  * @package common\models
  */
 class Device extends ActiveRecord
 {
+    public $sleeping_position;
+    const SCENARIO_REGISTER = 'register';
+    /**
+     * Primary key name
+     *
+     * @inheritdoc
+     */
+    public $primaryKey = 'id';
     /**
      * Table name
      *
@@ -22,24 +28,39 @@ class Device extends ActiveRecord
     {
         return '{{%device}}';
     }
-
+    /**
+     * Attribute labels
+     *
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id'        => 'Id',
+            'user_id'   => 'User Id',
+            'name'      => 'Name',
+            'position'  => 'Position',
+            'pin'       => 'Pin',
+            'pw'        => 'PW',
+            'sn'        => 'SN',
+            'updated_at'=> 'Updated_at',
+        ];
+    }
     /**
      * @inheritdoc
      */
-    public function fields()
+    public function scenarios()
     {
-        return [
-            'id',
-            'user_id',
+        $scenarion = parent::scenarios();
+        $scenarion[self::SCENARIO_REGISTER] = [
             'name',
             'position',
             'pin',
-            'sn',
             'pw',
-            'updated_at',
+            'sn',
         ];
+        return $scenarion;
     }
-
     /**
      * @inheritdoc
      */
@@ -56,35 +77,30 @@ class Device extends ActiveRecord
             ],
         ];
     }
-
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['user_id', 'name', 'position', 'pin', 'sn', 'pw'], 'safe'],
-            [['name', 'pin', 'sn', 'pw'], 'string', 'max' => 255],
-            [['user_id', 'updated_at'], 'integer'],
-            [['user_id', 'name', 'position', 'pin', 'sn', 'pw'], 'required'],
-            ['position', 'in', 'range' => ['left', 'right', 'middle']],
+            [['name', 'pin', 'pw', 'sn'], 'trim'],
+            [
+                ['name', 'pin', 'pw', 'sn'],
+                'required',
+                'on' => self::SCENARIO_REGISTER
+            ],
+
+            [['name', 'pin', 'pw', 'sn'], 'string', 'max' => 255],
+            ['sn', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('app', 'Device exists')],
+
         ];
     }
 
     /**
-     * Attributes labels
-     *
-     * @inheritdoc
+     * @return \yii\db\ActiveQuery
      */
-    public function attributeLabels()
+    public function getUser()
     {
-        return [
-            'user_id' => Yii::t('app', 'User ID'),
-            'name' => Yii::t('app', 'Device name'),
-            'pin' => Yii::t('app', 'Device PIN'),
-            'sn' => Yii::t('app', 'Device SN'),
-            'pw' => Yii::t('app', 'Device PW'),
-            'updated_at' => Yii::t('app', 'Updated at'),
-        ];
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 }

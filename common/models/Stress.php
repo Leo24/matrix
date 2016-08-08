@@ -5,24 +5,23 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "notifications".
+ * This is the model class for table "stress".
  *
  * @property integer $id
  * @property integer $user_id
  * @property string $date
- * @property string $title
- * @property string $body
- * @property string $type
- * @property string $icon
+ * @property string $timestamp
+ * @property integer $high_frequency
+ * @property integer $low_frequency
  */
-class Notification extends \yii\db\ActiveRecord
+class Stress extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'notification';
+        return 'stress';
     }
 
     /**
@@ -32,10 +31,8 @@ class Notification extends \yii\db\ActiveRecord
     {
         return [
             [['user_id'], 'required'],
-            [['user_id'], 'integer'],
-            [['date'], 'safe'],
-            [['body'], 'string'],
-            [['title', 'type', 'icon'], 'string', 'max' => 255],
+            [['user_id', 'high_frequency', 'low_frequency'], 'integer'],
+            [['date', 'timestamp'], 'safe'],
         ];
     }
 
@@ -48,10 +45,9 @@ class Notification extends \yii\db\ActiveRecord
             'id' => 'ID',
             'user_id' => 'User ID',
             'date' => 'Date',
-            'title' => 'Title',
-            'body' => 'Body',
-            'type' => 'Type',
-            'icon' => 'Icon',
+            'timestamp' => 'Timestamp',
+            'high_frequency' => 'High Frequency',
+            'low_frequency' => 'Low Frequency',
         ];
     }
 }

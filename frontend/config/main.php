@@ -110,8 +110,16 @@ return [
                     'class' => 'yii\rest\UrlRule',
                     'prefix' => 'api/v1/',
                     'controller' => ['emfit/emfitdata' => 'api/v1/emfitdata/emfitdata'],
-                    'patterns' => ['POST' => 'getdata']
+                    'patterns' => ['POST' => 'get-data']
                 ],
+
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'prefix' => 'api/v1/',
+                    'controller' => ['emfitdata' => 'api/v1/emfitdata/emfitdata'],
+                    'patterns' => [ 'GET' => 'parse-data',]
+                ],
+                
                 [
                     'class' => 'yii\rest\UrlRule',
                     'pluralize' => false,
@@ -123,6 +131,13 @@ return [
                         'notifications' => 'api/v1/notification/backend/notification',
                         'devices' => 'api/v1/device/backend/device',
                     ],
+                ],
+
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'prefix' => 'api/v1/',
+                    'controller' => ['notifications' => 'api/v1/notification/backend/notification',],
+                    'except' => ['index', 'create'],
                 ],
             ],
         ],

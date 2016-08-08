@@ -5,7 +5,6 @@ namespace common\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
-
 /**
  * Class Profile
  * @package common\models
@@ -13,16 +12,13 @@ use yii\behaviors\TimestampBehavior;
 class Profile extends ActiveRecord
 {
     public $sleeping_position;
-
     const SCENARIO_REGISTER = 'register';
-
     /**
      * Primary key name
      *
      * @inheritdoc
      */
     public $primaryKey = 'user_id';
-
     /**
      * Table name
      *
@@ -32,7 +28,6 @@ class Profile extends ActiveRecord
     {
         return '{{%profile}}';
     }
-
     /**
      * Attribute labels
      *
@@ -46,11 +41,9 @@ class Profile extends ActiveRecord
             'gender' => Yii::t('app', 'Gender'),
             'state' => Yii::t('app', 'State'),
             'city' => Yii::t('app', 'City'),
-            'phone' => Yii::t('app', 'Phone'),
             'profession_interest' => Yii::t('app', 'Profession interest'),
         ];
     }
-
     /**
      * @inheritdoc
      */
@@ -70,7 +63,6 @@ class Profile extends ActiveRecord
         ];
         return $scenarion;
     }
-
     /**
      * @inheritdoc
      */
@@ -87,27 +79,25 @@ class Profile extends ActiveRecord
             ],
         ];
     }
-
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['firstname', 'lastname', 'profession_interest', 'state', 'city', 'phone'], 'trim'],
+            [['firstname', 'lastname', 'profession_interest', 'state', 'city'], 'trim'],
             [
                 ['firstname', 'lastname', 'state', 'city', 'profession_interest'],
                 'required',
                 'on' => self::SCENARIO_REGISTER
             ],
             [['firstname', 'lastname'], 'string', 'max' => 30],
-            [['city', 'state', 'phone'], 'string', 'max' => 20],
+            [['city', 'state'], 'string', 'max' => 20],
             [['profession_interest', 'average_hours_sleep'], 'string', 'max' => 255],
             ['gender', 'in', 'range' => ['female', 'male']],
             ['user_id', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('app', 'Profile exists')],
         ];
     }
-
     /**
      * @inheritdoc
      */
@@ -115,7 +105,6 @@ class Profile extends ActiveRecord
     {
         return ['user'];
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */

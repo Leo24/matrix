@@ -5,24 +5,23 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "notifications".
+ * This is the model class for table "notes".
  *
  * @property integer $id
  * @property integer $user_id
- * @property string $date
- * @property string $title
+ * @property string $created_at
+ * @property string $updated_at
  * @property string $body
- * @property string $type
- * @property string $icon
+ * @property string $order
  */
-class Notification extends \yii\db\ActiveRecord
+class Note extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'notification';
+        return 'notes';
     }
 
     /**
@@ -33,9 +32,9 @@ class Notification extends \yii\db\ActiveRecord
         return [
             [['user_id'], 'required'],
             [['user_id'], 'integer'],
-            [['date'], 'safe'],
+            [['created_at', 'updated_at'], 'safe'],
             [['body'], 'string'],
-            [['title', 'type', 'icon'], 'string', 'max' => 255],
+            [['order'], 'string', 'max' => 255],
         ];
     }
 
@@ -47,11 +46,10 @@ class Notification extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
-            'date' => 'Date',
-            'title' => 'Title',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
             'body' => 'Body',
-            'type' => 'Type',
-            'icon' => 'Icon',
+            'order' => 'Order',
         ];
     }
 }

@@ -5,24 +5,22 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "notifications".
+ * This is the model class for table "awakenings".
  *
  * @property integer $id
  * @property integer $user_id
  * @property string $date
- * @property string $title
- * @property string $body
- * @property string $type
- * @property string $icon
+ * @property string $timestamp
+ * @property integer $duration
  */
-class Notification extends \yii\db\ActiveRecord
+class Awakening extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'notification';
+        return 'awakenings';
     }
 
     /**
@@ -32,10 +30,8 @@ class Notification extends \yii\db\ActiveRecord
     {
         return [
             [['user_id'], 'required'],
-            [['user_id'], 'integer'],
-            [['date'], 'safe'],
-            [['body'], 'string'],
-            [['title', 'type', 'icon'], 'string', 'max' => 255],
+            [['user_id', 'duration'], 'integer'],
+            [['date', 'timestamp'], 'safe'],
         ];
     }
 
@@ -48,10 +44,8 @@ class Notification extends \yii\db\ActiveRecord
             'id' => 'ID',
             'user_id' => 'User ID',
             'date' => 'Date',
-            'title' => 'Title',
-            'body' => 'Body',
-            'type' => 'Type',
-            'icon' => 'Icon',
+            'timestamp' => 'Timestamp',
+            'duration' => 'Duration',
         ];
     }
 }

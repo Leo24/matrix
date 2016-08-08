@@ -1,10 +1,7 @@
 <?php
-
 namespace common\models;
-
 use Yii;
 use yii\db\ActiveRecord;
-
 /**
  * This is the model class for table "social_network".
  *
@@ -18,7 +15,6 @@ use yii\db\ActiveRecord;
 class SocialNetwork extends ActiveRecord
 {
     const SCENARIO_REGISTER = 'register';
-
     /**
      * @inheritdoc
      */
@@ -26,7 +22,6 @@ class SocialNetwork extends ActiveRecord
     {
         return '{{%social_network}}';
     }
-
     /**
      * @inheritdoc
      */
@@ -41,7 +36,6 @@ class SocialNetwork extends ActiveRecord
             ],
         ];
     }
-
     /**
      * @inheritdoc
      */
@@ -53,7 +47,6 @@ class SocialNetwork extends ActiveRecord
             ['social_network_type', 'in', 'range' => ['facebook', 'instagram', 'pinterest', 'twitter']],
         ];
     }
-
     /**
      * @inheritdoc
      */
@@ -66,7 +59,6 @@ class SocialNetwork extends ActiveRecord
             'data' => Yii::t('app', 'Data'),
         ];
     }
-
     /**
      * @inheritdoc
      */
@@ -76,14 +68,11 @@ class SocialNetwork extends ActiveRecord
         $fields['data'] = function ($model) {
             return $model->getSocialNetworkData();
         };
-
         if ($this->scenario == self::SCENARIO_REGISTER) {
             unset($fields['user_id']);
         }
-
         return $fields;
     }
-
     /**
      * @inheritdoc
      */
@@ -91,7 +80,6 @@ class SocialNetwork extends ActiveRecord
     {
         return ['user'];
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -99,7 +87,6 @@ class SocialNetwork extends ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
-
     /**
      * @return mixed
      */
@@ -107,7 +94,6 @@ class SocialNetwork extends ActiveRecord
     {
         return json_decode($this->data);
     }
-
     /**
      * @param $user_id
      * @param $type
@@ -117,7 +103,6 @@ class SocialNetwork extends ActiveRecord
     {
         return (bool)SocialNetwork::findOne(['user_id' => $user_id, 'social_network_type' => $type]);
     }
-
     /**
      * @inheritdoc
      */
