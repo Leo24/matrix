@@ -22,7 +22,7 @@ class Notification extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'notifications';
+        return 'notification';
     }
 
     /**

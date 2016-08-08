@@ -38,6 +38,8 @@ class m160805_132257_create_sleep_quality_table extends Migration
             'fm_count' => $this->integer(11),
             'awakenings' => $this->integer(11),
         ], $tableOptions);
+        
+        $this->createIndex('idx_sleep_quality_user_id', '{{%sleep_quality}}', 'user_id');
 
         $this->addForeignKey(
             'fk_tbl_sleep_quality_tbl_user',
@@ -55,6 +57,7 @@ class m160805_132257_create_sleep_quality_table extends Migration
      */
     public function down()
     {
+        $this->dropIndex('idx_sleep_quality_user_id', '{{%sleep_quality}}');
         $this->dropForeignKey('fk_tbl_sleep_quality_tbl_user', '{{%sleep_quality}}');
         $this->dropTable('sleep_quality');
     }

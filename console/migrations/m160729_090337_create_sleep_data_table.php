@@ -20,7 +20,9 @@ class m160729_090337_create_sleep_data_table extends Migration
             'timestamp' => $this->bigInteger(),
             'sleep_type' => $this->float(),
         ], $tableOptions);
-        
+
+        $this->createIndex('idx_sleep_data_user_id', '{{%sleep_data}}', 'user_id');
+
         $this->addForeignKey(
             'fk_tbl_sleep_data_tbl_user',
             '{{%sleep_data}}',
@@ -36,6 +38,7 @@ class m160729_090337_create_sleep_data_table extends Migration
      */
     public function down()
     {
+        $this->dropIndex('idx_sleep_data_user_id', '{{%sleep_data}}');
         $this->dropForeignKey('fk_tbl_sleep_data_tbl_user', '{{%sleep_data}}');
         $this->dropTable('{{%sleep_data}}');
     }

@@ -24,16 +24,25 @@ class m160729_083033_create_calc_data_table extends Migration
             'respiration_rate' => $this->float(),
             'activity' => $this->integer(),
         ], $tableOptions);
-        $this->addForeignKey('fk_tbl_calc_data_tbl_user',
-            '{{%calc_data}}', 'user_id',
-            '{{%user}}', 'id',
-            'CASCADE', 'CASCADE');
+
+        $this->createIndex('idx_calc_data_user_id', '{{%calc_data}}', 'user_id');
+
+        $this->addForeignKey(
+            'fk_tbl_calc_data_tbl_user',
+            '{{%calc_data}}',
+            'user_id',
+            '{{%user}}',
+            'id',
+            'CASCADE',
+            'CASCADE'
+        );
     }
     /**
      * @inheritdoc
      */
     public function down()
     {
+        $this->dropIndex('idx_calc_data_user_id', '{{%calc_data}}');
         $this->dropForeignKey('fk_tbl_calc_data_tbl_user', '{{%calc_data}}');
         $this->dropTable('{{%calc_data}}');
     }

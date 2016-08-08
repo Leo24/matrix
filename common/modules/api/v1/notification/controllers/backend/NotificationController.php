@@ -27,17 +27,6 @@ class NotificationController extends ActiveController
         $behaviors['bearerAuth'] = [
             'class' => HttpBearerAuth::className(),
         ];
-        $behaviors['verbs'] = [
-            'class' => \yii\filters\VerbFilter::className(),
-            'actions' => [
-                'index'  => ['get'],
-                'view'   => ['get'],
-                'create' => ['post'],
-                'update' => ['patch'],
-                'delete' => ['post','delete'],
-            ]
-        ];
-
         return $behaviors;
     }
 

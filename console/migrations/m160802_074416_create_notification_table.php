@@ -26,6 +26,8 @@ class m160802_074416_create_notification_table extends Migration
             'updated_at' => $this->integer(11)->unsigned()->defaultValue(null),
         ], $tableOptions);
 
+        $this->createIndex('idx_notification_user_id', '{{%notification}}', 'user_id');
+
         $this->addForeignKey(
             'fk_tbl_notification_tbl_user',
             '{{%notification}}',
@@ -42,6 +44,7 @@ class m160802_074416_create_notification_table extends Migration
      */
     public function down()
     {
+        $this->dropIndex('idx_notification_user_id', '{{%notification}}');
         $this->dropForeignKey('fk_tbl_notification_tbl_user', '{{%notification}}');
         $this->dropTable('{{%notification}}');
     }

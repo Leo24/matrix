@@ -23,7 +23,9 @@ class m160729_090619_create_hrv_data_table extends Migration
             'recovery_ratio' => $this->float(),
             'recovery_rate' => $this->float(),
         ], $tableOptions);
-        
+
+        $this->createIndex('idx_hrv_data_user_id', '{{%hrv_data}}', 'user_id');
+
         $this->addForeignKey(
             'fk_tbl_hrv_data_tbl_user',
             '{{%hrv_data}}',
@@ -39,6 +41,7 @@ class m160729_090619_create_hrv_data_table extends Migration
      */
     public function down()
     {
+        $this->dropIndex('idx_hrv_data_user_id', '{{%hrv_data}}');
         $this->dropForeignKey('fk_tbl_hrv_data_tbl_user', '{{%hrv_data}}');
         $this->dropTable('{{%hrv_data}}');
     }

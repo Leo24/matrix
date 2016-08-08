@@ -71,10 +71,10 @@ class EmfitdataController extends ActiveController
 
             if (!empty($json['calc_data'])) {
                 $jsonCalcData = json_decode($json['calc_data'], true);
-                $currentStep = $jsonCalcData[0][0];
+                $currentTimestamp = $jsonCalcData[0][0];
                 foreach ($jsonCalcData as $k => $m) {
-                    if ((int)$m[0] - (int)$currentStep >= 6000 || $k < 10) { // Save data in 10 minutes interval
-                        $currentStep = $m[0];
+                    if ($this->countCurrentStep($m[0], $currentTimestamp) >= 6000 || $k < 10) { // Save data in 10 minutes interval
+                        $currentTimestamp = $m[0];
                         $CalcDataModel->id                  = null;
                         $CalcDataModel->user_id             = $json['user_id'];
                         $CalcDataModel->timestamp           = $this->checkData($m[0]) ? $m[0] : null;
@@ -116,10 +116,10 @@ class EmfitdataController extends ActiveController
 
             if (!empty($json['hrv_rmssd_data'])) {
                 $jsonHrvRmssdData = json_decode($json['hrv_rmssd_data'], true);
-                $currentStep = $jsonHrvRmssdData [0][0];
+                $currentTimestamp = $jsonHrvRmssdData [0][0];
                 foreach ($jsonHrvRmssdData as $k => $m) {
-                    if ((int)$m[0] - (int)$currentStep >= 6000 || $k < 10) { // Save data in 10 minutes interval
-                        $currentStep = $m[0];
+                    if ($this->countCurrentStep($m[0], $currentTimestamp)  >= 6000 || $k < 10) { // Save data in 10 minutes interval
+                        $currentTimestamp = $m[0];
                         $HrvRmssdDataModel->id              = null;
                         $HrvRmssdDataModel->user_id         = $json['user_id'];
                         $HrvRmssdDataModel->timestamp       = $this->checkData($m[0]) ? $m[0] : null;
@@ -196,10 +196,10 @@ class EmfitdataController extends ActiveController
 
                 if (!empty($json['calc_data'])) {
                     $jsonCalcData = json_decode($json['calc_data'], true);
-                    $currentStep = $jsonCalcData[0][0];
+                    $currentTimestamp = $jsonCalcData[0][0];
                     foreach ($jsonCalcData as $k => $m) {
-                        if ((int)$m[0] - (int)$currentStep >= 6000 || $k < 10) { // Save data in 10 minutes interval
-                            $currentStep = $m[0];
+                        if ($this->countCurrentStep($m[0], $currentTimestamp) >= 6000 || $k < 10) { // Save data in 10 minutes interval
+                            $currentTimestamp = $m[0];
                             $CalcDataModel->id                  = null;
                             $CalcDataModel->user_id             = $json['user_id'];
                             $CalcDataModel->timestamp           = $this->checkData($m[0]) ? $m[0] : null;
@@ -247,10 +247,10 @@ class EmfitdataController extends ActiveController
 
                 if (!empty($json['hrv_rmssd_data'])) {
                     $jsonHrvRmssdData = json_decode($json['hrv_rmssd_data'], true);
-                    $currentStep = $jsonHrvRmssdData [0][0];
+                    $currentTimestamp = $jsonHrvRmssdData [0][0];
                     foreach ($jsonHrvRmssdData as $k => $m) {
-                        if ((int)$m[0] - (int)$currentStep >= 6000 || $k < 10) { // Save data in 10 minutes interval
-                            $currentStep = $m[0];
+                        if ($this->countCurrentStep($m[0], $currentTimestamp) >= 6000 || $k < 10) { // Save data in 10 minutes interval
+                            $currentTimestamp = $currentTimestamp;
                             $HrvRmssdDataModel->id              = null;
                             $HrvRmssdDataModel->user_id         = $json['user_id'];
                             $HrvRmssdDataModel->timestamp       = $this->checkData($m[0]) ? $m[0] : null;
@@ -275,5 +275,10 @@ class EmfitdataController extends ActiveController
             return $data;
         }
         return false;
+    }
+
+    protected function countCurrentStep($timestamp, $currentTimestamp)
+    {
+        return (int)$timestamp - (int)$currentTimestamp;
     }
 }

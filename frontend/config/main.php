@@ -132,6 +132,13 @@ return [
                         'devices' => 'api/v1/device/backend/device',
                     ],
                 ],
+
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'prefix' => 'api/v1/',
+                    'controller' => ['notifications' => 'api/v1/notification/backend/notification',],
+                    'except' => ['index', 'create'],
+                ],
             ],
         ],
     ],
