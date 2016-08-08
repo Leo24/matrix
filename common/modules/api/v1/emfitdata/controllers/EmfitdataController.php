@@ -21,7 +21,7 @@ use common\models\Stress;
 class EmfitdataController extends ActiveController
 {
 
-    public $modelClass = 'app\models\VitalParams';
+    public $modelClass = SleepQuality::class;
     /**
      * @parse data into database
      */
@@ -66,6 +66,13 @@ class EmfitdataController extends ActiveController
             $SleepQualityModel->tossnturn_count         = $json['tossnturn_count'];
             $SleepQualityModel->fm_count                = $json['fm_count'];
             $SleepQualityModel->awakenings              = $json['awakenings'];
+            $SleepQualityModel->avg_hr                  = $json['avg_hr'];
+            $SleepQualityModel->avg_rr                  = $json['avg_rr'];
+            $SleepQualityModel->avg_act                 = $json['avg_act'];
+            $SleepQualityModel->min_hr                  = $json['min_hr'];
+            $SleepQualityModel->max_hr                  = $json['max_hr'];
+            $SleepQualityModel->min_rr                  = $json['min_rr'];
+            $SleepQualityModel->max_rr                  = $json['max_rr'];
             $SleepQualityModel->isNewRecord             = true;
             $SleepQualityModel->save();
 

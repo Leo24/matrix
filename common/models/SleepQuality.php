@@ -43,11 +43,34 @@ class SleepQuality extends \yii\db\ActiveRecord
     {
         return [
             [['user_id'], 'required'],
-            [['user_id', 'date', 'sleep_score', 'duration', 'duration_in_bed', 'duration_awake', 'duration_in_sleep', 'duration_in_rem', 'duration_in_light', 'duration_in_deep', 'duration_sleep_onset', 'bedexit_duration', 'bedexit_count', 'tossnturn_count', 'fm_count', 'awakenings'], 'integer'],
+            [[
+                'user_id',
+                'date',
+                'sleep_score',
+                'duration',
+                'duration_in_bed',
+                'duration_awake',
+                'duration_in_sleep',
+                'duration_in_rem',
+                'duration_in_light',
+                'duration_in_deep',
+                'duration_sleep_onset',
+                'bedexit_duration',
+                'bedexit_count',
+                'tossnturn_count',
+                'fm_count',
+                'awakenings',
+                'avg_hr',
+                'avg_rr',
+                'avg_act',
+                'min_hr',
+                'max_hr',
+                'min_rr',
+                'max_rr',
+            ], 'integer'],
+
             [['from', 'to'], 'string'],
         ];
-
-
     }
 
     /**
@@ -76,6 +99,13 @@ class SleepQuality extends \yii\db\ActiveRecord
             'tossnturn_count' => 'Tossnturn Count',
             'fm_count' => 'FM Count',
             'awakenings' => 'Awakenings',
+            'avg_hr' => 'Avg_hr',
+            'avg_rr' => 'Avg_rr',
+            'avg_act'=> 'Avg_act',
+            'min_hr'=> 'Min_hr',
+            'max_hr'=> 'Max_hr',
+            'min_rr'=> 'Min_rr',
+            'max_rr'=> 'Max_rr',
 
         ];
     }
