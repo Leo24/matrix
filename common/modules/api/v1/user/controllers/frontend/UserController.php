@@ -9,6 +9,7 @@ use common\models\User;
 /**
  * Class UserController
  *
+ * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
  * @package common\modules\api\v1\user\controllers\frontend
  */
 class UserController extends Controller

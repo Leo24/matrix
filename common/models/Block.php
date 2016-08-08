@@ -5,9 +5,16 @@ namespace common\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
+
 /**
- * This is the model class for table "block".
+ * This is the model class for table 'block'.
  *
+ * @property string $token
+ * @property integer $user_id
+ * @property integer $created_at
+ * @property integer $expired_at
+ *
+ * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
  * @package common\models
  */
 class Block extends ActiveRecord
@@ -20,6 +27,7 @@ class Block extends ActiveRecord
     {
         return '{{%block}}';
     }
+
     /**
      * Primary key
      * @inheritdoc
@@ -28,6 +36,7 @@ class Block extends ActiveRecord
     {
         return 'token';
     }
+
     /**
      * @inheritdoc
      */
@@ -40,6 +49,7 @@ class Block extends ActiveRecord
             'expired_at',
         ];
     }
+
     /**
      * @inheritdoc
      */
@@ -56,6 +66,7 @@ class Block extends ActiveRecord
             ],
         ];
     }
+
     /**
      * @inheritdoc
      */
@@ -68,6 +79,7 @@ class Block extends ActiveRecord
             [['user_id', 'token', 'expired_at'], 'required'],
         ];
     }
+
     /**
      * Attributes labels
      * @inheritdoc

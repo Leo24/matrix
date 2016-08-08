@@ -7,7 +7,10 @@ use yii\filters\auth\HttpBearerAuth;
 use common\models\Device;
 
 /**
- * Device controller
+ * Class DeviceController
+ *
+ * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
+ * @package common\modules\api\v1\device\controllers\backend
  */
 class DeviceController extends ActiveController
 {

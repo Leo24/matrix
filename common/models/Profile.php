@@ -4,21 +4,54 @@ namespace common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\helpers\BaseUrl;
+use yii\helpers\BaseFileHelper;
 use yii\behaviors\TimestampBehavior;
+
 /**
- * Class Profile
+ * This is the model class for table 'profile'
+ *
+ * @property integer user_id
+ * @property string firstname
+ * @property string lastname
+ * @property string gender
+ * @property string avatar_url
+ * @property object avatar
+ * @property string state
+ * @property string city
+ * @property string phone
+ * @property string profession_interest
+ * @property string average_hours_sleep
+ * @property integer birthday
+ * @property integer updated_at
+ *
+ * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
  * @package common\models
  */
 class Profile extends ActiveRecord
 {
-    public $sleeping_position;
+    public $avatar;
+
     const SCENARIO_REGISTER = 'register';
+    const SCENARIO_UPLOAD_AVATAR = 'avatar';
+
+    /**
+     * Photo maximum size value of the photo (mbyte)
+     */
+    const FILE_AVATAR_MAX_SIZE_MB = 3;
+
+    /**
+     * Path to folder with avatars
+     */
+    const FILE_AVATAR_PATH = '/web/uploads/avatars/';
+
     /**
      * Primary key name
      *
      * @inheritdoc
      */
     public $primaryKey = 'user_id';
+
     /**
      * Table name
      *
@@ -28,6 +61,7 @@ class Profile extends ActiveRecord
     {
         return '{{%profile}}';
     }
+
     /**
      * Attribute labels
      *
@@ -41,9 +75,12 @@ class Profile extends ActiveRecord
             'gender' => Yii::t('app', 'Gender'),
             'state' => Yii::t('app', 'State'),
             'city' => Yii::t('app', 'City'),
+            'avatar_url' => Yii::t('app', 'Avatar URL'),
+            'birthday' => Yii::t('app', 'Birthday'),
             'profession_interest' => Yii::t('app', 'Profession interest'),
         ];
     }
+
     /**
      * @inheritdoc
      */
@@ -56,13 +93,18 @@ class Profile extends ActiveRecord
             'gender',
             'state',
             'city',
+            'birthday',
             'profession_interest',
             'average_hours_sleep',
             'user_id',
-            'average_hours_sleep'
         ];
+        $scenarion[self::SCENARIO_UPLOAD_AVATAR] = [
+            'avatar_url',
+        ];
+
         return $scenarion;
     }
+
     /**
      * @inheritdoc
      */
@@ -79,6 +121,7 @@ class Profile extends ActiveRecord
             ],
         ];
     }
+
     /**
      * @inheritdoc
      */
@@ -87,17 +130,27 @@ class Profile extends ActiveRecord
         return [
             [['firstname', 'lastname', 'profession_interest', 'state', 'city'], 'trim'],
             [
-                ['firstname', 'lastname', 'state', 'city', 'profession_interest'],
+                ['firstname', 'lastname', 'state', 'city', 'profession_interest', 'birthday'],
                 'required',
                 'on' => self::SCENARIO_REGISTER
             ],
             [['firstname', 'lastname'], 'string', 'max' => 30],
             [['city', 'state'], 'string', 'max' => 20],
-            [['profession_interest', 'average_hours_sleep'], 'string', 'max' => 255],
+            [['birthday'], 'integer'],
+            [['profession_interest', 'average_hours_sleep', 'avatar_url'], 'string', 'max' => 255],
             ['gender', 'in', 'range' => ['female', 'male']],
             ['user_id', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('app', 'Profile exists')],
+            [
+                ['avatar'],
+                'file',
+                'skipOnEmpty' => false,
+                'extensions' => 'png, jpg',
+                'on' => self::SCENARIO_UPLOAD_AVATAR,
+                'maxSize' => self::getPhotoMaxSize()
+            ],
         ];
     }
+
     /**
      * @inheritdoc
      */
@@ -105,11 +158,79 @@ class Profile extends ActiveRecord
     {
         return ['user'];
     }
+
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * Returns maximum size of the photo (bytes)
+     *
+     * @return int
+     */
+    public static function getPhotoMaxSize()
+    {
+        return self::FILE_AVATAR_MAX_SIZE_MB * 1024 * 1024;
+    }
+
+    /**
+     * Returns avatar path
+     *
+     * @return string
+     */
+    public static function getAvatarPath()
+    {
+        return Yii::getAlias('@app') . self::FILE_AVATAR_PATH;
+    }
+
+    /**
+     * Returns avatar filename
+     *
+     * @return string
+     */
+    public function createAvatarFileName()
+    {
+        return 'avatar-'
+        . time()
+        . '-'
+        . $this->user_id
+        . $this->avatar->extension;
+    }
+
+    /**
+     * Returns avatar URL
+     *
+     * @param $fileName
+     * @return string
+     */
+    public function getAvatarUrl($fileName)
+    {
+        return BaseUrl::base() . 'uploads/avatars/' . $fileName;
+    }
+
+
+    /**
+     * This is method uploads user avatar
+     *
+     * @return mixed
+     * @throws \yii\base\Exception
+     */
+    public function uploadAvatar()
+    {
+        if (!is_dir(self::getAvatarPath())) {
+            BaseFileHelper::createDirectory(self::getAvatarPath(), $mode = 509, $recursive = true);
+        }
+        $fileName = $this->createAvatarFileName();
+        $avatarFilePath = self::getAvatarPath() . $fileName;
+
+        if($this->avatar->saveAs($avatarFilePath))
+        {
+            return $fileName;
+        }
+        return false;
     }
 }
