@@ -2,9 +2,9 @@
 
 namespace common\modules\api\v1\notification\controllers\backend\actions;
 
-use common\models\Notification;
 use Yii;
 use yii\web\HttpException;
+use common\models\Notification;
 
 /**
  * Class CreateAction

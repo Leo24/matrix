@@ -1,11 +1,11 @@
 <?php
 namespace common\modules\api\v1\notification\controllers\backend;
 
-use common\models\Notification;
-use common\modules\api\v1\notification\controllers\backend\actions\ViewAction;
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
+use common\models\Notification;
+use common\modules\api\v1\notification\controllers\backend\actions\ViewAction;
 
 /**
  * Notification controller
