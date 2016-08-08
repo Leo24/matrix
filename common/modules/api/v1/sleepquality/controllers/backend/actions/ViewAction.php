@@ -36,19 +36,15 @@ class ViewAction extends \yii\rest\ViewAction
         $startDate = Yii::$app->getRequest()->getQueryParam('{startDate}');
         $endDate = Yii::$app->getRequest()->getQueryParam('{endDate}');
         $where = ['user_id' => $id];
+        $andWhere = [];
 
-        if (empty($startDate)) {
-            $startDate = 0;
-        }
-
-        if (empty($endDate)) {
-            $endDate = 0;
+        if (!empty($startDate) && !empty($endDate)) {
+            $andWhere = ['between', 'date', $startDate, $endDate];
         }
 
         $data = $model::find()
             ->where($where)
-            ->andWhere(['>=', 'date', $startDate])
-            ->andWhere(['<=', 'date', $endDate])
+            ->andWhere($andWhere)
             ->all();
 
         return $data;
