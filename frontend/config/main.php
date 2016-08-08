@@ -28,6 +28,9 @@ return [
                         'sleepquality' => [
                             'class' => 'common\modules\api\v1\sleepquality\Module'
                         ],
+                        'report' => [
+                            'class' => 'common\modules\api\v1\report\Module'
+                        ],
                         'socialnetwork' => [
                             'class' => 'common\modules\api\v1\socialnetwork\Module'
                         ],
