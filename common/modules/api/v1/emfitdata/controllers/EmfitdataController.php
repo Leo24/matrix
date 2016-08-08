@@ -163,8 +163,8 @@ class EmfitdataController extends ActiveController
         $path = getcwd() . '/tmp/';
         $dir = scandir($path);
         foreach ($dir as $key => $str) {
-            $file = file_get_contents($path . $str);
-//            $file = file_get_contents($path . 'Emfit_data.txt');
+//            $file = file_get_contents($path . $str);
+            $file = file_get_contents($path . 'Emfit_data.txt');
             $file_parts = pathinfo($str);
             if ($file_parts['extension'] == 'txt') {
                 $json = json_decode($file, true);
