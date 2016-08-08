@@ -33,6 +33,27 @@ class ViewAction extends \yii\rest\ViewAction
     public function run($id)
     {
         $model = $this->modelClass;
-        return $model::find()->where(['user_id' => $id])->all();
+        $filters = json_decode(Yii::$app->getRequest()->getQueryParam('filters'));
+        $lastDate = Yii::$app->getRequest()->getQueryParam('last_date');
+        $where = ['user_id' => $id];
+
+        if (empty($lastDate)) {
+            $lastDate = 0;
+        }
+
+        if (!empty($filters->viewed)) {
+            $where['viewed'] =  $filters->viewed;
+        }
+
+        if (!empty($filters->type)) {
+            $type['type'] = $filters->type;
+        }
+
+        $data = $model::find()
+            ->where($where)
+            ->andWhere(['>=', 'created_at', $lastDate])
+            ->all();
+
+        return $data;
     }
 }
