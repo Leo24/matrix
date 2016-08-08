@@ -138,6 +138,13 @@ class EmfitdataController extends ActiveController
                     }
                 }
             }
+
+            $data = json_encode($request->bodyParams);
+            date_default_timezone_set('europe/kiev');
+            $filename = date('Y:m:d-H:i:s', time());
+            $myfile = fopen(getcwd() . '/tmp/' . $filename . ".txt", "w");
+            fwrite($myfile, $data."\n");
+            fclose($myfile);
             return $json;
         }
     }
