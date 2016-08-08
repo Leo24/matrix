@@ -60,15 +60,12 @@ class SleepQuality extends \yii\db\ActiveRecord
                 'tossnturn_count',
                 'fm_count',
                 'awakenings',
-                'avg_hr',
-                'avg_rr',
-                'avg_act',
                 'min_hr',
                 'max_hr',
                 'min_rr',
                 'max_rr',
             ], 'integer'],
-
+            [['avg_hr', 'avg_rr', 'avg_act'], 'number'],
             [['from', 'to'], 'string'],
         ];
     }
