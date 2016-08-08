@@ -1,4 +1,5 @@
 <?php
+
 namespace common\modules\api\v1\socialnetwork\controllers\backend;
 
 use common\models\SocialNetwork;
@@ -7,7 +8,10 @@ use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
 
 /**
- * Profile controller
+ * Class SocialNetwork controller
+ *
+ * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
+ * @package common\modules\api\v1\socialnetwork\controllers\backend
  */
 class SocialnetworkController extends ActiveController
 {

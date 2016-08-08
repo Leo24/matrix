@@ -6,6 +6,18 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 
+/**
+ * This is the model class for table 'sleep_position
+ *
+ * @property integer $user_id
+ * @property boolean $back_sleeper
+ * @property boolean $side_sleeper
+ * @property boolean $stomach_sleeper
+ * @property integer $updated_at
+ *
+ * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
+ * @package common\models
+ */
 class SleepingPosition extends ActiveRecord
 {
     /**

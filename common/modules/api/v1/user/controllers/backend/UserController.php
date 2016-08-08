@@ -1,4 +1,5 @@
 <?php
+
 namespace common\modules\api\v1\user\controllers\backend;
 
 use Yii;
@@ -10,7 +11,9 @@ use common\modules\api\v1\user\controllers\backend\actions\user\DeleteAction;
 
 /**
  * Class UserController
- * @package common\modules\api\v1\user\controllers
+ *
+ * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
+ * @package common\modules\api\v1\user\controllers\backend
  */
 class UserController extends ActiveController
 {

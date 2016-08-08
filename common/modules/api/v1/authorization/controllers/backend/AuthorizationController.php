@@ -11,6 +11,8 @@ use common\models\User;
 
 /**
  * Class AuthorizationController
+ *
+ * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
  * @package common\modules\api\v1\authorization\controllers\backend
  */
 class AuthorizationController extends ActiveController
@@ -56,7 +58,7 @@ class AuthorizationController extends ActiveController
     }
 
     /**
-     * Refresh authorization token
+     * Refresh authorization token action
      *
      * @return array|null
      * @throws ForbiddenHttpException
@@ -74,7 +76,7 @@ class AuthorizationController extends ActiveController
     }
 
     /**
-     * Logout user
+     * Logout user action
      *
      * @throws HttpException
      * @throws ServerErrorHttpException
@@ -83,12 +85,9 @@ class AuthorizationController extends ActiveController
     public function actionLogout()
     {
         User::findIdentityByAccessToken($this->authorizationToken);
-
         if (User::addBlackListToken($this->authorizationToken)) {
             throw new HttpException(200, 'The session is successfully closed', self::SESSION_CLOSED_CODE);
         }
-
         throw new ServerErrorHttpException;
     }
-
 }

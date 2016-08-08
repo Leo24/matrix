@@ -7,8 +7,17 @@ use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 
 /**
- * This is the model class for table "reason_using_matrix".
+ * This is the model class for table 'reason_using_matrix
  *
+ * @property integer $user_id
+ * @property boolean $overall_wellness
+ * @property boolean $sleep_related_issues
+ * @property boolean $specific_health_issues
+ * @property boolean $athletic_training
+ * @property boolean $other
+ * @property integer $updated_at
+ *
+ * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
  * @package common\models
  */
 class ReasonUsingMatrix extends ActiveRecord

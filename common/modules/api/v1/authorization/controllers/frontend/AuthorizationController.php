@@ -11,6 +11,7 @@ use common\models\User;
 /**
  * Class AuthorizationController
  *
+ * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
  * @package common\modules\api\v1\authorization\controllers\frontend
  */
 class AuthorizationController extends Controller
