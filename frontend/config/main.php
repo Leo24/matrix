@@ -25,6 +25,9 @@ return [
                         'profile' => [
                             'class' => 'common\modules\api\v1\profile\Module'
                         ],
+                        'sleepquality' => [
+                            'class' => 'common\modules\api\v1\sleepquality\Module'
+                        ],
                         'socialnetwork' => [
                             'class' => 'common\modules\api\v1\socialnetwork\Module'
                         ],
@@ -126,6 +129,7 @@ return [
                     'prefix' => 'api/v1/',
                     'controller' => [
                         'profiles' => 'api/v1/profile/backend/profile',
+                        'profiles/sleep/quality' => 'api/v1/sleepquality/backend/sleepquality',
                         'users' => 'api/v1/user/backend/user',
                         'socialnetworks' => 'api/v1/socialnetwork/backend/socialnetwork',
                         'notifications' => 'api/v1/notification/backend/notification',
