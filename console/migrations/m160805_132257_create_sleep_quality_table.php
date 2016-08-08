@@ -37,6 +37,13 @@ class m160805_132257_create_sleep_quality_table extends Migration
             'tossnturn_count' => $this->integer(11),
             'fm_count' => $this->integer(11),
             'awakenings' => $this->integer(11),
+            'avg_hr' => $this->integer(11),
+            'avg_rr' => $this->integer(11),
+            'avg_act' => $this->integer(11),
+            'min_hr' => $this->integer(11),
+            'max_hr' => $this->integer(11),
+            'min_rr' => $this->integer(11),
+            'max_rr' => $this->integer(11),
         ], $tableOptions);
         
         $this->createIndex('idx_sleep_quality_user_id', '{{%sleep_quality}}', 'user_id');
