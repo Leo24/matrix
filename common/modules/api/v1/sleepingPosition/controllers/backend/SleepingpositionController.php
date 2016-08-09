@@ -1,24 +1,24 @@
 <?php
 
-namespace common\modules\api\v1\device\controllers\backend;
+namespace common\modules\api\v1\sleepingposition\controllers\backend;
 
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
-use common\modules\api\v1\device\models\Device;
+use common\modules\api\v1\sleepingposition\models\SleepingPosition;
 
 /**
- * Class DeviceController
+ * Class SleepingPosition controller
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
- * @package common\modules\api\v1\device\controllers\backend
+ * @package common\modules\api\v1\sleepingposition\controllers\backend
  */
-class DeviceController extends ActiveController
+class SleepingpositionController extends ActiveController
 {
     /**
      * @inheritdoc
      */
-    public $modelClass = Device::class;
+    public $modelClass = SleepingPosition::class;
 
     /**
      * @inheritdoc

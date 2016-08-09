@@ -1,9 +1,10 @@
 <?php
 
-namespace common\models;
+namespace common\modules\api\v1\socialnetwork\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use common\modules\api\v1\user\models\User;
 
 /**
  * This is the model class for table 'social_network'.

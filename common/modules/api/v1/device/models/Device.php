@@ -1,10 +1,11 @@
 <?php
 
-namespace common\models;
+namespace common\modules\api\v1\device\models;
 
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
+use common\models\User;
 
 /**
  * This is the model class for table 'device'
@@ -19,7 +20,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $updated_at
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
- * @package common\models
+ * @package common\modules\api\v1\device\models
  */
 class Device extends ActiveRecord
 {
