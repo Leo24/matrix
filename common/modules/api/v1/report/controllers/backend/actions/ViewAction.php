@@ -5,6 +5,11 @@ namespace common\modules\api\v1\report\controllers\backend\actions;
 use Yii;
 use yii\web\HttpException;
 use common\models\HrvData;
+use common\models\SleepQuality;
+use common\models\SleepData;
+use common\models\HrvRmssdData;
+use common\models\CalcData;
+use common\models\HeartFlex;
 
 /**
  * Class CreateAction
@@ -32,26 +37,49 @@ class ViewAction extends \yii\rest\ViewAction
      */
     public function run($id)
     {
+
         $model = $this->modelClass;
-        $filters = json_decode(Yii::$app->getRequest()->getQueryParam('filters'));
-        $lastDate = Yii::$app->getRequest()->getQueryParam('last_date');
+        $startDate = Yii::$app->getRequest()->getQueryParam('{startDate}');
+        $endDate = Yii::$app->getRequest()->getQueryParam('{endDate}');
+        $select = [];
         $where = ['user_id' => $id];
+        $andWhere = [];
 
-        if (empty($lastDate)) {
-            $lastDate = 0;
+        if (!empty($startDate) && !empty($endDate)) {
+            $andWhere = ['between', 'timestamp', $startDate, $endDate];
         }
 
-        if (!empty($filters->viewed)) {
-            $where['viewed'] =  $filters->viewed;
+        if (strpos(Yii::$app->request->url, 'report/sleep/cycles') !== false) {
+            $model = SleepData::class;
+            $select = ['{{user_id}}', '{{timestamp}}', '{{sleep_type}}'];
         }
 
-        if (!empty($filters->type)) {
-            $type['type'] = $filters->type;
+        if (strpos(Yii::$app->request->url, 'report/sleep/quality') !== false) {
+            $model = SleepQuality::class;
+        }
+        
+        if (strpos(Yii::$app->request->url, 'report/stress') !== false) {
+            $model = HrvRmssdData::class;
+            $select = ['{{user_id}}', '{{timestamp}}', '{{low_frequency}}', '{{high_frequency}}'];
+        }
+
+        if (strpos(Yii::$app->request->url, 'report/breathing') !== false) {
+            $model = CalcData::class;
+            $select = ['{{user_id}}', '{{timestamp}}', '{{respiration_rate}}'];
+        }
+
+        if (strpos(Yii::$app->request->url, 'report/movement') !== false) {
+            $model = '';
+        }
+
+        if (strpos(Yii::$app->request->url, 'report/daily') !== false) {
+            $model = '';
         }
 
         $data = $model::find()
+            ->select($select)
             ->where($where)
-            ->andWhere(['>=', 'created_at', $lastDate])
+            ->andWhere($andWhere)
             ->all();
 
         return $data;
