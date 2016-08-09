@@ -69,6 +69,7 @@ class Device extends ActiveRecord
      */
     public function scenarios()
     {
+        //todo нормально назвать переменную
         $scenarion = parent::scenarios();
         $scenarion[self::SCENARIO_REGISTER] = [
             'name',
@@ -120,6 +121,7 @@ class Device extends ActiveRecord
      */
     public function getUser()
     {
+        //todo namespace add
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }

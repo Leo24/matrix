@@ -13,6 +13,7 @@ use common\modules\api\v1\sleepingposition\models\SleepingPosition;
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
  * @package common\modules\api\v1\sleepingposition\controllers\backend
  */
+//todo camelCase
 class SleepingpositionController extends ActiveController
 {
     /**

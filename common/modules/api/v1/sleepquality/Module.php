@@ -8,6 +8,7 @@ namespace common\modules\api\v1\sleepquality;
  */
 class Module extends \yii\base\Module
 {
+    // todo camelCase
     public $controllerNamespace = 'common\modules\api\v1\sleepquality\controllers';
 
     /**

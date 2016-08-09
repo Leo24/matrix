@@ -10,6 +10,7 @@ use common\modules\api\v1\sleepquality\controllers\backend\actions\ViewAction;
 /**
  * Notification controller
  */
+// todo camelCase
 class SleepqualityController extends ActiveController
 {
     /**

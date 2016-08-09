@@ -56,7 +56,7 @@ class AuthorizationController extends ActiveController
 
         return $behaviors;
     }
-
+   //todo много статичных функций.
     /**
      * Refresh authorization token action
      *

@@ -48,6 +48,7 @@ class UserController extends ActiveController
         return $actions;
     }
 
+    // todo почему не вынесен в отдельный action
     /**
      * Update user password action
      *

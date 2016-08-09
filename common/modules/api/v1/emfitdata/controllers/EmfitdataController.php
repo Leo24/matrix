@@ -22,6 +22,7 @@ class EmfitdataController extends ActiveController
 {
 
     public $modelClass = SleepQuality::class;
+    // todo кто делал?
     /**
      * @parse data into database
      */

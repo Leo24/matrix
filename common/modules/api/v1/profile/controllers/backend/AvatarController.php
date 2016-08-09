@@ -51,7 +51,7 @@ class AvatarController extends Controller
             if (!$profileModel) {
                 throw new NotFoundHttpException('Use not found');
             }
-
+            // todo нотации
             $profileModel->setScenario(Profile::SCENARIO_UPLOAD_AVATAR);
             $profileModel->avatar = UploadedFile::getInstanceByName('avatar');
 

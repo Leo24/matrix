@@ -13,6 +13,7 @@ use common\modules\api\v1\reasonusingmatrix\models\ReasonUsingMatrix;
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
  * @package common\modules\api\v1\reasonusingmatrix\controllers\backend
  */
+// todo camelCase
 class ReasonusingmatrixController extends ActiveController
 {
     /**

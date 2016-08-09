@@ -21,6 +21,7 @@ class ViewAction extends \yii\rest\ViewAction
      */
     public $modelClass = SleepQuality::class;
 
+    // todo тут скорей всего тоже нужно будет переписать
     /**
      * Displays a model.
      *

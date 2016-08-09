@@ -21,6 +21,7 @@ class ViewAction extends \yii\rest\ViewAction
      */
     public $modelClass = Notification::class;
 
+    // todo переделать на нормально. Не будет работать пагинация
     /**
      * Displays a model.
      *
