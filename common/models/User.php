@@ -235,10 +235,8 @@ class User extends ActiveRecord implements IdentityInterface
             'created_at' => Yii::t('app', 'Created at'),
             'updated_at' => Yii::t('app', 'Updated at'),
             'last_login' => Yii::t('app', 'Last login'),
-            'sleeping_position' => Yii::t('app', 'Sleeping position'),
         ];
     }
-
 
     /**
      * @param $modelErrors
