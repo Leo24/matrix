@@ -2,7 +2,7 @@
 
 namespace common\modules\api\v1\settings\models;
 
-use common\models\User;
+use common\modules\api\v1\user\models\User;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
@@ -43,10 +43,10 @@ class SettingNotification extends ActiveRecord
     {
         return [
             [
-                'class'              => TimestampBehavior::className(),
+                'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => null,
-                'value'              => function () {
+                'value' => function () {
                     return time();
                 },
             ],
@@ -93,13 +93,13 @@ class SettingNotification extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'user_id'      => 'User ID',
-            'general'      => 'Allow Notification',
-            'banner'       => 'Notification Banner',
-            'preview_text' => 'Show Preview Text',
-            'alert_sound'  => 'Alert Sound',
-            'vibrate'      => 'Vibrate',
-            'email'        => 'Email Notification'
+            'user_id' => Yii::t('app', 'User ID'),
+            'general' => Yii::t('app', 'Allow Notification'),
+            'banner' => Yii::t('app', 'Notification Banner'),
+            'preview_text' => Yii::t('app', 'Show Preview Text'),
+            'alert_sound' => Yii::t('app', 'Alert Sound'),
+            'vibrate' => Yii::t('app', 'Vibrate'),
+            'email' => Yii::t('app', 'Email Notification'),
         ];
     }
 
@@ -135,7 +135,7 @@ class SettingNotification extends ActiveRecord
         $query = self::find();
 
         $dataProvider = new ActiveDataProvider([
-            'query'      => $query
+            'query' => $query
         ]);
 
         $this->load($params);

@@ -1,13 +1,15 @@
 <?php
+
 namespace common\modules\api\v1\settings\controllers\backend;
 
-use common\modules\api\v1\settings\models\SettingNotification;
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
+use common\modules\api\v1\settings\models\SettingNotification;
 
 /**
  * Class NotificationController
+ *
  * @package common\modules\api\v1\settings\controllers\backend
  */
 class NotificationController extends ActiveController
