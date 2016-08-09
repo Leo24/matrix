@@ -1,6 +1,6 @@
 <?php
 
-namespace common\modules\api\v1\user\models;
+namespace common\models;
 
 use Yii;
 use yii\base\Exception;
@@ -9,13 +9,6 @@ use yii\web\HttpException;
 use yii\web\IdentityInterface;
 use yii\web\UnauthorizedHttpException;
 use yii\behaviors\TimestampBehavior;
-use common\modules\api\v1\block\models\Block;
-use common\modules\api\v1\device\models\Device;
-use common\modules\api\v1\profile\models\Profile;
-use common\modules\api\v1\notification\models\Notification;
-use common\modules\api\v1\socialnetwork\models\SocialNetwork;
-use common\modules\api\v1\sleepingposition\models\SleepingPosition;
-use common\modules\api\v1\reasonusingmatrix\models\ReasonUsingMatrix;
 use Firebase\JWT\JWT;
 
 /**
@@ -30,7 +23,7 @@ use Firebase\JWT\JWT;
  * @property integer $last_login
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
- * @package common\modules\api\v1\user\models
+ * @package common\models
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -201,7 +194,6 @@ class User extends ActiveRecord implements IdentityInterface
         }
         if ($this->scenario == self::SCENARIO_LOGIN) {
             $this->last_login = time();
-            unset($this->password, $this->email);
         }
 
         return true;

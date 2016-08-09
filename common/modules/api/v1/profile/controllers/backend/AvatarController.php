@@ -9,8 +9,8 @@ use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\BadRequestHttpException;
 use yii\filters\auth\HttpBearerAuth;
-use common\modules\api\v1\profile\models\Profile;
-use common\modules\api\v1\user\models\User;
+use common\models\Profile;
+use common\models\User;
 
 /**
  * Class Avatar controller

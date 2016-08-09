@@ -1,6 +1,6 @@
 <?php
 
-namespace common\modules\api\v1\block\models;
+namespace common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
@@ -15,7 +15,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $expired_at
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
- * @package common\modules\api\v1\block\models
+ * @package common\models
  */
 class Block extends ActiveRecord
 {

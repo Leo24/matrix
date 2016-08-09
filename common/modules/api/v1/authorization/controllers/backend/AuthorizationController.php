@@ -7,7 +7,7 @@ use yii\filters\auth\HttpBearerAuth;
 use yii\web\HttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\ServerErrorHttpException;
-use common\modules\api\v1\user\models\User;
+use common\models\User;
 
 /**
  * Class AuthorizationController

@@ -1,11 +1,10 @@
 <?php
-
 namespace common\modules\api\v1\device\controllers\backend;
 
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
-use common\modules\api\v1\device\models\Device;
+use common\models\Device;
 
 /**
  * Class DeviceController

@@ -5,7 +5,7 @@ namespace common\modules\api\v1\profile\controllers\backend;
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
-use common\modules\api\v1\profile\models\Profile;
+use common\models\Profile;
 
 /**
  * Class Profile controller

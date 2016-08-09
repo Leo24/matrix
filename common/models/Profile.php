@@ -1,6 +1,6 @@
 <?php
 
-namespace common\modules\api\v1\profile\models;
+namespace common\models;
 
 use Yii;
 use yii\base\Exception;
@@ -27,7 +27,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer updated_at
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
- * @package common\modules\api\v1\profile\models
+ * @package common\models
  */
 class Profile extends ActiveRecord
 {

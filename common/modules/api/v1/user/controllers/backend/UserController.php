@@ -6,7 +6,7 @@ use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
 use yii\web\HttpException;
-use common\modules\api\v1\user\models\User;
+use common\models\User;
 use common\modules\api\v1\user\controllers\backend\actions\user\DeleteAction;
 
 /**

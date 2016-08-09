@@ -6,7 +6,7 @@ use Yii;
 use yii\web\HttpException;
 use yii\web\ServerErrorHttpException;
 use yii\web\ForbiddenHttpException;
-use common\modules\api\v1\user\models\User;
+use common\models\User;
 
 /**
  * Class DeleteAction

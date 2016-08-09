@@ -6,7 +6,7 @@ use Yii;
 use yii\rest\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
-use common\modules\api\v1\user\models\User;
+use common\models\User;
 
 /**
  * Class AuthorizationController
@@ -32,18 +32,14 @@ class AuthorizationController extends Controller
      */
     public function actionLogin()
     {
-        /** @var $model User */
         $model = User::findOne(['email' => Yii::$app->getRequest()->getBodyParam('email')]);
         if (empty($model)) {
             throw new NotFoundHttpException('User not found', self::USER_NOT_FOUND_CODE);
         }
 
         $password = Yii::$app->getRequest()->getBodyParam('password');
-        //var_dump([$model->password, $password, $model->validatePassword($password)]); die();
-
         if (!empty($password) && $model->validatePassword($password)) {
             $model->scenario = 'login';
-
             $model->save();
 
             return ['token' => $model->getJWT()];
