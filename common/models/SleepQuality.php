@@ -9,7 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property integer $user_id
- * @property string $date
+ * @property string $timestamp
  * @property integer $sleep_class_awake_percent
  * @property integer $sleep_class_deep_percent
  * @property integer $sleep_class_light_percent
@@ -45,7 +45,7 @@ class SleepQuality extends \yii\db\ActiveRecord
             [['user_id'], 'required'],
             [[
                 'user_id',
-                'date',
+                'timestamp',
                 'sleep_score',
                 'duration',
                 'duration_in_bed',
@@ -81,7 +81,7 @@ class SleepQuality extends \yii\db\ActiveRecord
             'user_id' => 'User ID',
             'from' => 'From',
             'to' => 'To',
-            'date' => 'Date',
+            'timestamp' => 'Timestamp',
             'sleep_score' => 'Sleep Score',
             'duration' => 'Duration',
             'duration_in_bed' => 'Duration in Bed',

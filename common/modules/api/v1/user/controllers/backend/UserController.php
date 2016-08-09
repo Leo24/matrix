@@ -1,16 +1,19 @@
 <?php
+
 namespace common\modules\api\v1\user\controllers\backend;
 
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
 use yii\web\HttpException;
-use common\models\User;
+use common\modules\api\v1\user\models\User;
 use common\modules\api\v1\user\controllers\backend\actions\user\DeleteAction;
 
 /**
  * Class UserController
- * @package common\modules\api\v1\user\controllers
+ *
+ * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
+ * @package common\modules\api\v1\user\controllers\backend
  */
 class UserController extends ActiveController
 {

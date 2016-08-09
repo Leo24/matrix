@@ -1,11 +1,24 @@
 <?php
 
-namespace common\models;
+namespace common\modules\api\v1\sleepingposition\models;
 
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
+use common\modules\api\v1\user\models\User;
 
+/**
+ * This is the model class for table 'sleeping_position'
+ *
+ * @property integer $user_id
+ * @property boolean $back_sleeper
+ * @property boolean $side_sleeper
+ * @property boolean $stomach_sleeper
+ * @property integer $updated_at
+ *
+ * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
+ * @package common\modules\api\v1\sleepingposition\models
+ */
 class SleepingPosition extends ActiveRecord
 {
     /**

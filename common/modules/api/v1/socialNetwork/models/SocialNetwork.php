@@ -1,20 +1,26 @@
 <?php
-namespace common\models;
+
+namespace common\modules\api\v1\socialnetwork\models;
+
 use Yii;
 use yii\db\ActiveRecord;
+use common\modules\api\v1\user\models\User;
+
 /**
- * This is the model class for table "social_network".
+ * This is the model class for table 'social_network'.
  *
  * @property integer $id
  * @property integer $user_id
  * @property string $social_network_type
  * @property string $data
  *
- * @property User $user
+ * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
+ * @package common\models
  */
 class SocialNetwork extends ActiveRecord
 {
     const SCENARIO_REGISTER = 'register';
+
     /**
      * @inheritdoc
      */
@@ -22,6 +28,7 @@ class SocialNetwork extends ActiveRecord
     {
         return '{{%social_network}}';
     }
+
     /**
      * @inheritdoc
      */
@@ -36,6 +43,7 @@ class SocialNetwork extends ActiveRecord
             ],
         ];
     }
+
     /**
      * @inheritdoc
      */
@@ -47,6 +55,7 @@ class SocialNetwork extends ActiveRecord
             ['social_network_type', 'in', 'range' => ['facebook', 'instagram', 'pinterest', 'twitter']],
         ];
     }
+
     /**
      * @inheritdoc
      */
@@ -59,6 +68,7 @@ class SocialNetwork extends ActiveRecord
             'data' => Yii::t('app', 'Data'),
         ];
     }
+
     /**
      * @inheritdoc
      */
@@ -71,8 +81,10 @@ class SocialNetwork extends ActiveRecord
         if ($this->scenario == self::SCENARIO_REGISTER) {
             unset($fields['user_id']);
         }
+
         return $fields;
     }
+
     /**
      * @inheritdoc
      */
@@ -80,6 +92,7 @@ class SocialNetwork extends ActiveRecord
     {
         return ['user'];
     }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -87,6 +100,7 @@ class SocialNetwork extends ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
     /**
      * @return mixed
      */
@@ -94,6 +108,7 @@ class SocialNetwork extends ActiveRecord
     {
         return json_decode($this->data);
     }
+
     /**
      * @param $user_id
      * @param $type
@@ -103,6 +118,7 @@ class SocialNetwork extends ActiveRecord
     {
         return (bool)SocialNetwork::findOne(['user_id' => $user_id, 'social_network_type' => $type]);
     }
+
     /**
      * @inheritdoc
      */
@@ -112,6 +128,7 @@ class SocialNetwork extends ActiveRecord
             $this->data = json_encode($this->data);
             return true;
         }
+
         return false;
     }
 }

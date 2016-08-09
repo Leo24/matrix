@@ -51,7 +51,7 @@ class EmfitdataController extends ActiveController
             $SleepQualityModel->user_id                 = $json['user_id'];
             $SleepQualityModel->from                    = $json['from'];
             $SleepQualityModel->to                      = $json['to'];
-            $SleepQualityModel->date                    = strtotime($json['from']);
+            $SleepQualityModel->timestamp               = strtotime($json['from']);
             $SleepQualityModel->sleep_score             = $json['sleep_score'];
             $SleepQualityModel->duration                = $json['duration'];
             $SleepQualityModel->duration_in_bed         = $json['duration_in_bed'];
@@ -138,6 +138,13 @@ class EmfitdataController extends ActiveController
                     }
                 }
             }
+
+            $data = json_encode($request->bodyParams);
+            date_default_timezone_set('europe/kiev');
+            $filename = date('Y:m:d-H:i:s', time());
+            $myfile = fopen(getcwd() . '/tmp/' . $filename . ".txt", "w");
+            fwrite($myfile, $data."\n");
+            fclose($myfile);
             return $json;
         }
     }
@@ -182,7 +189,7 @@ class EmfitdataController extends ActiveController
                 $SleepQualityModel->user_id                 = $json['user_id'];
                 $SleepQualityModel->from                    = $json['from'];
                 $SleepQualityModel->to                      = $json['to'];
-                $SleepQualityModel->date                    = strtotime($json['from']);
+                $SleepQualityModel->timestamp               = strtotime($json['from']);
                 $SleepQualityModel->sleep_score             = $json['sleep_score'];
                 $SleepQualityModel->duration                = $json['duration'];
                 $SleepQualityModel->duration_in_bed         = $json['duration_in_bed'];

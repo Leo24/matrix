@@ -1,15 +1,25 @@
 <?php
 
-namespace common\models;
+namespace common\modules\api\v1\reasonusingmatrix\models;
 
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
+use common\modules\api\v1\user\models\User;
 
 /**
- * This is the model class for table "reason_using_matrix".
+ * This is the model class for table 'reason_using_matrix'
  *
- * @package common\models
+ * @property integer $user_id
+ * @property boolean $overall_wellness
+ * @property boolean $sleep_related_issues
+ * @property boolean $specific_health_issues
+ * @property boolean $athletic_training
+ * @property boolean $other
+ * @property integer $updated_at
+ *
+ * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
+ * @package common\modules\api\v1\reasonusingmatrix\models
  */
 class ReasonUsingMatrix extends ActiveRecord
 {

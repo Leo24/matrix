@@ -1,24 +1,40 @@
 <?php
 
-namespace common\models;
+namespace common\modules\api\v1\device\models;
 
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
+use common\models\User;
+
 /**
- * Class Profile
- * @package common\models
+ * This is the model class for table 'device'
+ *
+ * @property integer $id
+ * @property integer $user_id
+ * @property string $name
+ * @property string $position
+ * @property string $pin
+ * @property string $pw
+ * @property string $sn
+ * @property integer $updated_at
+ *
+ * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
+ * @package common\modules\api\v1\device\models
  */
 class Device extends ActiveRecord
 {
-    public $sleeping_position;
     const SCENARIO_REGISTER = 'register';
+
+    public $sleeping_position;
+
     /**
      * Primary key name
      *
      * @inheritdoc
      */
     public $primaryKey = 'id';
+
     /**
      * Table name
      *
@@ -28,6 +44,7 @@ class Device extends ActiveRecord
     {
         return '{{%device}}';
     }
+
     /**
      * Attribute labels
      *
@@ -36,16 +53,17 @@ class Device extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id'        => 'Id',
-            'user_id'   => 'User Id',
-            'name'      => 'Name',
-            'position'  => 'Position',
-            'pin'       => 'Pin',
-            'pw'        => 'PW',
-            'sn'        => 'SN',
-            'updated_at'=> 'Updated_at',
+            'id' => Yii::t('app', 'Id'),
+            'user_id' => Yii::t('app', 'User Id'),
+            'name' => Yii::t('app', 'Name'),
+            'position' => Yii::t('app', 'Position'),
+            'pin' => Yii::t('app', 'Pin'),
+            'pw' => Yii::t('app', 'PW'),
+            'sn' => Yii::t('app', 'SN'),
+            'updated_at' => Yii::t('app', 'Updated_at'),
         ];
     }
+
     /**
      * @inheritdoc
      */
@@ -59,8 +77,10 @@ class Device extends ActiveRecord
             'pw',
             'sn',
         ];
+
         return $scenarion;
     }
+
     /**
      * @inheritdoc
      */
@@ -77,6 +97,7 @@ class Device extends ActiveRecord
             ],
         ];
     }
+
     /**
      * @inheritdoc
      */
@@ -89,10 +110,8 @@ class Device extends ActiveRecord
                 'required',
                 'on' => self::SCENARIO_REGISTER
             ],
-
             [['name', 'pin', 'pw', 'sn'], 'string', 'max' => 255],
             ['sn', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('app', 'Device exists')],
-
         ];
     }
 
@@ -101,6 +120,6 @@ class Device extends ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }
