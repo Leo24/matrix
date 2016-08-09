@@ -2,10 +2,10 @@
 
 namespace common\modules\api\v1\socialnetwork\controllers\backend;
 
-use common\models\SocialNetwork;
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
+use common\modules\api\v1\socialnetwork\models\SocialNetwork;
 
 /**
  * Class SocialNetwork controller

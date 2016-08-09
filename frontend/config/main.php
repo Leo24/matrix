@@ -22,6 +22,9 @@ return [
                         'authorization' => [
                             'class' => 'common\modules\api\v1\authorization\Module'
                         ],
+                        'block' => [
+                            'class' => 'common\modules\api\v1\block\Module'
+                        ],
                         'profile' => [
                             'class' => 'common\modules\api\v1\profile\Module'
                         ],
@@ -30,6 +33,12 @@ return [
                         ],
                         'socialnetwork' => [
                             'class' => 'common\modules\api\v1\socialnetwork\Module'
+                        ],
+                        'reasonusingmatrix' => [
+                            'class' => 'common\modules\api\v1\reasonusingmatrix\Module'
+                        ],
+                        'sleepingposition' => [
+                            'class' => 'common\modules\api\v1\sleepingposition\Module'
                         ],
                         'device' => [
                             'class' => 'common\modules\api\v1\device\Module'
@@ -62,7 +71,7 @@ return [
             ],
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
+            'identityClass' => 'common\modules\api\v1\user\models\User',
             'enableSession' => false,
             'enableAutoLogin' => false,
         ],

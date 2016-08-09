@@ -1,6 +1,6 @@
 <?php
 
-namespace common\modules\api\v1\device\controllers\backend;
+namespace common\modules\api\v1\block\controllers\backend;
 
 use Yii;
 use yii\rest\ActiveController;
@@ -8,7 +8,7 @@ use yii\filters\auth\HttpBearerAuth;
 use common\modules\api\v1\device\models\Device;
 
 /**
- * Class DeviceController
+ * Class BlockController
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
  * @package common\modules\api\v1\device\controllers\backend
