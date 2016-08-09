@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\modules\api\v1\settings\models\SettingNotification;
 use Yii;
 use yii\base\Exception;
 use yii\db\ActiveRecord;
@@ -236,6 +237,12 @@ class User extends ActiveRecord implements IdentityInterface
                             }
                         }
                     }
+
+                    /** @var  $settingNotification SettingNotification */
+                    $settingNotification = new SettingNotification();
+                    /** Saving default setting of notification for new register user */
+                    $settingNotification->createDefaultRecordForNewRegisterUser($data['user_id']);
+
                     if ($sleepingPositionModel->validate()
                         && $reasonUsingMatrixModel->validate()
                         && $profileModel->validate()

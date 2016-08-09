@@ -37,6 +37,9 @@ return [
                         'notification' => [
                             'class' => 'common\modules\api\v1\notification\Module'
                         ],
+                        'settings' => [
+                            'class' => 'common\modules\api\v1\settings\Module'
+                        ],
                         'user' => [
                             'class' => 'common\modules\api\v1\user\Module'
                         ],
@@ -140,8 +143,17 @@ return [
                 [
                     'class' => 'yii\rest\UrlRule',
                     'prefix' => 'api/v1/',
-                    'controller' => ['notifications' => 'api/v1/notification/backend/notification',],
+                    'controller' => 'api/v1/notification/backend/notification',
                     'except' => ['index', 'create'],
+                ],
+
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'prefix' => 'api/v1/',
+                    'controller' => [
+                        'settings/notifications' => 'api/v1/settings/backend/notification'
+                    ],
+                    'except' => ['create', 'delete', 'view']
                 ],
             ],
         ],
