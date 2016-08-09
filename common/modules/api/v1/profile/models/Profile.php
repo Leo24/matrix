@@ -8,6 +8,7 @@ use yii\db\ActiveRecord;
 use yii\helpers\BaseUrl;
 use yii\helpers\BaseFileHelper;
 use yii\behaviors\TimestampBehavior;
+use common\modules\api\v1\user\models\User;
 
 /**
  * This is the model class for table 'profile'
