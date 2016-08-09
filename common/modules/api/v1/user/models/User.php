@@ -2,7 +2,6 @@
 
 namespace common\modules\api\v1\user\models;
 
-use common\modules\api\v1\settings\models\SettingNotification;
 use Yii;
 use yii\base\Exception;
 use yii\db\ActiveRecord;
@@ -15,7 +14,8 @@ use common\modules\api\v1\device\models\Device;
 use common\modules\api\v1\profile\models\Profile;
 use common\modules\api\v1\notification\models\Notification;
 use common\modules\api\v1\socialnetwork\models\SocialNetwork;
-use common\modules\api\v1\sleepingposition\models\SleepingPosition;
+use common\modules\api\v1\settings\models\SettingNotification;
+use common\modules\api\v1\sleepingPosition\models\SleepingPosition;
 use common\modules\api\v1\reasonusingmatrix\models\ReasonUsingMatrix;
 use Firebase\JWT\JWT;
 
@@ -84,10 +84,10 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             [
-                'class' => TimestampBehavior::className(),
+                'class'              => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => 'updated_at',
-                'value' => function () {
+                'value'              => function () {
                     return time();
                 },
             ],
@@ -106,7 +106,7 @@ class User extends ActiveRecord implements IdentityInterface
                 'confirm',
                 'compare',
                 'compareAttribute' => 'password',
-                'on' => [self::SCENARIO_REGISTER, self::SCENARIO_UPDATE_PASSWORD]
+                'on'               => [self::SCENARIO_REGISTER, self::SCENARIO_UPDATE_PASSWORD]
             ],
             [['username', 'email'], 'safe'],
             [['password', 'email'], 'string', 'max' => 255],
@@ -238,9 +238,9 @@ class User extends ActiveRecord implements IdentityInterface
     public function attributeLabels()
     {
         return [
-            'email' => Yii::t('app', 'Email'),
-            'password' => Yii::t('app', 'Password'),
-            'username' => Yii::t('app', 'User name'),
+            'email'      => Yii::t('app', 'Email'),
+            'password'   => Yii::t('app', 'Password'),
+            'username'   => Yii::t('app', 'User name'),
             'created_at' => Yii::t('app', 'Created at'),
             'updated_at' => Yii::t('app', 'Updated at'),
             'last_login' => Yii::t('app', 'Last login'),
@@ -255,7 +255,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function validationExceptionFirstMessage($modelErrors, $code = false)
     {
-        if(is_array($modelErrors) && !empty($modelErrors)) {
+        if (is_array($modelErrors) && !empty($modelErrors)) {
             $fields = array_keys($modelErrors);
             $first_message = current($modelErrors[$fields[0]]);
             throw new HttpException(422, "Validation exception: {$first_message}",
@@ -327,13 +327,13 @@ class User extends ActiveRecord implements IdentityInterface
                         $transaction->commit();
 
                         return [
-                            'token' => $userModel->getJWT(),
-                            'user' => $userModel,
-                            'profile' => $profileModel,
-                            'device' => $deviceModel,
-                            'sleeping_position' => $sleepingPositionModel,
+                            'token'               => $userModel->getJWT(),
+                            'user'                => $userModel,
+                            'profile'             => $profileModel,
+                            'device'              => $deviceModel,
+                            'sleeping_position'   => $sleepingPositionModel,
                             'reason_using_matrix' => $reasonUsingMatrixModel,
-                            'social_network' => $socialNetworksResponseData,
+                            'social_network'      => $socialNetworksResponseData,
                         ];
                     } else {
                         $errors = array_merge(
@@ -549,9 +549,9 @@ class User extends ActiveRecord implements IdentityInterface
             }
             $block = new Block();
             $values = [
-                'user_id' => User::getPayload($token, 'jti'),
+                'user_id'    => User::getPayload($token, 'jti'),
                 'expired_at' => User::getPayload($token, 'exp'),
-                'token' => $token
+                'token'      => $token
             ];
             $block->attributes = $values;
             return $block->save();
