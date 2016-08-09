@@ -23,7 +23,7 @@ class m160805_132257_create_sleep_quality_table extends Migration
             'user_id' => $this->integer(11),
             'from' => $this->string(255),
             'to' => $this->string(255),
-            'date' => $this->integer(14),
+            'timestamp' => $this->integer(14),
             'sleep_score' => $this->integer(11),
             'duration' => $this->integer(11),
             'duration_in_bed' => $this->integer(11),
@@ -65,8 +65,8 @@ class m160805_132257_create_sleep_quality_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropIndex('idx_sleep_quality_user_id', '{{%sleep_quality}}');
         $this->dropForeignKey('fk_tbl_sleep_quality_tbl_user', '{{%sleep_quality}}');
+        $this->dropIndex('idx_sleep_quality_user_id', '{{%sleep_quality}}');
         $this->dropTable('{{%sleep_quality}}');
     }
 }
