@@ -13,7 +13,7 @@ use common\modules\api\v1\block\models\Block;
 use common\modules\api\v1\device\models\Device;
 use common\modules\api\v1\profile\models\Profile;
 use common\modules\api\v1\notification\models\Notification;
-use common\modules\api\v1\socialnetwork\models\SocialNetwork;
+use common\modules\api\v1\socialNetwork\models\SocialNetwork;
 use common\modules\api\v1\settings\models\SettingNotification;
 use common\modules\api\v1\sleepingPosition\models\SleepingPosition;
 use common\modules\api\v1\reasonUsingMatrix\models\ReasonUsingMatrix;

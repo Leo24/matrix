@@ -1,6 +1,6 @@
 <?php
 
-namespace common\modules\api\v1\socialnetwork\models;
+namespace common\modules\api\v1\socialNetwork\models;
 
 use Yii;
 use yii\db\ActiveRecord;
@@ -62,10 +62,10 @@ class SocialNetwork extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
-            'user_id' => Yii::t('app', 'User ID'),
+            'id'                  => Yii::t('app', 'ID'),
+            'user_id'             => Yii::t('app', 'User ID'),
             'social_network_type' => Yii::t('app', 'Social Network Type'),
-            'data' => Yii::t('app', 'Data'),
+            'data'                => Yii::t('app', 'Data'),
         ];
     }
 
