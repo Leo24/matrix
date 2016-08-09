@@ -14,7 +14,6 @@ use Yii;
  * @property double $respiration_rate
  * @property integer $activity
  *
- * @property Users $user
  */
 class CalcData extends \yii\db\ActiveRecord
 {
