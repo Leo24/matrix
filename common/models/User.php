@@ -202,6 +202,20 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @inheritdoc
      */
+    public function beforeDelete()
+    {
+        if (parent::beforeDelete()) {
+            Profile::findOne(['user_id', $this->id])->deleteAvatar();
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function afterSave($insert, $changedAttributes)
     {
         parent::afterSave($insert, $changedAttributes);

@@ -56,6 +56,7 @@ class AvatarController extends Controller
             $profileModel->avatar = UploadedFile::getInstanceByName('avatar');
 
             if ($profileModel->validate()) {
+                $profileModel->deleteAvatar();
                 $profileModel->avatar_url = $profileModel->getAvatarUrl($profileModel->uploadAvatar());
                 $profileModel->save();
                 return $profileModel;

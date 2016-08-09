@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\base\Exception;
 use yii\db\ActiveRecord;
 use yii\helpers\BaseUrl;
 use yii\helpers\BaseFileHelper;
@@ -75,6 +76,7 @@ class Profile extends ActiveRecord
             'gender' => Yii::t('app', 'Gender'),
             'state' => Yii::t('app', 'State'),
             'city' => Yii::t('app', 'City'),
+            'phone' => Yii::t('app', 'Phone'),
             'avatar_url' => Yii::t('app', 'Avatar URL'),
             'birthday' => Yii::t('app', 'Birthday'),
             'profession_interest' => Yii::t('app', 'Profession interest'),
@@ -137,7 +139,7 @@ class Profile extends ActiveRecord
             [['firstname', 'lastname'], 'string', 'max' => 30],
             [['city', 'state'], 'string', 'max' => 20],
             [['birthday'], 'integer'],
-            [['profession_interest', 'average_hours_sleep', 'avatar_url'], 'string', 'max' => 255],
+            [['profession_interest', 'average_hours_sleep', 'avatar_url', 'phone'], 'string', 'max' => 255],
             ['gender', 'in', 'range' => ['female', 'male']],
             ['user_id', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('app', 'Profile exists')],
             [
@@ -165,6 +167,19 @@ class Profile extends ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeDelete()
+    {
+        if (parent::beforeDelete()) {
+            $this->deleteAvatar();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -198,6 +213,7 @@ class Profile extends ActiveRecord
         . time()
         . '-'
         . $this->user_id
+        . '.'
         . $this->avatar->extension;
     }
 
@@ -227,9 +243,29 @@ class Profile extends ActiveRecord
         $fileName = $this->createAvatarFileName();
         $avatarFilePath = self::getAvatarPath() . $fileName;
 
-        if($this->avatar->saveAs($avatarFilePath))
-        {
+        if ($this->avatar->saveAs($avatarFilePath)) {
             return $fileName;
+        }
+        return false;
+    }
+
+    /**
+     * Deletes user avatar
+     *
+     * @return bool|int
+     */
+    public function deleteAvatar()
+    {
+        if (is_dir(self::getAvatarPath())) {
+            $mask = "avatar-*-{$this->user_id}.*";
+            $list = (glob('/' . self::getAvatarPath() . $mask));
+            try {
+                array_map('unlink', $list);
+
+                return count($list);
+            } catch (Exception $e) {
+                return false;
+            }
         }
         return false;
     }
