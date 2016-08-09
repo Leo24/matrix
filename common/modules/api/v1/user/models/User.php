@@ -16,7 +16,7 @@ use common\modules\api\v1\notification\models\Notification;
 use common\modules\api\v1\socialnetwork\models\SocialNetwork;
 use common\modules\api\v1\settings\models\SettingNotification;
 use common\modules\api\v1\sleepingPosition\models\SleepingPosition;
-use common\modules\api\v1\reasonusingmatrix\models\ReasonUsingMatrix;
+use common\modules\api\v1\reasonUsingMatrix\models\ReasonUsingMatrix;
 use Firebase\JWT\JWT;
 
 /**

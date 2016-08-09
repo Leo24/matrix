@@ -1,6 +1,6 @@
 <?php
 
-namespace common\modules\api\v1\reasonusingmatrix\models;
+namespace common\modules\api\v1\reasonUsingMatrix\models;
 
 use Yii;
 use yii\db\ActiveRecord;
@@ -70,10 +70,10 @@ class ReasonUsingMatrix extends ActiveRecord
     {
         return [
             [
-                'class' => TimestampBehavior::className(),
+                'class'              => TimestampBehavior::className(),
                 'createdAtAttribute' => null,
                 'updatedAtAttribute' => 'updated_at',
-                'value' => function () {
+                'value'              => function () {
                     return time();
                 },
             ],
@@ -110,7 +110,7 @@ class ReasonUsingMatrix extends ActiveRecord
                 'user_id',
                 'unique',
                 'targetClass' => self::className(),
-                'message' => Yii::t('app', 'Sleeping position data exists')
+                'message'     => Yii::t('app', 'Sleeping position data exists')
             ],
         ];
     }
