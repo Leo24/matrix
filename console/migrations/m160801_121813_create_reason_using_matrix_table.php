@@ -46,8 +46,8 @@ class m160801_121813_create_reason_using_matrix_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropIndex('idx-reason-using-matrix-user-id', '{{%reason_using_matrix}}');
         $this->dropForeignKey('fk_tbl_reason_using_matrix_tbl_user', '{{%reason_using_matrix}}');
+        $this->dropIndex('idx-reason-using-matrix-user-id', '{{%reason_using_matrix}}');
         $this->dropTable('{{%reason_using_matrix}}');
     }
 }

@@ -7,7 +7,7 @@ class m160802_074416_create_notification_table extends Migration
     /**
      * @inheritdoc
      */
-    public function up()
+    public function safeUp()
     {
         $tableOptions = ($this->db->driverName === 'mysql')
             ? 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB' : null;
@@ -40,10 +40,10 @@ class m160802_074416_create_notification_table extends Migration
     /**
      * @inheritdoc
      */
-    public function down()
+    public function safeDown()
     {
-        $this->dropIndex('idx_notification_user_id', '{{%notification}}');
         $this->dropForeignKey('fk_tbl_notification_tbl_user', '{{%notification}}');
+        $this->dropIndex('idx_notification_user_id', '{{%notification}}');
         $this->dropTable('{{%notification}}');
     }
 }

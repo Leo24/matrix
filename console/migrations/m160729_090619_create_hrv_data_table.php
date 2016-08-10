@@ -7,7 +7,7 @@ class m160729_090619_create_hrv_data_table extends Migration
     /**
      * @inheritdoc
      */
-    public function up()
+    public function safeUp()
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -40,10 +40,10 @@ class m160729_090619_create_hrv_data_table extends Migration
     /**
      * @inheritdoc
      */
-    public function down()
+    public function safeDown()
     {
-        $this->dropIndex('idx_hrv_data_user_id', '{{%hrv_data}}');
         $this->dropForeignKey('fk_tbl_hrv_data_tbl_user', '{{%hrv_data}}');
+        $this->dropIndex('idx_hrv_data_user_id', '{{%hrv_data}}');
         $this->dropTable('{{%hrv_data}}');
     }
 }
