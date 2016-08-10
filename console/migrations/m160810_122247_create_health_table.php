@@ -26,6 +26,7 @@ class m160810_122247_create_health_table extends Migration
             'blood_pressure_systolic'  => $this->integer(3)->unsigned()->defaultValue(null),
             'blood_pressure_diastolic' => $this->integer(3)->unsigned()->defaultValue(null),
             'cholesterol_level'        => $this->integer(3)->unsigned()->defaultValue(null),
+            'updated_at'               => $this->integer(11)->unsigned()->defaultValue(null),
         ], $options);
 
         $this->createIndex('idx-health-user_id', '{{%health}}', 'user_id');
@@ -45,8 +46,8 @@ class m160810_122247_create_health_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropIndex('idx-health-user_id', '{{%health}}');
         $this->dropForeignKey('fk-health-user_id', '{{%health}}');
+        $this->dropIndex('idx-health-user_id', '{{%health}}');
         $this->dropTable('{{%health}}');
     }
 }
