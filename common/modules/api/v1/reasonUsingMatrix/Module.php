@@ -1,6 +1,6 @@
 <?php
 
-namespace common\modules\api\v1\reasonusingmatrix;
+namespace common\modules\api\v1\reasonUsingMatrix;
 
 /**
  * Class Module
@@ -10,7 +10,7 @@ namespace common\modules\api\v1\reasonusingmatrix;
  */
 class Module extends \yii\base\Module
 {
-    public $controllerNamespace = 'common\modules\api\v1\reasonusingmatrix\controllers';
+    public $controllerNamespace = 'common\modules\api\v1\reasonUsingMatrix\controllers';
 
     /**
      * @var string Major API version. Property should be filled
