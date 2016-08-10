@@ -15,10 +15,12 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.4.0",
+        "fxp/composer-asset-plugin": "v1.1.3",
         "yiisoft/yii2": ">=2.0.6",
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
-        "firebase/php-jwt": "^4.0"
+        "firebase/php-jwt": "^4.0",
+        "bryglen/yii2-apns-gcm": "1.0.4"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
