@@ -32,7 +32,6 @@ class Notification extends ActiveRecord
     const MATRIX_TAG = 'matrix';
     const GOAL_TAG = 'goal';
 
-
     /**
      * @inheritdoc
      */
