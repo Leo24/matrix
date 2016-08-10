@@ -1,22 +1,21 @@
 <?php
-namespace common\modules\api\v1\sleepquality\controllers\backend;
+namespace common\modules\api\v1\report\controllers\backend;
 
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
-use common\models\SleepQuality;
-use common\modules\api\v1\sleepquality\controllers\backend\actions\ViewAction;
+use common\models\HrvData;
+use common\modules\api\v1\report\controllers\backend\actions\ViewAction;
 
 /**
- * Notification controller
+ * Report controller
  */
-// todo camelCase
-class SleepqualityController extends ActiveController
+class ReportController extends ActiveController
 {
     /**
      * @inheritdoc
      */
-    public $modelClass = SleepQuality::class;
+    public $modelClass = HrvData::class;
 
     /**
      * @inheritdoc
@@ -38,6 +37,7 @@ class SleepqualityController extends ActiveController
     {
         $actions = parent::actions();
 
+        $actions['index']['class'] = IndexAction::class;
         $actions['view']['class'] = ViewAction::class;
 
 

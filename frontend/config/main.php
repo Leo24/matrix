@@ -31,6 +31,9 @@ return [
                         'sleepquality' => [
                             'class' => 'common\modules\api\v1\sleepquality\Module'
                         ],
+                        'report' => [
+                            'class' => 'common\modules\api\v1\report\Module'
+                        ],
                         'socialnetwork' => [
                             'class' => 'common\modules\api\v1\socialnetwork\Module'
                         ],
@@ -151,7 +154,14 @@ return [
                     'prefix' => 'api/v1/',
                     'controller' => [
                         'profiles' => 'api/v1/profile/backend/profile',
-                        'profiles/sleep/quality' => 'api/v1/sleepquality/backend/sleepquality',
+                        'profile/sleep/quality' => 'api/v1/report/backend/report',
+                        'profile/matrix/averages' => 'api/v1/report/backend/report',
+                        'report' => 'api/v1/report/backend/report',
+                        'report/sleep/cycles' => 'api/v1/report/backend/report',
+                        'report/movement' => 'api/v1/report/backend/report',
+                        'report/stress' => 'api/v1/report/backend/report',
+                        'report/breathing' => 'api/v1/report/backend/report',
+                        'report/daily' => 'api/v1/report/backend/report',
                         'users' => 'api/v1/user/backend/user',
                         'socialnetworks' => 'api/v1/socialnetwork/backend/socialnetwork',
                         'notifications' => 'api/v1/notification/backend/notification',
