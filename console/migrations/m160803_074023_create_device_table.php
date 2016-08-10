@@ -46,8 +46,8 @@ class m160803_074023_create_device_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropIndex('idx-device-user-id', '{{%device}}');
         $this->dropForeignKey('fk_tbl_device_tbl_user', '{{%device}}');
+        $this->dropIndex('idx-device-user-id', '{{%device}}');
         $this->dropTable('{{%device}}');
     }
 }

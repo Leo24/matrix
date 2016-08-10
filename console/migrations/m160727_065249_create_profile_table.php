@@ -47,8 +47,8 @@ class m160727_065249_create_profile_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropIndex('idx-profile-user-id', '{{%profile}}');
         $this->dropForeignKey('fk_tbl_profile_tbl_user', '{{%profile}}');
+        $this->dropIndex('idx-profile-user-id', '{{%profile}}');
         $this->dropTable('{{%profile}}');
     }
 }

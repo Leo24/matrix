@@ -14,7 +14,6 @@ use common\modules\api\v1\user\models\User;
  * This is the model class for table 'profile'
  *
  * @property integer user_id
- * @property enum('public', 'private', 'off-the-grid') $privacy
  * @property string firstname
  * @property string lastname
  * @property string gender
@@ -37,9 +36,6 @@ class Profile extends ActiveRecord
 
     const SCENARIO_REGISTER = 'register';
     const SCENARIO_UPLOAD_AVATAR = 'avatar';
-    const PRIVACY_PUBLIC = 'public';
-    const PRIVACY_PRIVATE = 'private';
-    const PRIVACY_OFF_THE_GRID = 'off-the-grid';
 
     /**
      * Photo maximum size value of the photo (mbyte)
@@ -141,7 +137,6 @@ class Profile extends ActiveRecord
                 'required',
                 'on' => self::SCENARIO_REGISTER
             ],
-            [['privacy'], 'in', 'range' => $this->getPrivacyList()],
             [['firstname', 'lastname'], 'string', 'max' => 30],
             [['city', 'state'], 'string', 'max' => 20],
             [['birthday'], 'integer'],
@@ -233,21 +228,6 @@ class Profile extends ActiveRecord
     {
         return BaseUrl::base() . 'uploads/avatars/' . $fileName;
     }
-
-    /**
-     * Return list of privacy for users
-     *
-     * @return array
-     */
-    public function getPrivacyList()
-    {
-        return [
-            self::PRIVACY_PUBLIC,
-            self::PRIVACY_PRIVATE,
-            self::PRIVACY_OFF_THE_GRID
-        ];
-    }
-
 
     /**
      * This is method uploads user avatar
