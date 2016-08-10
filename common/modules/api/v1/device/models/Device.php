@@ -1,10 +1,11 @@
 <?php
 
-namespace common\models;
+namespace common\modules\api\v1\device\models;
 
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
+use common\models\User;
 
 /**
  * This is the model class for table 'device'
@@ -19,7 +20,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $updated_at
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
- * @package common\models
+ * @package common\modules\api\v1\device\models
  */
 class Device extends ActiveRecord
 {
@@ -68,6 +69,7 @@ class Device extends ActiveRecord
      */
     public function scenarios()
     {
+        //todo нормально назвать переменную
         $scenarion = parent::scenarios();
         $scenarion[self::SCENARIO_REGISTER] = [
             'name',
@@ -119,6 +121,7 @@ class Device extends ActiveRecord
      */
     public function getUser()
     {
+        //todo namespace add
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }

@@ -1,13 +1,14 @@
 <?php
 
-namespace common\models;
+namespace common\modules\api\v1\reasonUsingMatrix\models;
 
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
+use common\modules\api\v1\user\models\User;
 
 /**
- * This is the model class for table 'reason_using_matrix
+ * This is the model class for table 'reason_using_matrix'
  *
  * @property integer $user_id
  * @property boolean $overall_wellness
@@ -18,7 +19,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $updated_at
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
- * @package common\models
+ * @package common\modules\api\v1\reasonusingmatrix\models
  */
 class ReasonUsingMatrix extends ActiveRecord
 {
@@ -69,10 +70,10 @@ class ReasonUsingMatrix extends ActiveRecord
     {
         return [
             [
-                'class' => TimestampBehavior::className(),
+                'class'              => TimestampBehavior::className(),
                 'createdAtAttribute' => null,
                 'updatedAtAttribute' => 'updated_at',
-                'value' => function () {
+                'value'              => function () {
                     return time();
                 },
             ],
@@ -109,7 +110,7 @@ class ReasonUsingMatrix extends ActiveRecord
                 'user_id',
                 'unique',
                 'targetClass' => self::className(),
-                'message' => Yii::t('app', 'Sleeping position data exists')
+                'message'     => Yii::t('app', 'Sleeping position data exists')
             ],
         ];
     }

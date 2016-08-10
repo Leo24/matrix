@@ -22,6 +22,7 @@ class EmfitdataController extends ActiveController
 {
 
     public $modelClass = SleepQuality::class;
+    // todo кто делал?
     /**
      * @parse data into database
      */
@@ -51,7 +52,7 @@ class EmfitdataController extends ActiveController
             $SleepQualityModel->user_id                 = $json['user_id'];
             $SleepQualityModel->from                    = $json['from'];
             $SleepQualityModel->to                      = $json['to'];
-            $SleepQualityModel->date                    = strtotime($json['from']);
+            $SleepQualityModel->timestamp               = strtotime($json['from']);
             $SleepQualityModel->sleep_score             = $json['sleep_score'];
             $SleepQualityModel->duration                = $json['duration'];
             $SleepQualityModel->duration_in_bed         = $json['duration_in_bed'];

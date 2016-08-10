@@ -6,7 +6,7 @@ use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
 use yii\web\HttpException;
-use common\models\User;
+use common\modules\api\v1\user\models\User;
 use common\modules\api\v1\user\controllers\backend\actions\user\DeleteAction;
 
 /**
@@ -48,6 +48,7 @@ class UserController extends ActiveController
         return $actions;
     }
 
+    // todo почему не вынесен в отдельный action
     /**
      * Update user password action
      *

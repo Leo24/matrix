@@ -22,6 +22,9 @@ return [
                         'authorization' => [
                             'class' => 'common\modules\api\v1\authorization\Module'
                         ],
+                        'block' => [
+                            'class' => 'common\modules\api\v1\block\Module'
+                        ],
                         'profile' => [
                             'class' => 'common\modules\api\v1\profile\Module'
                         ],
@@ -34,11 +37,20 @@ return [
                         'socialnetwork' => [
                             'class' => 'common\modules\api\v1\socialnetwork\Module'
                         ],
+                        'reasonusingmatrix' => [
+                            'class' => 'common\modules\api\v1\reasonusingmatrix\Module'
+                        ],
+                        'sleepingposition' => [
+                            'class' => 'common\modules\api\v1\sleepingposition\Module'
+                        ],
                         'device' => [
                             'class' => 'common\modules\api\v1\device\Module'
                         ],
                         'notification' => [
                             'class' => 'common\modules\api\v1\notification\Module'
+                        ],
+                        'settings' => [
+                            'class' => 'common\modules\api\v1\settings\Module'
                         ],
                         'user' => [
                             'class' => 'common\modules\api\v1\user\Module'
@@ -65,7 +77,7 @@ return [
             ],
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
+            'identityClass' => 'common\modules\api\v1\user\models\User',
             'enableSession' => false,
             'enableAutoLogin' => false,
         ],
@@ -155,6 +167,20 @@ return [
                         'notifications' => 'api/v1/notification/backend/notification',
                         'devices' => 'api/v1/device/backend/device',
                     ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'prefix' => 'api/v1/',
+                    'controller' => [
+                        'settings/notifications' => 'api/v1/settings/backend/notification'
+                    ],
+                    'except' => ['create', 'delete', 'view']
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'prefix' => 'api/v1/',
+                    'controller' => ['notifications' => 'api/v1/notification/backend/notification',],
+                    'except' => ['index', 'create'],
                 ],
             ],
         ],

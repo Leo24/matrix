@@ -4,7 +4,7 @@ namespace common\modules\api\v1\user\controllers\frontend;
 
 use Yii;
 use yii\base\Controller;
-use common\models\User;
+use common\modules\api\v1\user\models\User;
 
 /**
  * Class UserController

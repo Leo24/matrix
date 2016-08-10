@@ -1,24 +1,24 @@
 <?php
-
-namespace common\modules\api\v1\device\controllers\backend;
+namespace common\modules\api\v1\accomplishment\controllers\backend;
 
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
-use common\modules\api\v1\device\models\Device;
+use common\modules\api\v1\accomplishment\models\Accomplishment;
+
 
 /**
- * Class DeviceController
+ * Class AccomplishmentController
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
- * @package common\modules\api\v1\device\controllers\backend
+ * @package common\modules\api\v1\accomplishment\controllers\backend
  */
-class DeviceController extends ActiveController
+class AccomplishmentController extends ActiveController
 {
     /**
      * @inheritdoc
      */
-    public $modelClass = Device::class;
+    public $modelClass = Accomplishment::class;
 
     /**
      * @inheritdoc

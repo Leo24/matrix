@@ -1,13 +1,14 @@
 <?php
 
-namespace common\models;
+namespace common\modules\api\v1\sleepingPosition\models;
 
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
+use common\modules\api\v1\user\models\User;
 
 /**
- * This is the model class for table 'sleep_position
+ * This is the model class for table 'sleeping_position'
  *
  * @property integer $user_id
  * @property boolean $back_sleeper
@@ -16,7 +17,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $updated_at
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
- * @package common\models
+ * @package common\modules\api\v1\sleepingPosition\models
  */
 class SleepingPosition extends ActiveRecord
 {
@@ -36,10 +37,10 @@ class SleepingPosition extends ActiveRecord
     {
         return [
             [
-                'class' => TimestampBehavior::className(),
+                'class'              => TimestampBehavior::className(),
                 'createdAtAttribute' => null,
                 'updatedAtAttribute' => 'updated_at',
-                'value' => function () {
+                'value'              => function () {
                     return time();
                 },
             ],
@@ -58,7 +59,7 @@ class SleepingPosition extends ActiveRecord
                 'user_id',
                 'unique',
                 'targetClass' => self::className(),
-                'message' => Yii::t('app', 'Sleeping position data exists')
+                'message'     => Yii::t('app', 'Sleeping position data exists')
             ],
         ];
     }

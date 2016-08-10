@@ -7,7 +7,7 @@ use yii\filters\auth\HttpBearerAuth;
 use yii\web\HttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\ServerErrorHttpException;
-use common\models\User;
+use common\modules\api\v1\user\models\User;
 
 /**
  * Class AuthorizationController
@@ -56,7 +56,7 @@ class AuthorizationController extends ActiveController
 
         return $behaviors;
     }
-
+   //todo много статичных функций.
     /**
      * Refresh authorization token action
      *

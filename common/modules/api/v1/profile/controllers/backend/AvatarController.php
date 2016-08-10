@@ -9,8 +9,8 @@ use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\BadRequestHttpException;
 use yii\filters\auth\HttpBearerAuth;
-use common\models\Profile;
-use common\models\User;
+use common\modules\api\v1\profile\models\Profile;
+use common\modules\api\v1\user\models\User;
 
 /**
  * Class Avatar controller
@@ -51,7 +51,7 @@ class AvatarController extends Controller
             if (!$profileModel) {
                 throw new NotFoundHttpException('Use not found');
             }
-
+            // todo нотации
             $profileModel->setScenario(Profile::SCENARIO_UPLOAD_AVATAR);
             $profileModel->avatar = UploadedFile::getInstanceByName('avatar');
 

@@ -10,8 +10,9 @@ class m160805_132257_create_sleep_quality_table extends Migration
     /**
      * @inheritdoc
      */
-    public function up()
+    public function safeUp()
     {
+        $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
@@ -62,10 +63,10 @@ class m160805_132257_create_sleep_quality_table extends Migration
     /**
      * @inheritdoc
      */
-    public function down()
+    public function safeDown()
     {
         $this->dropForeignKey('fk_tbl_sleep_quality_tbl_user', '{{%sleep_quality}}');
         $this->dropIndex('idx_sleep_quality_user_id', '{{%sleep_quality}}');
-        $this->dropTable('sleep_quality');
+        $this->dropTable('{{%sleep_quality}}');
     }
 }
