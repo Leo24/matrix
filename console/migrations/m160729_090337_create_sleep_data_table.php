@@ -15,9 +15,9 @@ class m160729_090337_create_sleep_data_table extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
         }
         $this->createTable('{{%sleep_data}}', [
-            'id' => $this->primaryKey(),
-            'user_id' => $this->integer(11)->notNull(),
-            'timestamp' => $this->bigInteger(),
+            'id'         => $this->primaryKey(),
+            'user_id'    => $this->integer(11)->notNull(),
+            'timestamp'  => $this->bigInteger(),
             'sleep_type' => $this->float(),
         ], $tableOptions);
 
@@ -33,6 +33,7 @@ class m160729_090337_create_sleep_data_table extends Migration
             'CASCADE'
         );
     }
+
     /**
      * @inheritdoc
      */

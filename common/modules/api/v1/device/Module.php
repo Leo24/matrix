@@ -4,6 +4,8 @@ namespace common\modules\api\v1\device;
 
 /**
  * Class Module
+ *
+ * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
  * @package common\modules\api\v1\device
  */
 class Module extends \yii\base\Module

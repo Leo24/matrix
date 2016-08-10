@@ -57,10 +57,10 @@ class Block extends ActiveRecord
     {
         return [
             [
-                'class' => TimestampBehavior::className(),
+                'class'              => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => null,
-                'value' => function () {
+                'value'              => function () {
                     return time();
                 },
             ],
@@ -87,8 +87,8 @@ class Block extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'user_id' => Yii::t('app', 'User ID'),
-            'token' => Yii::t('app', 'Token'),
+            'user_id'    => Yii::t('app', 'User ID'),
+            'token'      => Yii::t('app', 'Token'),
             'created_at' => Yii::t('app', 'Created at'),
             'expired_at' => Yii::t('app', 'Expired at'),
         ];

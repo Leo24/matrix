@@ -4,6 +4,8 @@ namespace common\modules\api\v1\block;
 
 /**
  * Class Module
+ *
+ * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
  * @package common\modules\api\v1\block
  */
 class Module extends \yii\base\Module

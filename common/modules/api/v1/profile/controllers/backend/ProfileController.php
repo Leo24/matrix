@@ -41,7 +41,7 @@ class ProfileController extends ActiveController
         $actions = parent::actions();
 
         // disable actions
-         unset($actions['delete'], $actions['create']);
+        unset($actions['delete'], $actions['create']);
 
         return $actions;
     }

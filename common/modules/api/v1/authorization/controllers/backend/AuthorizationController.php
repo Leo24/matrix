@@ -1,4 +1,5 @@
 <?php
+
 namespace common\modules\api\v1\authorization\controllers\backend;
 
 use Yii;
@@ -56,7 +57,7 @@ class AuthorizationController extends ActiveController
 
         return $behaviors;
     }
-   //todo много статичных функций.
+    //todo много статичных функций.
     /**
      * Refresh authorization token action
      *
@@ -71,7 +72,7 @@ class AuthorizationController extends ActiveController
 
         return [
             'token' => $user->getJWT(),
-            'exp' => User::getPayload($this->authorizationToken, $payload_id = 'exp'),
+            'exp'   => User::getPayload($this->authorizationToken, $payload_id = 'exp'),
         ];
     }
 

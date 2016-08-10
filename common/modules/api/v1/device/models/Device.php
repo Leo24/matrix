@@ -5,7 +5,7 @@ namespace common\modules\api\v1\device\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
-use common\models\User;
+use common\modules\api\v1\user\models\User;
 
 /**
  * This is the model class for table 'device'
@@ -53,13 +53,13 @@ class Device extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'Id'),
-            'user_id' => Yii::t('app', 'User Id'),
-            'name' => Yii::t('app', 'Name'),
-            'position' => Yii::t('app', 'Position'),
-            'pin' => Yii::t('app', 'Pin'),
-            'pw' => Yii::t('app', 'PW'),
-            'sn' => Yii::t('app', 'SN'),
+            'id'         => Yii::t('app', 'Id'),
+            'user_id'    => Yii::t('app', 'User Id'),
+            'name'       => Yii::t('app', 'Name'),
+            'position'   => Yii::t('app', 'Position'),
+            'pin'        => Yii::t('app', 'Pin'),
+            'pw'         => Yii::t('app', 'PW'),
+            'sn'         => Yii::t('app', 'SN'),
             'updated_at' => Yii::t('app', 'Updated_at'),
         ];
     }
@@ -69,9 +69,8 @@ class Device extends ActiveRecord
      */
     public function scenarios()
     {
-        //todo нормально назвать переменную
-        $scenarion = parent::scenarios();
-        $scenarion[self::SCENARIO_REGISTER] = [
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_REGISTER] = [
             'name',
             'position',
             'pin',
@@ -79,7 +78,7 @@ class Device extends ActiveRecord
             'sn',
         ];
 
-        return $scenarion;
+        return $scenarios;
     }
 
     /**
@@ -89,10 +88,10 @@ class Device extends ActiveRecord
     {
         return [
             [
-                'class' => TimestampBehavior::className(),
+                'class'              => TimestampBehavior::className(),
                 'createdAtAttribute' => null,
                 'updatedAtAttribute' => 'updated_at',
-                'value' => function () {
+                'value'              => function () {
                     return time();
                 },
             ],
@@ -121,7 +120,6 @@ class Device extends ActiveRecord
      */
     public function getUser()
     {
-        //todo namespace add
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }

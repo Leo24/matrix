@@ -13,7 +13,6 @@ use common\modules\api\v1\socialnetwork\models\SocialNetwork;
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
  * @package common\modules\api\v1\socialnetwork\controllers\backend
  */
-//todo camelCase
 class SocialnetworkController extends ActiveController
 {
     /**
