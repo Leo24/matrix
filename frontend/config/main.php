@@ -147,19 +147,6 @@ return [
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
-                    'pluralize' => false,
-                    'prefix' => 'api/v1/',
-                    'controller' => [
-                        'profiles' => 'api/v1/profile/backend/profile',
-                        'profiles/sleep/quality' => 'api/v1/sleepquality/backend/sleepquality',
-                        'users' => 'api/v1/user/backend/user',
-                        'socialnetworks' => 'api/v1/socialnetwork/backend/socialnetwork',
-                        'notifications' => 'api/v1/notification/backend/notification',
-                        'devices' => 'api/v1/device/backend/device',
-                    ],
-                ],
-                [
-                    'class' => 'yii\rest\UrlRule',
                     'prefix' => 'api/v1/',
                     'controller' => [
                         'settings/notifications' => 'api/v1/settings/backend/notification'
@@ -171,6 +158,19 @@ return [
                     'prefix' => 'api/v1/',
                     'controller' => ['notifications' => 'api/v1/notification/backend/notification',],
                     'except' => ['index', 'create'],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'pluralize' => false,
+                    'prefix' => 'api/v1/',
+                    'controller' => [
+                        'profiles' => 'api/v1/profile/backend/profile',
+                        'profiles/sleep/quality' => 'api/v1/sleepquality/backend/sleepquality',
+                        'users' => 'api/v1/user/backend/user',
+                        'socialnetworks' => 'api/v1/socialnetwork/backend/socialnetwork',
+                        'notifications' => 'api/v1/notification/backend/notification',
+                        'devices' => 'api/v1/device/backend/device',
+                    ],
                 ],
             ],
         ],

@@ -4,6 +4,8 @@ namespace common\modules\api\v1\profile;
 
 /**
  * Class Module
+ *
+ * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
  * @package common\modules\api\v1\profile
  */
 class Module extends \yii\base\Module

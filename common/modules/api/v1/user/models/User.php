@@ -7,7 +7,6 @@ use yii\base\Exception;
 use yii\db\ActiveRecord;
 use yii\web\HttpException;
 use yii\web\IdentityInterface;
-use yii\web\UnauthorizedHttpException;
 use yii\behaviors\TimestampBehavior;
 use common\modules\api\v1\block\models\Block;
 use common\modules\api\v1\device\models\Device;
@@ -17,7 +16,7 @@ use common\modules\api\v1\socialNetwork\models\SocialNetwork;
 use common\modules\api\v1\settings\models\SettingNotification;
 use common\modules\api\v1\sleepingPosition\models\SleepingPosition;
 use common\modules\api\v1\reasonUsingMatrix\models\ReasonUsingMatrix;
-use Firebase\JWT\JWT;
+use common\modules\api\v1\user\traits\AuthorizationJwtTrait;
 
 /**
  * This is the model class for table 'user'
@@ -35,20 +34,11 @@ use Firebase\JWT\JWT;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const UNAUTHORIZED_INCORRECT_CODE = 12;
-    const UNAUTHORIZED_EXPIRED_CODE = 13;
-    const UNAUTHORIZED_BLOCK_CODE = 14;
-    const INTERNAL_ERROR_CODE = 22;
-    const VALIDATION_EXCEPTION_CODE = 21;
+    use AuthorizationJwtTrait;
 
     const SCENARIO_LOGIN = 'login';
     const SCENARIO_REGISTER = 'register';
     const SCENARIO_UPDATE_PASSWORD = 'password';
-
-    const TOKEN_EXPIRE_DAYS = 7;
-
-    const ALGORITHM = 'HS256';
-    const TYP = 'JWT';
 
     public $confirm;
     public $current_password;
@@ -258,9 +248,9 @@ class User extends ActiveRecord implements IdentityInterface
         if (is_array($modelErrors) && !empty($modelErrors)) {
             $fields = array_keys($modelErrors);
             $first_message = current($modelErrors[$fields[0]]);
-            throw new HttpException(422, "Validation exception: {$first_message}",
-                $code ? self::VALIDATION_EXCEPTION_CODE : 0);
+            throw new HttpException(422, "Validation exception: {$first_message}", $code);
         }
+
         return false;
     }
 
@@ -274,6 +264,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function registerUser($data)
     {
+        /** @var $userModel User */
         $userModel = new User;
         $userModel->setScenario(self::SCENARIO_REGISTER);
         $userModel->attributes = $data;
@@ -282,20 +273,30 @@ class User extends ActiveRecord implements IdentityInterface
             try {
                 if ($userModel->save(false)) {
                     $data['user_id'] = isset($userModel->id) ? $userModel->id : null;
+
+                    /** @var $sleepingPositionModel SleepingPosition */
                     $sleepingPositionModel = new SleepingPosition;
                     $sleepingPositionModel->attributes = isset($data['sleeping_position']) ? $data['sleeping_position'] : null;
                     $sleepingPositionModel->user_id = $data['user_id'];
+
+                    /** @var $reasonUsingMatrixModel ReasonUsingMatrix */
                     $reasonUsingMatrixModel = new ReasonUsingMatrix;
                     $reasonUsingMatrixModel->attributes = isset($data['reason_using_matrix']) ? $data['reason_using_matrix'] : null;
                     $reasonUsingMatrixModel->user_id = $data['user_id'];
+
+                    /** @var $deviceModel Device */
                     $deviceModel = new Device;
                     $deviceModel->attributes = isset($data['device']) ? $data['device'] : null;
                     $deviceModel->user_id = $data['user_id'];
+
+                    /** @var $profileModel Profile */
                     $profileModel = new Profile;
                     $profileModel->attributes = $data;
                     $socialNetworksResponseData = [];
                     if (isset($data['social_networks'])) {
                         foreach ($data['social_networks'] as $socialNetwork) {
+
+                            /** @var $socialNetworkModel SocialNetwork */
                             $socialNetworkModel = new SocialNetwork;
                             $socialNetworkModel->setScenario(self::SCENARIO_REGISTER);
                             $socialNetworkModel->attributes = $socialNetwork;
@@ -348,7 +349,7 @@ class User extends ActiveRecord implements IdentityInterface
                 }
             } catch (Exception $e) {
                 $transaction->rollBack();
-                throw new HttpException(422, $e->getMessage(), self::INTERNAL_ERROR_CODE);
+                throw new HttpException(422, $e->getMessage());
             }
         } else {
             self::validationExceptionFirstMessage($userModel->errors);
@@ -367,172 +368,35 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Getter for secret key that's used for generation of JWT
+     * Finds user by username
      *
-     * @return string secret key used to generate JWT
+     * @param string $username
+     * @return static|null
      */
-    protected static function getSecretKey()
+    public static function findByUsername($username)
     {
-        return Yii::$app->params['secretJWT'];
+        return static::findOne(['username' => $username]);
     }
 
     /**
-     * Getter for "header" array that's used for generation of JWT
+     * Returns id user
      *
-     * @return array JWT Header Token param, see http://jwt.io/ for details
+     * @return mixed
      */
-    protected static function getHeaderToken()
+    public function getId()
     {
-        return [
-            'typ' => self::TYP,
-            'alg' => self::getAlgorithm()
-        ];
+        return $this->id;
     }
 
     /**
-     * Logins user by given JWT encoded string. If string is correctly decoded
-     * - array (token) must contain 'jti' param - the id of existing user
+     * Finds user by id
      *
-     * @param string $token access token to decode
-     * @param null $type
-     * @return mixed|null User model or null if there's no user
-     * @throws UnauthorizedHttpException if anything went wrong
+     * @param int|string $id
+     * @return null|static
      */
-    public static function findIdentityByAccessToken($token, $type = null)
+    public static function findIdentity($id)
     {
-        $decodedArray = static::decodeJWT($token);
-        if (self::isBlocked($token)) {
-            throw new UnauthorizedHttpException('Token is blocked', self::UNAUTHORIZED_BLOCK_CODE);
-        }
-        // If there's no jti param - exception
-        if (!isset($decodedArray['jti'])) {
-            throw new UnauthorizedHttpException('Unauthorized');
-        }
-        // JTI is unique identifier of user.
-        // For more details: https://tools.ietf.org/html/rfc7519#section-4.1.7
-        $id = $decodedArray['jti'];
-
-        return static::findByJTI($id);
-    }
-
-    /**
-     * Decode JWT token
-     *
-     * @param string $token access token to decode
-     * @return array decoded token
-     * @throws UnauthorizedHttpException
-     */
-    public static function decodeJWT($token)
-    {
-        $secret = static::getSecretKey();
-        $errorText = 'Incorrect token';
-        $code = User::UNAUTHORIZED_INCORRECT_CODE;
-        // Decode token and transform it into array.
-        // Firebase\JWT\JWT throws exception if token can not be decoded
-        try {
-            $decoded = JWT::decode($token, $secret, [static::getAlgorithm()]);
-        } catch (\Exception $e) {
-            if ($e->getMessage() == 'Expired token') {
-                $errorText = 'Expired token';
-                $code = User::UNAUTHORIZED_EXPIRED_CODE;
-            }
-            throw new UnauthorizedHttpException($errorText, $code);
-        }
-        $decodedArray = (array)$decoded;
-
-        return $decodedArray;
-    }
-
-    /**
-     * Finds User model using static method findOne
-     * Override this method in model if you need to complicate id-management
-     *
-     * @param integer $id if of user to search
-     * @return mixed User model
-     * @throws UnauthorizedHttpException if model is not found
-     */
-    public static function findByJTI($id)
-    {
-        $model = static::findOne($id);
-        $errorText = "Incorrect token";
-        // Throw error if user is missing
-        if (empty($model)) {
-            throw new UnauthorizedHttpException($errorText);
-        }
-        return $model;
-    }
-
-    /**
-     * Getter for encryption algorithm used in JWT generation and decoding
-     * Override this method to set up other algorytm.
-     *
-     * @return string needed algorithm
-     */
-    public static function getAlgorithm()
-    {
-        return self::ALGORITHM;
-    }
-
-    /**
-     * Returns some 'id' to encode to token. By default is current model id.
-     *
-     * If you override this method, be sure that findByJTI is updated too
-     * @return integer any unique integer identifier of user
-     */
-    public function getJTI()
-    {
-        //use primary key for JTI
-        return $this->getPrimaryKey();
-    }
-
-    /**
-     * Encodes model data to create custom JWT with model.id set in it
-     *
-     * @param  array $payloads payloads data to set, default value is empty array.
-     * See registered claim names for payloads at https://tools.ietf.org/html/rfc7519#section-4.1
-     * @return sting encoded JWT
-     */
-    public function getJWT($payloads = [])
-    {
-        $secret = static::getSecretKey();
-        // Merge token with presets not to miss any params in custom
-        // configuration
-        $token = array_merge($payloads, static::getHeaderToken());
-        // Set up id user
-        $token['jti'] = $this->getJTI();
-        //set exp if not isset
-        if (!isset($token['exp'])) {
-            //default value is an hour from now
-            $token['exp'] = time() + $this->getTokenExpire();
-        }
-        return JWT::encode($token, $secret, static::getAlgorithm());
-    }
-
-    /**
-     * Returns token expire period
-     *
-     * @return int
-     */
-    public function getTokenExpire()
-    {
-        return 3600 * 24 * self::TOKEN_EXPIRE_DAYS;
-    }
-
-    /**
-     * Get payload data in a JWT string
-     *
-     * @param string $token
-     * @param string|null $payload_id Payload ID that want to return, the default value is NULL. If NULL it will return all the payloads data
-     * @return mixed payload data
-     */
-    public static function getPayload($token, $payload_id = null)
-    {
-        $decoded_array = static::decodeJWT($token);
-        if ($payload_id != null) {
-            return isset($decoded_array[$payload_id]) ? $decoded_array[$payload_id] : null;
-        } else {
-            return $decoded_array;
-        }
+        return static::findOne(['id' => $id]);
     }
 
     /**
@@ -544,7 +408,7 @@ class User extends ActiveRecord implements IdentityInterface
     public static function addBlackListToken($token)
     {
         if ($token) {
-            if (Block::find()->where(['token' => $token])->one()) {
+            if (self::isBlocked($token)) {
                 return true;
             }
             $block = new Block();
@@ -571,65 +435,6 @@ class User extends ActiveRecord implements IdentityInterface
             return true;
         }
         return false;
-    }
-
-    /**
-     * Finds user by id
-     *
-     * @param int|string $id
-     * @return null|static
-     */
-    public static function findIdentity($id)
-    {
-        return static::findOne(['id' => $id]);
-    }
-
-    /**
-     * Finds user by username
-     *
-     * @param string $username
-     * @return static|null
-     */
-    public static function findByUsername($username)
-    {
-        return static::findOne(['username' => $username]);
-    }
-
-    /**
-     * Returns id user
-     *
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Returns AuthKey user
-     *
-     * @return mixed
-     */
-    public function getAuthKey()
-    {
-        $headerAuthorizationKey = Yii::$app->getRequest()->getHeaders()->get('Authorization');
-        if ($headerAuthorizationKey !== null && preg_match("/^Bearer\\s+(.*?)$/", $headerAuthorizationKey, $matches)) {
-            if (isset($matches[1])) {
-                return $matches[1];
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Validates user token
-     *
-     * @param string $token
-     * @return bool
-     */
-    public function validateAuthKey($token)
-    {
-        return (bool)JWT::decode($token, self::getSecretKey(), [static::getAlgo()]);
     }
 
     /**

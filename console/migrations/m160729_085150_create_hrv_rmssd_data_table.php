@@ -15,17 +15,16 @@ class m160729_085150_create_hrv_rmssd_data_table extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
         }
         $this->createTable('{{%hrv_rmssd_data}}', [
-           
 
 
-            'id' => $this->primaryKey(),
-            'user_id' => $this->integer(11)->notNull(),
-            'timestamp' => $this->bigInteger(),
-            'rmssd' => $this->integer(),
-            'low_frequency' => $this->integer(),
+            'id'             => $this->primaryKey(),
+            'user_id'        => $this->integer(11)->notNull(),
+            'timestamp'      => $this->bigInteger(),
+            'rmssd'          => $this->integer(),
+            'low_frequency'  => $this->integer(),
             'high_frequency' => $this->integer(),
-            
-            
+
+
         ], $tableOptions);
 
         $this->createIndex('idx_hrv_rmssd_data_user_id', '{{%hrv_rmssd_data}}', 'user_id');
@@ -40,6 +39,7 @@ class m160729_085150_create_hrv_rmssd_data_table extends Migration
             'CASCADE'
         );
     }
+
     /**
      * @inheritdoc
      */

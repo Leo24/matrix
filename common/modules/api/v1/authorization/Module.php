@@ -4,6 +4,8 @@ namespace common\modules\api\v1\authorization;
 
 /**
  * Class Module
+ *
+ * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
  * @package common\modules\api\v1\authorization
  */
 class Module extends \yii\base\Module

@@ -15,15 +15,15 @@ class m160802_074416_create_notification_table extends Migration
         }
 
         $this->createTable('{{%notification}}', [
-            'id' => $this->primaryKey(),
-            'user_id' => $this->integer(11),
-            'title' => $this->string(255),
+            'id'          => $this->primaryKey(),
+            'user_id'     => $this->integer(11),
+            'title'       => $this->string(255),
             'description' => $this->text()->defaultValue(null),
-            'viewed'=>$this->boolean()->defaultValue(false),
-            'type' => "ENUM('positivity', 'negativity', 'neutrality') NOT NULL DEFAULT 'neutrality'",
-            'tag' => "ENUM('report', 'experiment', 'tip', 'matrix', 'goal') NOT NULL DEFAULT 'report'",
-            'created_at' => $this->integer(11)->unsigned()->defaultValue(null),
-            'updated_at' => $this->integer(11)->unsigned()->defaultValue(null),
+            'viewed'      => $this->boolean()->defaultValue(false),
+            'type'        => "ENUM('positivity', 'negativity', 'neutrality') NOT NULL DEFAULT 'neutrality'",
+            'tag'         => "ENUM('report', 'experiment', 'tip', 'matrix', 'goal') NOT NULL DEFAULT 'report'",
+            'created_at'  => $this->integer(11)->unsigned()->defaultValue(null),
+            'updated_at'  => $this->integer(11)->unsigned()->defaultValue(null),
         ], $tableOptions);
 
         $this->createIndex('idx_notification_user_id', '{{%notification}}', 'user_id');
