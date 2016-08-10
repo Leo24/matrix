@@ -142,9 +142,10 @@ return [
                     'prefix' => 'api/v1/',
                     'controller' => [
                         'profiles' => 'api/v1/profile/backend/profile',
+                        'profile/sleep/quality' => 'api/v1/report/backend/report',
+                        'profile/matrix/averages' => 'api/v1/report/backend/report',
                         'report' => 'api/v1/report/backend/report',
                         'report/sleep/cycles' => 'api/v1/report/backend/report',
-                        'report/sleep/quality' => 'api/v1/report/backend/report',
                         'report/movement' => 'api/v1/report/backend/report',
                         'report/stress' => 'api/v1/report/backend/report',
                         'report/breathing' => 'api/v1/report/backend/report',

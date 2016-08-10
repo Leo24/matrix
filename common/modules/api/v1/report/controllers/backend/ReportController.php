@@ -6,7 +6,6 @@ use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
 use common\models\HrvData;
 use common\modules\api\v1\report\controllers\backend\actions\ViewAction;
-use common\modules\api\v1\report\controllers\backend\actions\IndexAction;
 
 /**
  * Report controller
