@@ -2,6 +2,7 @@
 
 namespace common\modules\api\v1\user\models;
 
+
 use Yii;
 use yii\base\Exception;
 use yii\db\ActiveRecord;
@@ -10,6 +11,7 @@ use yii\web\IdentityInterface;
 use yii\behaviors\TimestampBehavior;
 use common\modules\api\v1\block\models\Block;
 use common\modules\api\v1\device\models\Device;
+use common\modules\api\v1\health\models\Health;
 use common\modules\api\v1\profile\models\Profile;
 use common\modules\api\v1\notification\models\Notification;
 use common\modules\api\v1\socialNetwork\models\SocialNetwork;
@@ -315,6 +317,10 @@ class User extends ActiveRecord implements IdentityInterface
                     $settingNotification = new SettingNotification();
                     /** Saving default setting of notification for new register user */
                     $settingNotification->createDefaultRecordForNewRegisterUser($data['user_id']);
+
+                    /** @var $healthModel Health */
+                    $healthModel = new Health();
+                    $healthModel->createDefaultRecordForNewRegisterUser($data['user_id']);
 
                     if ($sleepingPositionModel->validate()
                         && $reasonUsingMatrixModel->validate()

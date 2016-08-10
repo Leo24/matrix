@@ -1,4 +1,5 @@
 <?php
+
 $params = array_merge(
     require(__DIR__ . '/../../common/config/params.php'),
     require(__DIR__ . '/../../common/config/params-local.php'),
@@ -30,6 +31,9 @@ return [
                         ],
                         'sleepquality'      => [
                             'class' => 'common\modules\api\v1\sleepquality\Module'
+                        ],
+                        'health'            => [
+                            'class' => 'common\modules\api\v1\health\Module'
                         ],
                         'report'            => [
                             'class' => 'common\modules\api\v1\report\Module'
@@ -99,15 +103,14 @@ return [
                     'class'      => 'yii\rest\UrlRule',
                     'prefix'     => 'api/v1/',
                     'controller' => ['user' => 'api/v1/authorization/frontend/authorization'],
-                    'patterns'   => [
-                        'POST login' => 'login',
-                    ]
+                    'patterns'   => ['POST login' => 'login']
                 ],
                 [
                     'class'      => 'yii\rest\UrlRule',
                     'prefix'     => 'api/v1/',
                     'controller' => ['user' => 'api/v1/authorization/backend/authorization'],
-                    'patterns'   => [
+                    'patterns'   =>
+                    [
                         'GET logout'  => 'logout',
                         'GET refresh' => 'refresh'
                     ]
@@ -145,53 +148,20 @@ return [
                 [
                     'class'      => 'yii\rest\UrlRule',
                     'prefix'     => 'api/v1/',
-                    'controller' => ['notifications' => 'api/v1/notification/backend/notification',],
-                    'except'     => ['update', 'view'],
-                ],
-                [
-                    'class'      => 'yii\rest\UrlRule',
-                    'pluralize'  => false,
-                    'prefix'     => 'api/v1/',
-                    'controller' => [
-                        'profiles'                => 'api/v1/profile/backend/profile',
-                        'profile/sleep/quality'   => 'api/v1/report/backend/report',
-                        'profile/matrix/averages' => 'api/v1/report/backend/report',
-                        'report'                  => 'api/v1/report/backend/report',
-                        'report/sleep/cycles'     => 'api/v1/report/backend/report',
-                        'report/movement'         => 'api/v1/report/backend/report',
-                        'report/stress'           => 'api/v1/report/backend/report',
-                        'report/breathing'        => 'api/v1/report/backend/report',
-                        'report/daily'            => 'api/v1/report/backend/report',
-                        'users'                   => 'api/v1/user/backend/user',
-                        'socialnetworks'          => 'api/v1/socialNetwork/backend/social-network',
-                        'notifications'           => 'api/v1/notification/backend/notification',
-                        'devices'                 => 'api/v1/device/backend/device',
-                    ],
-                ],
-                [
-                    'class'      => 'yii\rest\UrlRule',
-                    'prefix'     => 'api/v1/',
-                    'controller' => [
-                        'settings/notifications' => 'api/v1/settings/backend/notification'
-                    ],
+                    'controller' => ['settings/notifications' => 'api/v1/settings/backend/notification'],
                     'except'     => ['create', 'delete', 'view']
                 ],
                 [
                     'class'      => 'yii\rest\UrlRule',
-                    'prefix'     => 'api/v1/',
-                    'controller' => ['notifications' => 'api/v1/notification/backend/notification',],
-                    'except'     => ['index', 'create'],
-                ],
-                [
-                    'class'      => 'yii\rest\UrlRule',
                     'pluralize'  => false,
                     'prefix'     => 'api/v1/',
                     'controller' => [
-                        'profiles'               => 'api/v1/profile/backend/profile',
-                        'profiles/sleep/quality' => 'api/v1/sleepquality/backend/sleepquality',
-                        'users'                  => 'api/v1/user/backend/user',
-                        'notifications'          => 'api/v1/notification/backend/notification',
-                        'devices'                => 'api/v1/device/backend/device',
+                        'profiles'       => 'api/v1/profile/backend/profile',
+                        'users'          => 'api/v1/user/backend/user',
+                        'notifications'  => 'api/v1/notification/backend/notification',
+                        'devices'        => 'api/v1/device/backend/device',
+                        'socialnetworks' => 'api/v1/socialNetwork/backend/social-network',
+                        'healths'        => 'api/v1/health/backend/health',
                     ],
                 ],
             ],
