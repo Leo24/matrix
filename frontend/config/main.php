@@ -146,7 +146,7 @@ return [
                     'class' => 'yii\rest\UrlRule',
                     'prefix' => 'api/v1/',
                     'controller' => ['notifications' => 'api/v1/notification/backend/notification',],
-                    'except' => ['index', 'create'],
+                    'except' => ['update', 'view'],
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
