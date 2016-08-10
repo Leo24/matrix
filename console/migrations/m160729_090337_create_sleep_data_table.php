@@ -7,7 +7,7 @@ class m160729_090337_create_sleep_data_table extends Migration
     /**
      * @inheritdoc
      */
-    public function up()
+    public function safeUp()
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -37,10 +37,10 @@ class m160729_090337_create_sleep_data_table extends Migration
     /**
      * @inheritdoc
      */
-    public function down()
+    public function safeDown()
     {
-        $this->dropIndex('idx_sleep_data_user_id', '{{%sleep_data}}');
         $this->dropForeignKey('fk_tbl_sleep_data_tbl_user', '{{%sleep_data}}');
+        $this->dropIndex('idx_sleep_data_user_id', '{{%sleep_data}}');
         $this->dropTable('{{%sleep_data}}');
     }
 }

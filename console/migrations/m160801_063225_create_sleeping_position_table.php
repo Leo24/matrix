@@ -44,8 +44,8 @@ class m160801_063225_create_sleeping_position_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropIndex('idx-sleeping-position-user-id', '{{%sleeping_position}}');
         $this->dropForeignKey('fk_tbl_sleeping_position_tbl_user', '{{%sleeping_position}}');
+        $this->dropIndex('idx-sleeping-position-user-id', '{{%sleeping_position}}');
         $this->dropTable('{{%sleeping_position}}');
     }
 }

@@ -7,7 +7,7 @@ class m160729_085150_create_hrv_rmssd_data_table extends Migration
     /**
      * @inheritdoc
      */
-    public function up()
+    public function safeUp()
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -15,22 +15,18 @@ class m160729_085150_create_hrv_rmssd_data_table extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
         }
         $this->createTable('{{%hrv_rmssd_data}}', [
-
-
             'id'             => $this->primaryKey(),
             'user_id'        => $this->integer(11)->notNull(),
             'timestamp'      => $this->bigInteger(),
             'rmssd'          => $this->integer(),
             'low_frequency'  => $this->integer(),
             'high_frequency' => $this->integer(),
-
-
         ], $tableOptions);
 
-        $this->createIndex('idx_hrv_rmssd_data_user_id', '{{%hrv_rmssd_data}}', 'user_id');
+        $this->createIndex('idx-rmssd_data-user_id', '{{%hrv_rmssd_data}}', 'user_id');
 
         $this->addForeignKey(
-            'fk_tbl_hrv_rmssd_data_tbl_user',
+            'fk-rmssd_data-user_id',
             '{{%hrv_rmssd_data}}',
             'user_id',
             '{{%user}}',
@@ -43,10 +39,10 @@ class m160729_085150_create_hrv_rmssd_data_table extends Migration
     /**
      * @inheritdoc
      */
-    public function down()
+    public function safeDown()
     {
-        $this->dropIndex('idx_hrv_rmssd_data_user_id', '{{%hrv_rmssd_data}}');
-        $this->dropForeignKey('fk_tbl_hrv_rmssd_data_tbl_user', '{{%hrv_rmssd_data}}');
+        $this->dropForeignKey('fk-rmssd_data-user_id', '{{%hrv_rmssd_data}}');
+        $this->dropIndex('idx-rmssd_data-user_id', '{{%hrv_rmssd_data}}');
         $this->dropTable('{{%hrv_rmssd_data}}');
     }
 }

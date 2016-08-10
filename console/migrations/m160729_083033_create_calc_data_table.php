@@ -11,7 +11,7 @@ class m160729_083033_create_calc_data_table extends Migration
     /**
      * @inheritdoc
      */
-    public function up()
+    public function safeUp()
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -43,10 +43,10 @@ class m160729_083033_create_calc_data_table extends Migration
     /**
      * @inheritdoc
      */
-    public function down()
+    public function safeDown()
     {
-        $this->dropIndex('idx_calc_data_user_id', '{{%calc_data}}');
         $this->dropForeignKey('fk_tbl_calc_data_tbl_user', '{{%calc_data}}');
+        $this->dropIndex('idx_calc_data_user_id', '{{%calc_data}}');
         $this->dropTable('{{%calc_data}}');
     }
 }
