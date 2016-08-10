@@ -1,8 +1,11 @@
 <?php
 
-namespace common\models;
+namespace common\modules\api\v1\report\models;
 
 use Yii;
+use common\modules\api\v1\user\models\User;
+use yii\data\ActiveDataProvider;
+use \yii\db\Query;
 
 /**
  * This is the model class for table "sleep_quality".
@@ -21,7 +24,8 @@ use Yii;
  */
 class SleepQuality extends \yii\db\ActiveRecord
 {
-
+    public $startDate;
+    public $endDate;
     /**
      * Primary key name
      *
@@ -67,6 +71,7 @@ class SleepQuality extends \yii\db\ActiveRecord
             ], 'integer'],
             [['avg_hr', 'avg_rr', 'avg_act'], 'number'],
             [['from', 'to'], 'string'],
+            [['startDate', 'endDate'], 'safe'],
         ];
     }
 
@@ -105,5 +110,62 @@ class SleepQuality extends \yii\db\ActiveRecord
             'max_rr'=> 'Max_rr',
 
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function formName()
+    {
+        return '';
+    }
+
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return float
+     */
+
+    public function currentAverage($params)
+    {
+        $this->load($params);
+        $today = time();
+        $shortTerm = (new Query())->from('sleep_quality')
+            ->where(['user_id' => $this->user_id])
+            ->andWhere(['between', 'from', strtotime("-1 month", $today), $today]);
+        $longTerm = (new Query())->from('sleep_quality')
+            ->where(['user_id' => $this->user_id])
+            ->andWhere(['between', 'from', strtotime("-3 month", $today), $today]);
+
+        $shortTermAverage = $shortTerm->average('[[sleep_score]]');
+        $longTermAverage = $longTerm->average('[[sleep_score]]');
+
+        return ($shortTermAverage + $longTermAverage)/2;
+    }
+
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+
+    public function sleepQualityData($params)
+    {
+        $this->load($params);
+
+        $query = (new Query())->from('sleep_quality')
+            ->select(['{{timestamp}}', '{{sleep_score}}'])
+            ->where(['user_id' => $this->user_id]);
+
+        if ($this->startDate && $this->endDate) {
+            $query->andWhere(['between', 'from', $this->startDate, $this->endDate]);
+        }
+        return $query->all();
     }
 }

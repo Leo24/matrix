@@ -56,11 +56,6 @@ class ViewAction extends \yii\rest\ViewAction
 
         if (strpos(Yii::$app->request->url, '/sleep/quality') !== false) {
             $model = SleepQuality::class;
-            if (!empty($andWhere)) {
-                return $this->countSleepQuality($model, $where, $andWhere);
-            } else {
-                return 'startDate and endDate should be provided';
-            }
         }
 
         if (strpos(Yii::$app->request->url, '/stress') !== false) {
@@ -97,42 +92,4 @@ class ViewAction extends \yii\rest\ViewAction
     }
 
 
-    protected function countSleepQuality($model, $where, $andWhere)
-    {
-
-        $graphData = [];
-
-        $today = date('Y-m-d H:i:s');
-        $minusMonth = date('Y-m-dTH:i:sZ', strtotime($today . "-1 month"));
-        $minusTreeMonth = date('Y-m-dTH:i:sZ', strtotime($today . "-1 month"));
-        $shortTermAverage = (new \yii\db\Query())->from('sleep_quality')
-            ->where($where)
-            ->andWhere(['between', 'from', $minusMonth, $today]);
-        $longTermAverage = (new \yii\db\Query())->from('sleep_quality')
-            ->where($where)
-            ->andWhere(['between', 'from', $minusTreeMonth, $today]);
-
-        $shortTermAverage = $shortTermAverage->average('[[sleep_score]]');
-        $longTermAverage = $longTermAverage->average('[[sleep_score]]');
-
-        $currentAverage = ($shortTermAverage + $longTermAverage)/2;
-
-        $sleepQualityData = $model::find()
-            ->select(['{{timestamp}}', '{{sleep_score}}'])
-            ->where($where)
-            ->andWhere($andWhere)
-            ->all();
-
-        foreach ($sleepQualityData as $ln) {
-            $graphData[] = [
-                'chart' => [
-                    'axis_x'=> $ln->timestamp,
-                    'axis_y'=> $ln->sleep_score,
-                ],
-                'current_average' => $currentAverage
-            ];
-        }
-
-        return $graphData;
-    }
 }

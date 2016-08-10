@@ -156,18 +156,41 @@ return [
                         'profiles' => 'api/v1/profile/backend/profile',
                         'profile/sleep/quality' => 'api/v1/report/backend/report',
                         'profile/matrix/averages' => 'api/v1/report/backend/report',
-                        'report' => 'api/v1/report/backend/report',
-                        'report/sleep/cycles' => 'api/v1/report/backend/report',
-                        'report/movement' => 'api/v1/report/backend/report',
-                        'report/stress' => 'api/v1/report/backend/report',
-                        'report/breathing' => 'api/v1/report/backend/report',
-                        'report/daily' => 'api/v1/report/backend/report',
-                        'users' => 'api/v1/user/backend/user',
                         'socialnetworks' => 'api/v1/socialnetwork/backend/socialnetwork',
                         'notifications' => 'api/v1/notification/backend/notification',
                         'devices' => 'api/v1/device/backend/device',
                     ],
                 ],
+
+
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'pluralize' => false,
+                    'prefix' => 'api/v1/',
+                    'controller' => [
+                        'report' => 'api/v1/report/backend/report',
+                        'report/sleep-cycles' => 'api/v1/report/backend/report',
+                        'report/sleep-quality' => 'api/v1/report/backend/report',
+                        'report/movement' => 'api/v1/report/backend/report',
+                        'report/stress' => 'api/v1/report/backend/report',
+                        'report/breathing' => 'api/v1/report/backend/report',
+                        'report/daily' => 'api/v1/report/backend/report',
+                    ],
+                    'patterns' => [
+                        'GET sleep-cycles' => 'sleep-cycles',
+                        'GET sleep-quality' => 'sleep-quality',
+                        'GET movement' => 'movement',
+                        'GET stress' => 'stress',
+                        'GET breathing' => 'breathing',
+                        'GET daily' => 'daily',
+
+                    ]
+                ],
+
+
+
+
+
                 [
                     'class' => 'yii\rest\UrlRule',
                     'prefix' => 'api/v1/',

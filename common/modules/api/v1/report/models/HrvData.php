@@ -1,8 +1,9 @@
 <?php
 
-namespace common\models;
+namespace common\modules\api\v1\report\models;
 
 use Yii;
+use common\modules\api\v1\user\models\User;
 
 /**
  * This is the model class for table "hrv_data".

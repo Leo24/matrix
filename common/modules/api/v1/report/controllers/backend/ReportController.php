@@ -4,43 +4,47 @@ namespace common\modules\api\v1\report\controllers\backend;
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
-use common\models\HrvData;
-use common\modules\api\v1\report\controllers\backend\actions\ViewAction;
+use common\modules\api\v1\report\models\SleepData;
+use common\modules\api\v1\report\models\SleepQuality;
+use common\modules\api\v1\report\models\HrvData;
+use common\modules\api\v1\report\controllers\backend\actions\SleepQualityAction;
+use common\modules\api\v1\report\controllers\backend\actions\MovementAction;
 
 /**
  * Report controller
  */
 class ReportController extends ActiveController
 {
+
+    public $serializer = [
+        'class'              => 'yii\rest\Serializer',
+        'collectionEnvelope' => 'items',
+    ];
+
     /**
      * @inheritdoc
      */
     public $modelClass = HrvData::class;
 
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        $behaviors = parent::behaviors();
-        $behaviors['bearerAuth'] = [
-            'class' => HttpBearerAuth::className(),
-        ];
-        return $behaviors;
-    }
 
-
-    /**
-     * @return array
-     */
     public function actions()
     {
+
         $actions = parent::actions();
+        
+        $additional = [
+            'sleep-quality' => [
+                'class'       => SleepQualityAction::class,
+                'modelClass'  => SleepQuality::class,
+                'checkAccess' => [$this, 'checkAccess']
+            ],
+            'movement' => [
+                'class'       => MovementAction::class,
+                'modelClass'  => SleepData::class,
+                'checkAccess' => [$this, 'checkAccess']
+            ]
+        ];
 
-        $actions['index']['class'] = IndexAction::class;
-        $actions['view']['class'] = ViewAction::class;
-
-
-        return $actions;
+        return $actions + $additional;
     }
 }
