@@ -4,6 +4,7 @@ namespace common\modules\api\v1\synchronize\models;
 
 use common\modules\api\v1\user\models\User;
 use Yii;
+use yii\behaviors\TimestampBehavior;
 use \yii\db\ActiveRecord;
 
 /**
@@ -123,6 +124,23 @@ class SleepQuality extends ActiveRecord
             'max_hr'               => 'Max_hr',
             'min_rr'               => 'Min_rr',
             'max_rr'               => 'Max_rr'
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class'              => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value'              => function () {
+                    return time();
+                },
+            ],
         ];
     }
 

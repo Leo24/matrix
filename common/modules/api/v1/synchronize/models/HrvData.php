@@ -4,6 +4,7 @@ namespace common\modules\api\v1\synchronize\models;
 
 use common\modules\api\v1\user\models\User;
 use Yii;
+use yii\behaviors\TimestampBehavior;
 use \yii\db\ActiveRecord;
 
 /**
@@ -69,6 +70,23 @@ class HrvData extends ActiveRecord
     }
 
     /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class'              => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value'              => function () {
+                    return time();
+                },
+            ],
+        ];
+    }
+
+    /**
      * Method of saving hrv data
      *
      * @param $jsonHrvData
@@ -86,7 +104,9 @@ class HrvData extends ActiveRecord
                 'end_rmssd'      => isset($m[1]) ? (float)$m[1] : null,
                 'total_recovery' => isset($m[2]) ? (float)$m[2] : null,
                 'recovery_ratio' => isset($m[3]) ? (float)$m[3] : null,
-                'recovery_rate'  => isset($m[4]) ? (float)$m[4] : null
+                'recovery_rate'  => isset($m[4]) ? (float)$m[4] : null,
+                'created_at'       => time(),
+                'updated_at'       => time()
             ];
         }
 

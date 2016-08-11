@@ -4,6 +4,7 @@ namespace common\modules\api\v1\synchronize\models;
 
 use common\modules\api\v1\user\models\User;
 use Yii;
+use yii\behaviors\TimestampBehavior;
 use \yii\db\ActiveRecord;
 
 /**
@@ -56,6 +57,23 @@ class HrvRmssdData extends ActiveRecord
     }
 
     /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class'              => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value'              => function () {
+                    return time();
+                },
+            ],
+        ];
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getUser()
@@ -80,7 +98,9 @@ class HrvRmssdData extends ActiveRecord
                 'timestamp'      => isset($m[0]) ? $m[0] : null,
                 'rmssd'          => isset($m[1]) ? $m[1] : null,
                 'low_frequency'  => isset($m[2]) ? $m[2] : null,
-                'high_frequency' => isset($m[3]) ? $m[3] : null
+                'high_frequency' => isset($m[3]) ? $m[3] : null,
+                'created_at'       => time(),
+                'updated_at'       => time()
             ];
         }
 

@@ -4,6 +4,7 @@ namespace common\modules\api\v1\synchronize\models;
 
 use common\modules\api\v1\user\models\User;
 use Yii;
+use yii\behaviors\TimestampBehavior;
 use \yii\db\ActiveRecord;
 
 /**
@@ -28,7 +29,7 @@ class SleepData extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'sleep_data';
+        return '{{%sleep_data}}';
     }
 
     /**
@@ -39,7 +40,7 @@ class SleepData extends ActiveRecord
         return [
             [['user_id'], 'required'],
             [['user_id', 'timestamp'], 'integer'],
-            [['sleep_type'], 'number'],
+            [['sleep_type'], 'in', 'range' => $this->getSleepTypeList()],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -58,11 +59,44 @@ class SleepData extends ActiveRecord
     }
 
     /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class'              => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value'              => function () {
+                    return time();
+                },
+            ],
+        ];
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public function getSleepTypeList($id)
+    {
+        $sleepTypes = [
+            1 => self::SLEEP_TYPE_DEEP,
+            2 => self::SLEEP_TYPE_LIGHT,
+            3 => self::SLEEP_TYPE_REM,
+            4 => self::SLEEP_TYPE_AWAKE
+        ];
+
+        return ($id) ? $sleepTypes[$id] : $sleepTypes;
     }
 
     /**
@@ -79,7 +113,9 @@ class SleepData extends ActiveRecord
             $rows[$k] = [
                 'user_id'          => $userId,
                 'timestamp'        => isset($m[0]) ? $m[0] : null,
-                'sleep_type'       => isset($m[1]) ? $m[1] : null
+                'sleep_type'       => isset($m[1]) ? $this->getSleepTypeList($m[1]) : null,
+                'created_at'       => time(),
+                'updated_at'       => time()
             ];
         }
 

@@ -19,6 +19,8 @@ class m160729_090337_create_sleep_data_table extends Migration
             'user_id'    => $this->integer(11)->notNull(),
             'timestamp'  => $this->bigInteger(),
             'sleep_type' => $this->float(),
+            'created_at' => $this->integer(11)->unsigned()->defaultValue(null),
+            'updated_at' => $this->integer(11)->unsigned()->defaultValue(null),
         ], $tableOptions);
 
         $this->createIndex('idx_sleep_data_user_id', '{{%sleep_data}}', 'user_id');

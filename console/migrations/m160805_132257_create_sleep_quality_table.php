@@ -45,6 +45,8 @@ class m160805_132257_create_sleep_quality_table extends Migration
             'max_hr'               => $this->integer(11),
             'min_rr'               => $this->integer(11),
             'max_rr'               => $this->integer(11),
+            'created_at'           => $this->integer(11)->unsigned()->defaultValue(null),
+            'updated_at'           => $this->integer(11)->unsigned()->defaultValue(null),
         ], $tableOptions);
 
         $this->createIndex('idx_sleep_quality_user_id', '{{%sleep_quality}}', 'user_id');

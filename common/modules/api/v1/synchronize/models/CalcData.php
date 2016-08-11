@@ -4,6 +4,7 @@ namespace common\modules\api\v1\synchronize\models;
 
 use common\modules\api\v1\user\models\User;
 use Yii;
+use yii\behaviors\TimestampBehavior;
 use \yii\db\ActiveRecord;
 
 /**
@@ -65,6 +66,23 @@ class CalcData extends ActiveRecord
     }
 
     /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class'              => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value'              => function () {
+                    return time();
+                },
+            ],
+        ];
+    }
+
+    /**
      * Method of saving calc data
      *
      * @param $jsonCalcData
@@ -82,7 +100,9 @@ class CalcData extends ActiveRecord
                 'timestamp'        => isset($m[0]) ? $m[0] : null,
                 'heart_rate'       => isset($m[1]) ? $m[1] : null,
                 'respiration_rate' => isset($m[2]) ? $m[2] : null,
-                'activity'         => isset($m[3]) ? $m[3] : null
+                'activity'         => isset($m[3]) ? $m[3] : null,
+                'created_at'       => time(),
+                'updated_at'       => time()
             ];
         }
 
