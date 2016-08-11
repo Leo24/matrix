@@ -171,7 +171,6 @@ class SleepQuality extends ActiveRecord
         return '';
     }
 
-
     /**
      * Creates data provider instance with search query applied
      *
@@ -231,8 +230,10 @@ class SleepQuality extends ActiveRecord
         $query = (new Query())
             ->select(['user_id', 'from as date','avg_hr as last_night', 'max_hr as highest', 'min_hr as lowest' ])
             ->from('sleep_quality')
-            ->where(['user_id' => $this->user_id])
-            ->andWhere(['between', 'from', strtotime("-1 day", $this->currentDate), $this->currentDate]);
+            ->where(['user_id' => $this->user_id]);
+        if ($this->currentDate) {
+            $query->andWhere(['between', 'from', strtotime("-1 day", $this->currentDate), $this->currentDate]);
+        }
         return $query->all();
     }
 
