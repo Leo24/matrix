@@ -2,19 +2,17 @@
 
 namespace common\modules\api\v1\user\models;
 
-
 use Yii;
 use yii\base\Exception;
 use yii\db\ActiveRecord;
 use yii\web\HttpException;
 use yii\web\IdentityInterface;
 use yii\behaviors\TimestampBehavior;
-use common\modules\api\v1\block\models\Block;
 use common\modules\api\v1\device\models\Device;
 use common\modules\api\v1\health\models\Health;
 use common\modules\api\v1\profile\models\Profile;
+use common\modules\api\v1\authorization\models\Block;
 use common\modules\api\v1\notification\models\Notification;
-use common\modules\api\v1\socialNetwork\models\SocialNetwork;
 use common\modules\api\v1\settings\models\SettingNotification;
 use common\modules\api\v1\sleepingPosition\models\SleepingPosition;
 use common\modules\api\v1\reasonUsingMatrix\models\ReasonUsingMatrix;

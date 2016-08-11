@@ -32,9 +32,6 @@ return [
                         'report'            => [
                             'class' => 'common\modules\api\v1\report\Module'
                         ],
-                        'socialNetwork'     => [
-                            'class' => 'common\modules\api\v1\socialNetwork\Module'
-                        ],
                         'reasonUsingMatrix' => [
                             'class' => 'common\modules\api\v1\reasonUsingMatrix\Module'
                         ],
@@ -164,7 +161,7 @@ return [
                         'notifications'  => 'api/v1/notification/backend/notification',
                         'healths'        => 'api/v1/health/backend/health',
                         'devices'        => 'api/v1/device/backend/device',
-                        'socialnetworks' => 'api/v1/socialNetwork/backend/social-network',
+                        'socialnetworks' => 'api/v1/user/backend/social-network',
                     ],
                 ],
             ],

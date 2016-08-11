@@ -1,10 +1,9 @@
 <?php
 
-namespace common\modules\api\v1\socialNetwork\models;
+namespace common\modules\api\v1\user\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-use common\modules\api\v1\user\models\User;
 
 /**
  * This is the model class for table 'social_network'.
@@ -15,7 +14,7 @@ use common\modules\api\v1\user\models\User;
  * @property string $data
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
- * @package common\modules\api\v1\socialNetwork\models
+ * @package common\modules\api\v1\user\models
  */
 class SocialNetwork extends ActiveRecord
 {
@@ -76,6 +75,7 @@ class SocialNetwork extends ActiveRecord
     {
         $fields = parent::fields();
         $fields['data'] = function ($model) {
+            /** @var $model SocialNetwork */
             return $model->getSocialNetworkData();
         };
         if ($this->scenario == self::SCENARIO_REGISTER) {
