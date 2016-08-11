@@ -1,17 +1,17 @@
 <?php
 
-namespace common\modules\api\v1\profile\controllers\backend;
+namespace common\modules\api\v1\user\controllers\backend;
 
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
-use common\modules\api\v1\profile\models\Profile;
+use common\modules\api\v1\user\models\Profile;
 
 /**
  * Class Profile controller
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
- * @package common\modules\api\v1\profile\controllers\backend
+ * @package common\modules\api\v1\user\controllers\backend
  */
 class ProfileController extends ActiveController
 {

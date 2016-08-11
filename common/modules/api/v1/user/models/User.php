@@ -8,13 +8,9 @@ use yii\db\ActiveRecord;
 use yii\web\HttpException;
 use yii\web\IdentityInterface;
 use yii\behaviors\TimestampBehavior;
-use common\modules\api\v1\device\models\Device;
-use common\modules\api\v1\health\models\Health;
-use common\modules\api\v1\profile\models\Profile;
 use common\modules\api\v1\authorization\models\Block;
 use common\modules\api\v1\notification\models\Notification;
 use common\modules\api\v1\settings\models\SettingNotification;
-use common\modules\api\v1\reasonUsingMatrix\models\ReasonUsingMatrix;
 use common\modules\api\v1\user\traits\AuthorizationJwtTrait;
 
 /**

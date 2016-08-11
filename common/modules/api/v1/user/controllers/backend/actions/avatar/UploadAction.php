@@ -1,6 +1,6 @@
 <?php
 
-namespace common\modules\api\v1\profile\controllers\backend\actions\avatar;
+namespace common\modules\api\v1\user\controllers\backend\actions\avatar;
 
 use Yii;
 use yii\rest\Action;
@@ -9,7 +9,7 @@ use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\BadRequestHttpException;
 use common\modules\api\v1\user\models\User;
-use common\modules\api\v1\profile\models\Profile;
+use common\modules\api\v1\user\models\Profile;
 
 /**
  * Class UploadAction

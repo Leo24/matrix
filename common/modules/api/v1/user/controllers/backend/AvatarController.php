@@ -1,18 +1,18 @@
 <?php
 
-namespace common\modules\api\v1\profile\controllers\backend;
+namespace common\modules\api\v1\user\controllers\backend;
 
 use Yii;
 use yii\base\Controller;
 use yii\filters\auth\HttpBearerAuth;
-use common\modules\api\v1\profile\models\Profile;
-use common\modules\api\v1\profile\controllers\backend\actions\avatar\UploadAction;
+use common\modules\api\v1\user\models\Profile;
+use common\modules\api\v1\user\controllers\backend\actions\avatar\UploadAction;
 
 /**
  * Class Avatar controller
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
- * @package common\modules\api\v1\profile\controllers\backend
+ * @package common\modules\api\v1\user\controllers\backend
  */
 class AvatarController extends Controller
 {

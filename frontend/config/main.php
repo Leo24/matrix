@@ -23,20 +23,11 @@ return [
                         'authorization'     => [
                             'class' => 'common\modules\api\v1\authorization\Module'
                         ],
-                        'profile'           => [
-                            'class' => 'common\modules\api\v1\profile\Module'
-                        ],
                         'sleepquality'      => [
                             'class' => 'common\modules\api\v1\sleepquality\Module'
                         ],
                         'report'            => [
                             'class' => 'common\modules\api\v1\report\Module'
-                        ],
-                        'device'            => [
-                            'class' => 'common\modules\api\v1\device\Module'
-                        ],
-                        'health'            => [
-                            'class' => 'common\modules\api\v1\health\Module'
                         ],
                         'notification'      => [
                             'class' => 'common\modules\api\v1\notification\Module'
@@ -150,11 +141,11 @@ return [
                     'pluralize'  => false,
                     'prefix'     => 'api/v1/',
                     'controller' => [
-                        'profiles'       => 'api/v1/profile/backend/profile',
+                        'profiles'       => 'api/v1/user/backend/profile',
                         'users'          => 'api/v1/user/backend/user',
                         'notifications'  => 'api/v1/notification/backend/notification',
-                        'healths'        => 'api/v1/health/backend/health',
-                        'devices'        => 'api/v1/device/backend/device',
+                        'healths'        => 'api/v1/user/backend/health',
+                        'devices'        => 'api/v1/user/backend/device',
                         'socialnetworks' => 'api/v1/user/backend/social-network',
                         'sleeping-positions' => 'api/v1/user/backend/sleeping-position',
                         'reason-using-matrix' => 'api/v1/user/backend/reason-using-matrix',

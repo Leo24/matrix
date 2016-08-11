@@ -5,7 +5,6 @@ namespace common\modules\api\v1\user\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
-use common\modules\api\v1\user\models\User;
 
 /**
  * This is the model class for table 'reason_using_matrix'

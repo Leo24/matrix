@@ -1,17 +1,17 @@
 <?php
 
-namespace common\modules\api\v1\health\controllers\backend;
+namespace common\modules\api\v1\user\controllers\backend;
 
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
-use common\modules\api\v1\health\models\Health;
+use common\modules\api\v1\user\models\Health;
 
 /**
  * Class HealthController
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
- * @package common\modules\api\v1\health\controllers\backend
+ * @package common\modules\api\v1\user\controllers\backend
  */
 class HealthController extends ActiveController
 {

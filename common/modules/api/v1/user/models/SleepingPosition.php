@@ -16,7 +16,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $updated_at
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
- * @package common\modules\api\v1\sleepingPosition\models
+ * @package common\modules\api\v1\user\models
  */
 class SleepingPosition extends ActiveRecord
 {

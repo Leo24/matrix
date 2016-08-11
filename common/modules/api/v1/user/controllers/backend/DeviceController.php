@@ -1,17 +1,17 @@
 <?php
 
-namespace common\modules\api\v1\device\controllers\backend;
+namespace common\modules\api\v1\user\controllers\backend;
 
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
-use common\modules\api\v1\device\models\Device;
+use common\modules\api\v1\user\models\Device;
 
 /**
  * Class DeviceController
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
- * @package common\modules\api\v1\device\controllers\backend
+ * @package common\modules\api\v1\user\controllers\backend
  */
 class DeviceController extends ActiveController
 {
