@@ -35,9 +35,6 @@ return [
                         'reasonUsingMatrix' => [
                             'class' => 'common\modules\api\v1\reasonUsingMatrix\Module'
                         ],
-                        'sleepingPosition'  => [
-                            'class' => 'common\modules\api\v1\sleepingPosition\Module'
-                        ],
                         'device'            => [
                             'class' => 'common\modules\api\v1\device\Module'
                         ],
@@ -162,6 +159,7 @@ return [
                         'healths'        => 'api/v1/health/backend/health',
                         'devices'        => 'api/v1/device/backend/device',
                         'socialnetworks' => 'api/v1/user/backend/social-network',
+                        'sleeping-positions' => 'api/v1/user/backend/sleeping-position',
                     ],
                 ],
             ],

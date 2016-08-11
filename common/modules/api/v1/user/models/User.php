@@ -14,7 +14,6 @@ use common\modules\api\v1\profile\models\Profile;
 use common\modules\api\v1\authorization\models\Block;
 use common\modules\api\v1\notification\models\Notification;
 use common\modules\api\v1\settings\models\SettingNotification;
-use common\modules\api\v1\sleepingPosition\models\SleepingPosition;
 use common\modules\api\v1\reasonUsingMatrix\models\ReasonUsingMatrix;
 use common\modules\api\v1\user\traits\AuthorizationJwtTrait;
 
