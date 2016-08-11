@@ -4,7 +4,7 @@ namespace common\modules\api\v1\report\controllers\backend\actions;
 
 use Yii;
 use yii\web\HttpException;
-use common\modules\api\v1\report\models\SleepQuality;
+use common\modules\api\v1\synchronize\models\SleepQuality;
 use \yii\rest\Action;
 
 /**

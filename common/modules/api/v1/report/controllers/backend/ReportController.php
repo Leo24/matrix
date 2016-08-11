@@ -4,9 +4,9 @@ namespace common\modules\api\v1\report\controllers\backend;
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
-use common\modules\api\v1\report\models\SleepData;
-use common\modules\api\v1\report\models\SleepQuality;
-use common\modules\api\v1\report\models\HrvData;
+use common\modules\api\v1\synchronize\models\SleepData;
+use common\modules\api\v1\synchronize\models\SleepQuality;
+use common\modules\api\v1\synchronize\models\HrvData;
 use common\modules\api\v1\report\controllers\backend\actions\SleepQualityAction;
 use common\modules\api\v1\report\controllers\backend\actions\HeartRateAction;
 use common\modules\api\v1\report\controllers\backend\actions\HeartHealthAction;
@@ -56,7 +56,8 @@ class ReportController extends ActiveController
                 'class'       => HeartHealthAction::class,
                 'modelClass'  => SleepData::class,
                 'checkAccess' => [$this, 'checkAccess']
-            ]
+            ],
+            
         ];
 
         return $actions + $additional;
