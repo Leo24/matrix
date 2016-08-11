@@ -23,9 +23,6 @@ return [
                         'authorization'     => [
                             'class' => 'common\modules\api\v1\authorization\Module'
                         ],
-                        'block'             => [
-                            'class' => 'common\modules\api\v1\block\Module'
-                        ],
                         'profile'           => [
                             'class' => 'common\modules\api\v1\profile\Module'
                         ],
@@ -154,7 +151,7 @@ return [
                 [
                     'class'      => 'yii\rest\UrlRule',
                     'prefix'     => 'api/v1/',
-                    'controller' => ['blocks' => 'api/v1/block/backend/block'],
+                    'controller' => ['blocks' => 'api/v1/authorization/backend/block'],
                     'only'       => ['index']
                 ],
                 [

@@ -1,6 +1,6 @@
 <?php
 
-namespace common\modules\api\v1\block\controllers\backend\actions\block;
+namespace common\modules\api\v1\authorization\controllers\backend\actions\block;
 
 use Yii;
 use common\modules\api\v1\user\models\User;
@@ -11,7 +11,7 @@ use yii\data\ActiveDataProvider;
  * Custom index action for BlockController
  *
  * @author Dmitriy Sobolevskiy <dmitriy.sobolevskiy@gmail.com>
- * @package common\modules\api\v1\block\controllers\backend\actions\block
+ * @package common\modules\api\v1\authorization\controllers\backend\actions\block
  */
 class IndexAction extends \yii\rest\IndexAction
 {

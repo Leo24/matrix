@@ -1,18 +1,18 @@
 <?php
 
-namespace common\modules\api\v1\block\controllers\backend;
+namespace common\modules\api\v1\authorization\controllers\backend;
 
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
-use common\modules\api\v1\block\models\Block;
-use common\modules\api\v1\block\controllers\backend\actions\block\IndexAction;
+use common\modules\api\v1\authorization\models\Block;
+use common\modules\api\v1\authorization\controllers\backend\actions\block\IndexAction;
 
 /**
  * Class BlockController
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
- * @package common\modules\api\v1\block\controllers\backend
+ * @package common\modules\api\v1\authorization\controllers\backend
  */
 class BlockController extends ActiveController
 {

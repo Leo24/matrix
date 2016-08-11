@@ -1,6 +1,6 @@
 <?php
 
-namespace common\modules\api\v1\block\models;
+namespace common\modules\api\v1\authorization\models;
 
 use Yii;
 use yii\db\ActiveRecord;
@@ -10,6 +10,7 @@ use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table 'block'.
  *
+ * @property string $id
  * @property string $token
  * @property integer $user_id
  * @property integer $created_at
@@ -44,6 +45,7 @@ class Block extends ActiveRecord
     public function fields()
     {
         return [
+            'id',
             'token',
             'user_id',
             'created_at',
@@ -58,6 +60,7 @@ class Block extends ActiveRecord
     {
         $scenarion = parent::scenarios();
         $scenarion[self::SCENARIO_CREATE_BLOCK] = [
+            'id',
             'token',
             'user_id',
             'created_at',
@@ -104,6 +107,7 @@ class Block extends ActiveRecord
     public function attributeLabels()
     {
         return [
+            'id'         => Yii::t('app', 'ID'),
             'user_id'    => Yii::t('app', 'User ID'),
             'token'      => Yii::t('app', 'Token'),
             'created_at' => Yii::t('app', 'Created at'),
@@ -140,7 +144,12 @@ class Block extends ActiveRecord
             return $dataProvider;
         }
 
-        $query->andFilterWhere(['token' => $this->token]);
+        $query->andFilterWhere([
+            'token' => $this->token,
+            'id' => $this->id,
+            'created_at' => $this->id,
+            'expired_at' => $this->id,
+        ]);
 
         return $dataProvider;
     }
