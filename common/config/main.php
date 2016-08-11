@@ -12,10 +12,6 @@ return [
             'password' => 'matrix123321',
             'charset'  => 'utf8',
         ],
-        // todo протестить оба и решить какой оставить
-        'notificationPush' => [
-            'class' => common\modules\api\v1\notification\services\NotificationPush::class
-        ],
         'apns'             => [
             'class'       => 'bryglen\apnsgcm\Apns',
             'environment' => \bryglen\apnsgcm\Apns::ENVIRONMENT_SANDBOX,

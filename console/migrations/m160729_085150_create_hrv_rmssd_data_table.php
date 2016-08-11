@@ -21,6 +21,8 @@ class m160729_085150_create_hrv_rmssd_data_table extends Migration
             'rmssd'          => $this->integer(),
             'low_frequency'  => $this->integer(),
             'high_frequency' => $this->integer(),
+            'created_at'     => $this->integer(11)->unsigned()->defaultValue(null),
+            'updated_at'     => $this->integer(11)->unsigned()->defaultValue(null),
         ], $tableOptions);
 
         $this->createIndex('idx-rmssd_data-user_id', '{{%hrv_rmssd_data}}', 'user_id');
