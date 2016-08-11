@@ -32,9 +32,6 @@ return [
                         'sleepquality'      => [
                             'class' => 'common\modules\api\v1\sleepquality\Module'
                         ],
-                        'health'            => [
-                            'class' => 'common\modules\api\v1\health\Module'
-                        ],
                         'report'            => [
                             'class' => 'common\modules\api\v1\report\Module'
                         ],
@@ -49,6 +46,9 @@ return [
                         ],
                         'device'            => [
                             'class' => 'common\modules\api\v1\device\Module'
+                        ],
+                        'health'            => [
+                            'class' => 'common\modules\api\v1\health\Module'
                         ],
                         'notification'      => [
                             'class' => 'common\modules\api\v1\notification\Module'
@@ -153,15 +153,21 @@ return [
                 ],
                 [
                     'class'      => 'yii\rest\UrlRule',
+                    'prefix'     => 'api/v1/',
+                    'controller' => ['blocks' => 'api/v1/block/backend/block'],
+                    'only'       => ['index']
+                ],
+                [
+                    'class'      => 'yii\rest\UrlRule',
                     'pluralize'  => false,
                     'prefix'     => 'api/v1/',
                     'controller' => [
                         'profiles'       => 'api/v1/profile/backend/profile',
                         'users'          => 'api/v1/user/backend/user',
                         'notifications'  => 'api/v1/notification/backend/notification',
+                        'healths'        => 'api/v1/health/backend/health',
                         'devices'        => 'api/v1/device/backend/device',
                         'socialnetworks' => 'api/v1/socialNetwork/backend/social-network',
-                        'healths'        => 'api/v1/health/backend/health',
                     ],
                 ],
             ],

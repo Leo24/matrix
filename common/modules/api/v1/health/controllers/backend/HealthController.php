@@ -46,8 +46,8 @@ class HealthController extends ActiveController
     public function actions()
     {
         $actions = parent::actions();
-
         $actions['index']['prepareDataProvider'] = [$this, 'indexDataProvider'];
+
         return $actions;
     }
 
