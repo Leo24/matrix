@@ -120,7 +120,7 @@ return [
                 [
                     'class'      => 'yii\rest\UrlRule',
                     'prefix'     => 'api/v1/',
-                    'controller' => ['avatar/upload' => 'api/v1/profile/backend/avatar'],
+                    'controller' => ['avatar/upload' => 'api/v1/user/backend/avatar'],
                     'patterns'   => ['POST' => 'upload']
                 ],
                 [
@@ -132,7 +132,6 @@ return [
                     'patterns'   => ['POST' => 'save-data'],
                     'except'     => ['update', 'view', 'delete', 'create', 'view']
                 ],
-
                 [
                     'class'      => 'yii\rest\UrlRule',
                     'prefix'     => 'api/v1/',
@@ -163,5 +162,5 @@ return [
             ],
         ],
     ],
-    'params'              => $params,
+    'params' => $params,
 ];
