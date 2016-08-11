@@ -163,22 +163,15 @@ return [
                     'prefix' => 'api/v1/',
                     'controller' => [
                         'report' => 'api/v1/report/backend/report',
-                        'report/sleep-cycles' => 'api/v1/report/backend/report',
                         'report/sleep-quality' => 'api/v1/report/backend/report',
                         'report/heart-rate' => 'api/v1/report/backend/report',
-                        'report/movement' => 'api/v1/report/backend/report',
-                        'report/stress' => 'api/v1/report/backend/report',
-                        'report/breathing' => 'api/v1/report/backend/report',
-                        'report/daily' => 'api/v1/report/backend/report',
+                        'report/heart-health' => 'api/v1/report/backend/report',
                     ],
                     'patterns' => [
                         'GET sleep-cycles' => 'sleep-cycles',
                         'GET sleep-quality' => 'sleep-quality',
                         'GET heart-rate' => 'heart-rate',
-                        'GET stress' => 'stress',
-                        'GET breathing' => 'breathing',
-                        'GET daily' => 'daily',
-
+                        'GET heart-health' => 'heart-health',
                     ]
 
                 ],
