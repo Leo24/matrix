@@ -3,8 +3,8 @@
 namespace common\modules\api\v1\report\models;
 
 use Yii;
-use common\modules\api\v1\user\models\User;
 use yii\data\ActiveDataProvider;
+use common\modules\api\v1\user\models\User;
 use \yii\db\Query;
 
 /**
@@ -71,7 +71,7 @@ class SleepQuality extends \yii\db\ActiveRecord
             ], 'integer'],
             [['avg_hr', 'avg_rr', 'avg_act'], 'number'],
             [['from', 'to'], 'string'],
-            [['startDate', 'endDate'], 'safe'],
+            [['startDate', 'endDate'], 'safe']
         ];
     }
 
@@ -159,13 +159,35 @@ class SleepQuality extends \yii\db\ActiveRecord
     {
         $this->load($params);
 
-        $query = (new Query())->from('sleep_quality')
+        $query = (new Query())
             ->select(['{{timestamp}}', '{{sleep_score}}'])
+            ->from('sleep_quality')
             ->where(['user_id' => $this->user_id]);
 
         if ($this->startDate && $this->endDate) {
             $query->andWhere(['between', 'from', $this->startDate, $this->endDate]);
         }
+        return $query->all();
+    }
+
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+
+    public function lastNightHeartRateParams($params)
+    {
+        $this->load($params);
+        $today = time();
+        $query = (new Query())
+            ->select(['user_id', 'from as date','avg_hr as last_night', 'max_hr as highest', 'min_hr as lowest' ])
+            ->from('sleep_quality')
+            ->where(['user_id' => $this->user_id])
+            ->andWhere(['between', 'to', strtotime("-1 day", $today), $today]);
         return $query->all();
     }
 }

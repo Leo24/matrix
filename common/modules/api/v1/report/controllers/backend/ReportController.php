@@ -8,7 +8,7 @@ use common\modules\api\v1\report\models\SleepData;
 use common\modules\api\v1\report\models\SleepQuality;
 use common\modules\api\v1\report\models\HrvData;
 use common\modules\api\v1\report\controllers\backend\actions\SleepQualityAction;
-use common\modules\api\v1\report\controllers\backend\actions\MovementAction;
+use common\modules\api\v1\report\controllers\backend\actions\HeartRateAction;
 
 /**
  * Report controller
@@ -38,8 +38,8 @@ class ReportController extends ActiveController
                 'modelClass'  => SleepQuality::class,
                 'checkAccess' => [$this, 'checkAccess']
             ],
-            'movement' => [
-                'class'       => MovementAction::class,
+            'heart-rate' => [
+                'class'       => HeartRateAction::class,
                 'modelClass'  => SleepData::class,
                 'checkAccess' => [$this, 'checkAccess']
             ]
