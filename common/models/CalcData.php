@@ -2,7 +2,9 @@
 
 namespace common\models;
 
+use common\modules\api\v1\user\models\User;
 use Yii;
+use \yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "calc_data".
@@ -15,14 +17,14 @@ use Yii;
  * @property integer $activity
  *
  */
-class CalcData extends \yii\db\ActiveRecord
+class CalcData extends ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'calc_data';
+        return '{{%calc_data}}';
     }
 
     /**
@@ -45,12 +47,12 @@ class CalcData extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'user_id' => 'User ID',
-            'timestamp' => 'Timestamp',
-            'heart_rate' => 'Heart Rate',
+            'id'               => 'ID',
+            'user_id'          => 'User ID',
+            'timestamp'        => 'Timestamp',
+            'heart_rate'       => 'Heart Rate',
             'respiration_rate' => 'Respiration Rate',
-            'activity' => 'Activity',
+            'activity'         => 'Activity',
         ];
     }
 
@@ -60,5 +62,40 @@ class CalcData extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * Method of saving calc data
+     *
+     * @param $jsonCalcData
+     * @param $userId
+     * @throws \Exception
+     */
+    public function saveCalcData($jsonCalcData, $userId)
+    {
+//        $currentTimestamp = $jsonCalcData[0][0];
+        $rows = [];
+        foreach ($jsonCalcData as $k => $m) {
+            // todo интервал должен быть 10 минут
+            $rows[$k] = [
+                'user_id'          => $userId,
+                'timestamp'        => isset($m[0]) ? $m[0] : null,
+                'heart_rate'       => isset($m[1]) ? $m[1] : null,
+                'respiration_rate' => isset($m[2]) ? $m[2] : null,
+                'activity'         => isset($m[3]) ? $m[3] : null
+            ];
+        }
+
+        $attr = $this->attributes();
+        unset($attr[0]);
+
+        Yii::$app->db->createCommand()
+            ->batchInsert(CalcData::tableName(), $attr, $rows)
+            ->execute();
+    }
+
+    private function countCurrentStep($timestamp, $currentTimestamp)
+    {
+        return (int)$timestamp - (int)$currentTimestamp;
     }
 }

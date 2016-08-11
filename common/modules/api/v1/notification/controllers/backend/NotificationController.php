@@ -9,6 +9,12 @@ use yii\filters\auth\HttpBearerAuth;
 /**
  * Notification controller
  */
+
+/**
+ * Class NotificationController
+ *
+ * @package common\modules\api\v1\notification\controllers\backend
+ */
 class NotificationController extends ActiveController
 {
     public $serializer = [

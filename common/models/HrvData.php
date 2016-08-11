@@ -2,7 +2,9 @@
 
 namespace common\models;
 
+use common\modules\api\v1\user\models\User;
 use Yii;
+use \yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "hrv_data".
@@ -18,7 +20,7 @@ use Yii;
  *
  * @property User $user
  */
-class HrvData extends \yii\db\ActiveRecord
+class HrvData extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -47,14 +49,14 @@ class HrvData extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'user_id' => 'User ID',
-            'timestamp' => 'Timestamp',
-            'start_rmssd' => 'Start Rmssd',
-            'end_rmssd' => 'End Rmssd',
+            'id'             => 'ID',
+            'user_id'        => 'User ID',
+            'timestamp'      => 'Timestamp',
+            'start_rmssd'    => 'Start Rmssd',
+            'end_rmssd'      => 'End Rmssd',
             'total_recovery' => 'Total Recovery',
             'recovery_ratio' => 'Recovery Ratio',
-            'recovery_rate' => 'Recovery Rate',
+            'recovery_rate'  => 'Recovery Rate',
         ];
     }
 
@@ -64,5 +66,55 @@ class HrvData extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * Method of saving hrv data
+     *
+     * @param $jsonHrvData
+     * @param $userId
+     * @throws \Exception
+     */
+    public function saveHrvData($jsonHrvData, $userId)
+    {
+        $rows = [];
+
+        var_dump($jsonHrvData);
+        var_dump($jsonHrvData[0][4]);
+        var_dump((float)$jsonHrvData[0][4]);
+        exit;
+
+        foreach ($jsonHrvData as $k => $m) {
+
+            $str = '-5.3';
+//
+//            echo gettype('-5.3') . PHP_EOL;
+//            echo floatval((string)'-5.3') . PHP_EOL;
+//
+//            echo $m[2] . PHP_EOL;
+//            echo gettype($m[2]) . PHP_EOL;
+
+            var_dump((float)$str);
+            echo gettype($m[2]);
+            var_dump((float)$m[2]);
+
+            exit;
+
+            $rows[$k] = [
+                'user_id'        => $userId,
+                'start_rmssd'    => isset($m[0]) ? $m[0] : null,
+                'end_rmssd'      => isset($m[1]) ? $m[1] : null,
+                'total_recovery' => isset($m[2]) ? $m[2] : null,
+                'recovery_ratio' => isset($m[3]) ? $m[3] : null,
+                'recovery_rate'  => isset($m[4]) ? $m[4] : null
+            ];
+        }
+
+        $attr = $this->attributes();
+        unset($attr[0]);
+
+        Yii::$app->db->createCommand()
+            ->batchInsert(HrvData::tableName(), $attr, $rows)->execute();
+
     }
 }

@@ -55,8 +55,8 @@ return [
                         'user'              => [
                             'class' => 'common\modules\api\v1\user\Module'
                         ],
-                        'emfitdata'         => [
-                            'class' => 'common\modules\api\v1\emfitdata\Module'
+                        'emfitData'         => [
+                            'class' => 'common\modules\api\v1\emfitData\Module'
                         ],
                     ]
                 ],
@@ -85,9 +85,20 @@ return [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets'    => [
                 [
-                    'class'  => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
+                    'class'   => 'yii\log\FileTarget',
+                    'levels'  => ['error', 'warning']
                 ],
+                [
+                    'class'          => 'yii\log\FileTarget',
+                    'levels'         => ['error', 'trace'],
+                    'categories'     => ['emfit_data'],
+                    'logVars'        => [],
+                    'logFile'        => '@app/runtime/logs/synchronize_emfit_data.log',
+                    'exportInterval' => 1,
+                    'maxFileSize'    => 1024 * 2,
+                    'maxLogFiles'    => 20
+                ],
+
             ],
         ],
         'urlManager' => [
@@ -133,14 +144,17 @@ return [
                 [
                     'class'      => 'yii\rest\UrlRule',
                     'prefix'     => 'api/v1/',
-                    'controller' => ['emfit/emfitdata' => 'api/v1/emfitdata/emfitdata'],
-                    'patterns'   => ['POST' => 'get-data']
+                    'controller' => [
+                        'emfit/emfitdata' => 'api/v1/emfitData/emfit-data'
+                    ],
+                    'patterns'   => ['POST' => 'save-data'],
+                    'except'     => ['update', 'view', 'delete', 'create', 'view']
                 ],
                 [
                     'class'      => 'yii\rest\UrlRule',
                     'prefix'     => 'api/v1/',
                     'controller' => ['emfitdata' => 'api/v1/emfitdata/emfitdata'],
-                    'patterns'   => ['GET' => 'parse-data',]
+                    'patterns'   => ['GET' => 'parse-data']
                 ],
                 [
                     'class'      => 'yii\rest\UrlRule',
