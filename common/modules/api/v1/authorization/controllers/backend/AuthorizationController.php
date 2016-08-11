@@ -54,10 +54,9 @@ class AuthorizationController extends ActiveController
         $behaviors['bearerAuth'] = [
             'class' => HttpBearerAuth::className(),
         ];
-
         return $behaviors;
     }
-    //todo много статичных функций.
+
     /**
      * Refresh authorization token action
      *

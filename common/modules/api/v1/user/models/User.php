@@ -417,14 +417,17 @@ class User extends ActiveRecord implements IdentityInterface
             if (self::isBlocked($token)) {
                 return true;
             }
-            $block = new Block();
+            /** @var $model Block */
+            $model = new Block();
+            $model->setScenario(Block::SCENARIO_CREATE_BLOCK);
+
             $values = [
                 'user_id'    => User::getPayload($token, 'jti'),
                 'expired_at' => User::getPayload($token, 'exp'),
                 'token'      => $token
             ];
-            $block->attributes = $values;
-            return $block->save();
+            $model->attributes = $values;
+            return $model->save();
         }
         return false;
     }

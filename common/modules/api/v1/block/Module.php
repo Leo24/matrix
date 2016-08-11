@@ -10,6 +10,9 @@ namespace common\modules\api\v1\block;
  */
 class Module extends \yii\base\Module
 {
+    /**
+     * @inheritdoc
+     */
     public $controllerNamespace = 'common\modules\api\v1\block\controllers';
 
     /**

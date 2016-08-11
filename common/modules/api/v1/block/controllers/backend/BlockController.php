@@ -5,20 +5,29 @@ namespace common\modules\api\v1\block\controllers\backend;
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
-use common\modules\api\v1\device\models\Device;
+use common\modules\api\v1\block\models\Block;
+use common\modules\api\v1\block\controllers\backend\actions\block\IndexAction;
 
 /**
  * Class BlockController
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
- * @package common\modules\api\v1\device\controllers\backend
+ * @package common\modules\api\v1\block\controllers\backend
  */
-class DeviceController extends ActiveController
+class BlockController extends ActiveController
 {
     /**
      * @inheritdoc
      */
-    public $modelClass = Device::class;
+    public $modelClass = Block::class;
+
+    /**
+     * @inheritdoc
+     */
+    public $serializer = [
+        'class'              => 'yii\rest\Serializer',
+        'collectionEnvelope' => 'items',
+    ];
 
     /**
      * @inheritdoc
@@ -31,5 +40,30 @@ class DeviceController extends ActiveController
         ];
 
         return $behaviors;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function actions()
+    {
+        $actions = parent::actions();
+        $actions['index']['prepareDataProvider'] = [$this, 'indexDataProvider'];
+        $actions['index'] = [
+                'class' => IndexAction::class,
+                'modelClass' => Block::class,
+        ];
+
+        return $actions;
+    }
+
+    /**
+     * @return \yii\data\ActiveDataProvider
+     */
+    public function indexDataProvider()
+    {
+        /** @var $searchModel Block */
+        $searchModel = new $this->modelClass;
+        return $searchModel->search(\Yii::$app->request->queryParams);
     }
 }
