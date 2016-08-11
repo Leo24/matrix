@@ -79,14 +79,14 @@ class HrvData extends ActiveRecord
     {
         $rows = [];
 
-        var_dump($jsonHrvData);
-        var_dump($jsonHrvData[0][4]);
-        var_dump((float)$jsonHrvData[0][4]);
-        exit;
+//        var_dump($jsonHrvData);
+//        var_dump($jsonHrvData[0][4]);
+//        var_dump((float)$jsonHrvData[0][4]);
+//        exit;
 
         foreach ($jsonHrvData as $k => $m) {
 
-            $str = '-5.3';
+            $str = '-9.3';
 //
 //            echo gettype('-5.3') . PHP_EOL;
 //            echo floatval((string)'-5.3') . PHP_EOL;
@@ -94,11 +94,24 @@ class HrvData extends ActiveRecord
 //            echo $m[2] . PHP_EOL;
 //            echo gettype($m[2]) . PHP_EOL;
 
-            var_dump((float)$str);
-            echo gettype($m[2]);
-            var_dump((float)$m[2]);
+            /**
+             * проблема в том, что первый символ не минус :)
+             */
+            die(var_dump(
+                [
+                    substr($str, 0, 1), // получаем первый символ строки образца
+                    substr($m[2], 0, 1), // получаем первый символ строки исходного массива
 
-            exit;
+                    ord(substr($str, 0, 1)), // ASCII код минуса
+                    ord(substr($m[2], 0, 1)), // ASCII код чего-то похожего визуально на минус
+
+                    (float) $m[2],
+                    $m[2],
+
+                    (float) $str
+                ]
+            ));
+
 
             $rows[$k] = [
                 'user_id'        => $userId,
