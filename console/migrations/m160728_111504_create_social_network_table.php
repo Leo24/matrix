@@ -24,6 +24,7 @@ class m160728_111504_create_social_network_table extends Migration
             'social_network_type' => "enum('facebook','instagram','pinterest','twitter') NOT NULL",
             'data'                => $this->text()->notNull(),
             'created_at'          => $this->integer(11)->unsigned()->defaultValue(null),
+            'updated_at'          => $this->integer(11)->unsigned()->defaultValue(null)
         ], $options);
 
         $this->createIndex('idx-social-network-user-id', '{{%social_network}}', 'user_id');

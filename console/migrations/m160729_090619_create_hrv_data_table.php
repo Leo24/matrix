@@ -22,6 +22,8 @@ class m160729_090619_create_hrv_data_table extends Migration
             'total_recovery' => $this->float(),
             'recovery_ratio' => $this->float(),
             'recovery_rate'  => $this->float(),
+            'created_at'     => $this->integer(11)->unsigned()->defaultValue(null),
+            'updated_at'     => $this->integer(11)->unsigned()->defaultValue(null),
         ], $tableOptions);
 
         $this->createIndex('idx_hrv_data_user_id', '{{%hrv_data}}', 'user_id');

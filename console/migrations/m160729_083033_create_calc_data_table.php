@@ -25,6 +25,8 @@ class m160729_083033_create_calc_data_table extends Migration
             'heart_rate'       => $this->float(),
             'respiration_rate' => $this->float(),
             'activity'         => $this->integer(),
+            'created_at'       => $this->integer(11)->unsigned()->defaultValue(null),
+            'updated_at'       => $this->integer(11)->unsigned()->defaultValue(null),
         ], $tableOptions);
 
         $this->createIndex('idx_calc_data_user_id', '{{%calc_data}}', 'user_id');
