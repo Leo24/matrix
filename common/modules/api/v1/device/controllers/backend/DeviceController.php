@@ -23,6 +23,14 @@ class DeviceController extends ActiveController
     /**
      * @inheritdoc
      */
+    public $serializer = [
+        'class'              => 'yii\rest\Serializer',
+        'collectionEnvelope' => 'items',
+    ];
+
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         $behaviors = parent::behaviors();
@@ -31,5 +39,26 @@ class DeviceController extends ActiveController
         ];
 
         return $behaviors;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function actions()
+    {
+        $actions = parent::actions();
+        $actions['index']['prepareDataProvider'] = [$this, 'indexDataProvider'];
+
+        return $actions;
+    }
+
+    /**
+     * @return \yii\data\ActiveDataProvider
+     */
+    public function indexDataProvider()
+    {
+        /** @var $searchModel Device */
+        $searchModel = new $this->modelClass;
+        return $searchModel->search(\Yii::$app->request->queryParams);
     }
 }
