@@ -1,27 +1,27 @@
 <?php
 
-namespace common\modules\api\v1\emfitData\controllers\actions;
+namespace common\modules\api\v1\synchronize\controllers\actions\emfitData;
 
-use common\models\CalcData;
-use common\models\HrvData;
-use common\models\HrvRmssdData;
-use common\models\SleepData;
-use common\models\SleepQuality;
-use common\modules\api\v1\device\models\Device;
-use common\modules\api\v1\user\models\User;
+use common\modules\api\v1\synchronize\models\CalcData;
+use common\modules\api\v1\synchronize\models\HrvData;
+use common\modules\api\v1\synchronize\models\HrvRmssdData;
+use common\modules\api\v1\synchronize\models\SleepData;
+use common\modules\api\v1\synchronize\models\SleepQuality;
 use Yii;
 use yii\base\Exception;
 use yii\console\ErrorHandler;
 use yii\rest\Action;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
+use common\modules\api\v1\device\models\Device;
+use common\modules\api\v1\user\models\User;
 
 /**
  * Class SaveAction
  *
  * Action for saving emfit data in DB
  *
- * @package common\modules\api\v1\emfitData\controllers\actions
+ * @package common\modules\api\v1\synchronize\controllers\actions\emfitData
  */
 class SaveAction extends Action
 {
@@ -40,7 +40,7 @@ class SaveAction extends Action
             $json = Yii::$app->request->bodyParams;
 
             /** @var  $device Device.php */
-            $device = Device::findOne(['sn' => $json['serial_number']]);
+            $device = Device::findOne(['sn' => $json['device']]);
             if (!$device) {
                 throw new NotFoundHttpException('Device not found!');
             }

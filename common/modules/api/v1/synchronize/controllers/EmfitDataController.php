@@ -1,15 +1,15 @@
 <?php
-namespace common\modules\api\v1\emfitData\controllers;
+namespace common\modules\api\v1\synchronize\controllers;
 
-use common\models\SleepQuality;
 use Yii;
 use yii\rest\ActiveController;
-use common\modules\api\v1\emfitData\controllers\actions\SaveAction;
+use common\modules\api\v1\synchronize\controllers\actions\emfitData\SaveAction;
+use \common\modules\api\v1\synchronize\models\SleepQuality;
 
 /**
  * Class EmfitDataController
  *
- * @package common\modules\api\v1\emfitdata\controllers
+ * @package common\modules\api\v1\synchronize\controllers
  */
 class EmfitDataController extends ActiveController
 {

@@ -55,8 +55,8 @@ return [
                         'user'              => [
                             'class' => 'common\modules\api\v1\user\Module'
                         ],
-                        'emfitData'         => [
-                            'class' => 'common\modules\api\v1\emfitData\Module'
+                        'synchronize'         => [
+                            'class' => 'common\modules\api\v1\synchronize\Module'
                         ],
                     ]
                 ],
@@ -145,17 +145,12 @@ return [
                     'class'      => 'yii\rest\UrlRule',
                     'prefix'     => 'api/v1/',
                     'controller' => [
-                        'emfit/emfitdata' => 'api/v1/emfitData/emfit-data'
+                        'synchronize/emfitdata' => 'api/v1/synchronize/emfit-data'
                     ],
                     'patterns'   => ['POST' => 'save-data'],
                     'except'     => ['update', 'view', 'delete', 'create', 'view']
                 ],
-                [
-                    'class'      => 'yii\rest\UrlRule',
-                    'prefix'     => 'api/v1/',
-                    'controller' => ['emfitdata' => 'api/v1/emfitdata/emfitdata'],
-                    'patterns'   => ['GET' => 'parse-data']
-                ],
+
                 [
                     'class'      => 'yii\rest\UrlRule',
                     'prefix'     => 'api/v1/',

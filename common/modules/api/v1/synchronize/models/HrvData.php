@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models;
+namespace common\modules\api\v1\synchronize\models;
 
 use common\modules\api\v1\user\models\User;
 use Yii;
@@ -79,54 +79,21 @@ class HrvData extends ActiveRecord
     {
         $rows = [];
 
-//        var_dump($jsonHrvData);
-//        var_dump($jsonHrvData[0][4]);
-//        var_dump((float)$jsonHrvData[0][4]);
-//        exit;
-
         foreach ($jsonHrvData as $k => $m) {
-
-            $str = '-9.3';
-//
-//            echo gettype('-5.3') . PHP_EOL;
-//            echo floatval((string)'-5.3') . PHP_EOL;
-//
-//            echo $m[2] . PHP_EOL;
-//            echo gettype($m[2]) . PHP_EOL;
-
-            /**
-             * проблема в том, что первый символ не минус :)
-             */
-            die(var_dump(
-                [
-                    substr($str, 0, 1), // получаем первый символ строки образца
-                    substr($m[2], 0, 1), // получаем первый символ строки исходного массива
-
-                    ord(substr($str, 0, 1)), // ASCII код минуса
-                    ord(substr($m[2], 0, 1)), // ASCII код чего-то похожего визуально на минус
-
-                    (float) $m[2],
-                    $m[2],
-
-                    (float) $str
-                ]
-            ));
-
-
             $rows[$k] = [
                 'user_id'        => $userId,
-                'start_rmssd'    => isset($m[0]) ? $m[0] : null,
-                'end_rmssd'      => isset($m[1]) ? $m[1] : null,
-                'total_recovery' => isset($m[2]) ? $m[2] : null,
-                'recovery_ratio' => isset($m[3]) ? $m[3] : null,
-                'recovery_rate'  => isset($m[4]) ? $m[4] : null
+                'start_rmssd'    => isset($m[0]) ? (float)$m[0] : null,
+                'end_rmssd'      => isset($m[1]) ? (float)$m[1] : null,
+                'total_recovery' => isset($m[2]) ? (float)$m[2] : null,
+                'recovery_ratio' => isset($m[3]) ? (float)$m[3] : null,
+                'recovery_rate'  => isset($m[4]) ? (float)$m[4] : null
             ];
         }
 
         $attr = $this->attributes();
         unset($attr[0]);
 
-        Yii::$app->db->createCommand()
+       Yii::$app->db->createCommand()
             ->batchInsert(HrvData::tableName(), $attr, $rows)->execute();
 
     }
