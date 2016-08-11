@@ -4,6 +4,7 @@ namespace common\modules\api\v1\device\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\data\ActiveDataProvider;
 use yii\behaviors\TimestampBehavior;
 use common\modules\api\v1\user\models\User;
 
@@ -104,14 +105,22 @@ class Device extends ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'pin', 'pw', 'sn'], 'trim'],
+            [['name', 'pin', 'pw', 'sn', 'position', 'user_id'], 'trim'],
             [
                 ['name', 'pin', 'pw', 'sn'],
                 'required',
                 'on' => self::SCENARIO_REGISTER
             ],
-            [['name', 'pin', 'pw', 'sn'], 'string', 'max' => 255],
-            ['sn', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('app', 'Device exists')],
+            [['name', 'pin', 'pw', 'sn', 'position'], 'string', 'max' => 255],
+            [['name', 'pin', 'pw', 'sn', 'position', 'user_id'], 'safe'],
+            [['user_id'], 'integer'],
+            [
+                'sn',
+                'unique',
+                'targetClass' => self::className(),
+                'message'     => Yii::t('app', 'Device exists'),
+                'on'          => self::SCENARIO_REGISTER
+            ],
         ];
     }
 
@@ -121,5 +130,46 @@ class Device extends ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    /**
+     * @return string
+     */
+    public function formName()
+    {
+        return '';
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function search($params)
+    {
+        $query = self::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere([
+            'user_id'  => $this->user_id,
+            'name'     => $this->name,
+            'position' => $this->position,
+            'pin'      => $this->pin,
+            'pw'       => $this->pw,
+            'sn'       => $this->sn,
+        ]);
+
+        return $dataProvider;
     }
 }
