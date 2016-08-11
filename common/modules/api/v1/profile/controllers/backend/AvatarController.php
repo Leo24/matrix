@@ -4,13 +4,9 @@ namespace common\modules\api\v1\profile\controllers\backend;
 
 use Yii;
 use yii\base\Controller;
-use yii\web\UploadedFile;
-use yii\web\HttpException;
-use yii\web\NotFoundHttpException;
-use yii\web\BadRequestHttpException;
 use yii\filters\auth\HttpBearerAuth;
 use common\modules\api\v1\profile\models\Profile;
-use common\modules\api\v1\user\models\User;
+use common\modules\api\v1\profile\controllers\backend\actions\avatar\UploadAction;
 
 /**
  * Class Avatar controller
@@ -34,35 +30,19 @@ class AvatarController extends Controller
     }
 
     /**
-     * Upload user avatar action
-     *
-     * @return null|static
-     * @throws BadRequestHttpException
-     * @throws HttpException
-     * @throws NotFoundHttpException
+     * @inheritdoc
      */
-    public function actionUpload()
+    public function actions()
     {
-        if (Yii::$app->request->isPost) {
+        $actions = parent::actions();
 
-            $userId = User::getPayload((new User())->getAuthKey(), $payload_id = 'jti');
-            $profileModel = Profile::findOne(['user_id' => $userId]);
+        $additional = [
+            'upload' => [
+                'class'      => UploadAction::class,
+                'modelClass' => Profile::class,
+            ]
+        ];
 
-            if (!$profileModel) {
-                throw new NotFoundHttpException('Use not found');
-            }
-            // todo нотации
-            $profileModel->setScenario(Profile::SCENARIO_UPLOAD_AVATAR);
-            $profileModel->avatar = UploadedFile::getInstanceByName('avatar');
-
-            if ($profileModel->validate()) {
-                $profileModel->deleteAvatar();
-                $profileModel->avatar_url = $profileModel->getAvatarUrl($profileModel->uploadAvatar());
-                $profileModel->save();
-                return $profileModel;
-            }
-            throw new HttpException(422, 'Validation exception');
-        }
-        throw new BadRequestHttpException('Bad request');
+        return $additional + $actions;
     }
 }

@@ -1,20 +1,19 @@
 <?php
 
-namespace common\modules\api\v1\socialnetwork\controllers\backend;
+namespace common\modules\api\v1\socialNetwork\controllers\backend;
 
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
-use common\modules\api\v1\socialnetwork\models\SocialNetwork;
+use common\modules\api\v1\socialNetwork\models\SocialNetwork;
 
 /**
  * Class SocialNetwork controller
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
- * @package common\modules\api\v1\socialnetwork\controllers\backend
+ * @package common\modules\api\v1\socialNetwork\controllers\backend
  */
-//todo camelCase
-class SocialnetworkController extends ActiveController
+class SocialNetworkController extends ActiveController
 {
     /**
      * @inheritdoc

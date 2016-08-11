@@ -72,14 +72,14 @@ class Profile extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'firstname' => Yii::t('app', 'First name'),
-            'lastname' => Yii::t('app', 'Last name'),
-            'gender' => Yii::t('app', 'Gender'),
-            'state' => Yii::t('app', 'State'),
-            'city' => Yii::t('app', 'City'),
-            'phone' => Yii::t('app', 'Phone'),
-            'avatar_url' => Yii::t('app', 'Avatar URL'),
-            'birthday' => Yii::t('app', 'Birthday'),
+            'firstname'           => Yii::t('app', 'First name'),
+            'lastname'            => Yii::t('app', 'Last name'),
+            'gender'              => Yii::t('app', 'Gender'),
+            'state'               => Yii::t('app', 'State'),
+            'city'                => Yii::t('app', 'City'),
+            'phone'               => Yii::t('app', 'Phone'),
+            'avatar_url'          => Yii::t('app', 'Avatar URL'),
+            'birthday'            => Yii::t('app', 'Birthday'),
             'profession_interest' => Yii::t('app', 'Profession interest'),
         ];
     }
@@ -115,10 +115,10 @@ class Profile extends ActiveRecord
     {
         return [
             [
-                'class' => TimestampBehavior::className(),
+                'class'              => TimestampBehavior::className(),
                 'createdAtAttribute' => null,
                 'updatedAtAttribute' => 'updated_at',
-                'value' => function () {
+                'value'              => function () {
                     return time();
                 },
             ],
@@ -147,9 +147,9 @@ class Profile extends ActiveRecord
                 ['avatar'],
                 'file',
                 'skipOnEmpty' => false,
-                'extensions' => 'png, jpg',
-                'on' => self::SCENARIO_UPLOAD_AVATAR,
-                'maxSize' => self::getPhotoMaxSize()
+                'extensions'  => 'png, jpg',
+                'on'          => self::SCENARIO_UPLOAD_AVATAR,
+                'maxSize'     => self::getPhotoMaxSize()
             ],
         ];
     }
@@ -228,7 +228,6 @@ class Profile extends ActiveRecord
     {
         return BaseUrl::base() . 'uploads/avatars/' . $fileName;
     }
-
 
     /**
      * This is method uploads user avatar

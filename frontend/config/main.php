@@ -1,4 +1,5 @@
 <?php
+
 $params = array_merge(
     require(__DIR__ . '/../../common/config/params.php'),
     require(__DIR__ . '/../../common/config/params-local.php'),
@@ -7,55 +8,58 @@ $params = array_merge(
 );
 
 return [
-    'id' => 'app-frontend',
-    'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'id'                  => 'app-frontend',
+    'basePath'            => dirname(__DIR__),
+    'bootstrap'           => ['log'],
     'controllerNamespace' => 'frontend\controllers',
-    'homeUrl' => '/',
-    'modules' => [
+    'homeUrl'             => '/',
+    'modules'             => [
         'api' => [
             'class'   => 'common\modules\api\Module',
             'modules' => [
                 'v1' => [
-                    'class' => 'common\modules\api\v1\Module',
+                    'class'   => 'common\modules\api\v1\Module',
                     'modules' => [
-                        'authorization' => [
+                        'authorization'     => [
                             'class' => 'common\modules\api\v1\authorization\Module'
                         ],
-                        'block' => [
+                        'block'             => [
                             'class' => 'common\modules\api\v1\block\Module'
                         ],
-                        'profile' => [
+                        'profile'           => [
                             'class' => 'common\modules\api\v1\profile\Module'
                         ],
-                        'sleepquality' => [
+                        'sleepquality'      => [
                             'class' => 'common\modules\api\v1\sleepquality\Module'
                         ],
-                        'report' => [
+                        'report'            => [
                             'class' => 'common\modules\api\v1\report\Module'
                         ],
-                        'socialnetwork' => [
-                            'class' => 'common\modules\api\v1\socialnetwork\Module'
+                        'socialNetwork'     => [
+                            'class' => 'common\modules\api\v1\socialNetwork\Module'
                         ],
-                        'reasonusingmatrix' => [
-                            'class' => 'common\modules\api\v1\reasonusingmatrix\Module'
+                        'reasonUsingMatrix' => [
+                            'class' => 'common\modules\api\v1\reasonUsingMatrix\Module'
                         ],
-                        'sleepingposition' => [
-                            'class' => 'common\modules\api\v1\sleepingposition\Module'
+                        'sleepingPosition'  => [
+                            'class' => 'common\modules\api\v1\sleepingPosition\Module'
                         ],
-                        'device' => [
+                        'device'            => [
                             'class' => 'common\modules\api\v1\device\Module'
                         ],
-                        'notification' => [
+                        'health'            => [
+                            'class' => 'common\modules\api\v1\health\Module'
+                        ],
+                        'notification'      => [
                             'class' => 'common\modules\api\v1\notification\Module'
                         ],
-                        'settings' => [
+                        'settings'          => [
                             'class' => 'common\modules\api\v1\settings\Module'
                         ],
-                        'user' => [
+                        'user'              => [
                             'class' => 'common\modules\api\v1\user\Module'
                         ],
-                        'emfitdata' => [
+                        'emfitdata'         => [
                             'class' => 'common\modules\api\v1\emfitdata\Module'
                         ],
                     ]
@@ -63,106 +67,96 @@ return [
             ],
         ],
     ],
-    'components' => [
-        'response' => [
-            'format' => yii\web\Response::FORMAT_JSON,
+    'components'          => [
+        'response'   => [
+            'format'  => yii\web\Response::FORMAT_JSON,
             'charset' => 'UTF-8',
         ],
-        'request' => [
-            'baseUrl' => '/',
-            'class' => '\yii\web\Request',
+        'request'    => [
+            'baseUrl'                => '/',
+            'class'                  => '\yii\web\Request',
             'enableCookieValidation' => false,
-            'parsers' => [
+            'parsers'                => [
                 'application/json' => 'yii\web\JsonParser',
             ],
         ],
-        'user' => [
-            'identityClass' => 'common\modules\api\v1\user\models\User',
-            'enableSession' => false,
+        'user'       => [
+            'identityClass'   => 'common\modules\api\v1\user\models\User',
+            'enableSession'   => false,
             'enableAutoLogin' => false,
         ],
-        'log' => [
+        'log'        => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
-            'targets' => [
+            'targets'    => [
                 [
-                    'class' => 'yii\log\FileTarget',
+                    'class'  => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
             ],
         ],
         'urlManager' => [
-            'enablePrettyUrl' => true,
+            'enablePrettyUrl'     => true,
             'enableStrictParsing' => false,
-            'showScriptName' => false,
-            'rules' => [
+            'showScriptName'      => false,
+            'rules'               => [
                 [
-                    'class' => 'yii\rest\UrlRule',
-                    'prefix' => 'api/v1/',
+                    'class'      => 'yii\rest\UrlRule',
+                    'prefix'     => 'api/v1/',
                     'controller' => ['user' => 'api/v1/authorization/frontend/authorization'],
-                    'patterns' => [
-                        'POST login' => 'login',
-                    ]
+                    'patterns'   => ['POST login' => 'login']
                 ],
                 [
-                    'class' => 'yii\rest\UrlRule',
-                    'prefix' => 'api/v1/',
+                    'class'      => 'yii\rest\UrlRule',
+                    'prefix'     => 'api/v1/',
                     'controller' => ['user' => 'api/v1/authorization/backend/authorization'],
-                    'patterns' => [
-                        'GET logout' => 'logout',
-                        'GET refresh' => 'refresh'
-                    ]
+                    'patterns'   =>
+                        [
+                            'GET logout'  => 'logout',
+                            'GET refresh' => 'refresh'
+                        ]
                 ],
                 [
-                    'class' => 'yii\rest\UrlRule',
-                    'prefix' => 'api/v1/',
+                    'class'      => 'yii\rest\UrlRule',
+                    'prefix'     => 'api/v1/',
                     'controller' => ['user/register' => 'api/v1/user/frontend/user'],
-                    'patterns' => ['POST' => 'register']
+                    'patterns'   => ['POST' => 'register']
                 ],
                 [
-                    'class' => 'yii\rest\UrlRule',
-                    'prefix' => 'api/v1/',
+                    'class'      => 'yii\rest\UrlRule',
+                    'prefix'     => 'api/v1/',
                     'controller' => ['user/password' => 'api/v1/user/backend/user'],
-                    'patterns' => ['PUT,PATCH' => 'password']
+                    'patterns'   => ['PUT,PATCH' => 'password']
                 ],
                 [
-                    'class' => 'yii\rest\UrlRule',
-                    'prefix' => 'api/v1/',
+                    'class'      => 'yii\rest\UrlRule',
+                    'prefix'     => 'api/v1/',
                     'controller' => ['avatar/upload' => 'api/v1/profile/backend/avatar'],
-                    'patterns' => ['POST' => 'upload']
+                    'patterns'   => ['POST' => 'upload']
                 ],
                 [
-                    'class' => 'yii\rest\UrlRule',
-                    'prefix' => 'api/v1/',
+                    'class'      => 'yii\rest\UrlRule',
+                    'prefix'     => 'api/v1/',
                     'controller' => ['emfit/emfitdata' => 'api/v1/emfitdata/emfitdata'],
-                    'patterns' => ['POST' => 'get-data']
+                    'patterns'   => ['POST' => 'get-data']
                 ],
                 [
-                    'class' => 'yii\rest\UrlRule',
-                    'prefix' => 'api/v1/',
+                    'class'      => 'yii\rest\UrlRule',
+                    'prefix'     => 'api/v1/',
                     'controller' => ['emfitdata' => 'api/v1/emfitdata/emfitdata'],
-                    'patterns' => [ 'GET' => 'parse-data',]
+                    'patterns'   => ['GET' => 'parse-data',]
                 ],
                 [
-                    'class' => 'yii\rest\UrlRule',
-                    'prefix' => 'api/v1/',
-                    'controller' => ['notifications' => 'api/v1/notification/backend/notification',],
-                    'except' => ['index', 'create'],
+                    'class'      => 'yii\rest\UrlRule',
+                    'prefix'     => 'api/v1/',
+                    'controller' => ['settings/notifications' => 'api/v1/settings/backend/notification'],
+                    'except'     => ['create', 'delete', 'view']
                 ],
                 [
-                    'class' => 'yii\rest\UrlRule',
-                    'pluralize' => false,
-                    'prefix' => 'api/v1/',
-                    'controller' => [
-                        'profiles' => 'api/v1/profile/backend/profile',
-                        'profile/sleep/quality' => 'api/v1/report/backend/report',
-                        'profile/matrix/averages' => 'api/v1/report/backend/report',
-                        'socialnetworks' => 'api/v1/socialnetwork/backend/socialnetwork',
-                        'notifications' => 'api/v1/notification/backend/notification',
-                        'devices' => 'api/v1/device/backend/device',
-                    ],
+                    'class'      => 'yii\rest\UrlRule',
+                    'prefix'     => 'api/v1/',
+                    'controller' => ['blocks' => 'api/v1/block/backend/block'],
+                    'only'       => ['index']
                 ],
-
-
                 [
                     'class' => 'yii\rest\UrlRule',
                     'pluralize' => false,
@@ -186,28 +180,23 @@ return [
                         'GET daily' => 'daily',
 
                     ]
+
                 ],
-
-
-
-
-
                 [
-                    'class' => 'yii\rest\UrlRule',
-                    'prefix' => 'api/v1/',
+                    'class'      => 'yii\rest\UrlRule',
+                    'pluralize'  => false,
+                    'prefix'     => 'api/v1/',
                     'controller' => [
-                        'settings/notifications' => 'api/v1/settings/backend/notification'
+                        'profiles'       => 'api/v1/profile/backend/profile',
+                        'users'          => 'api/v1/user/backend/user',
+                        'notifications'  => 'api/v1/notification/backend/notification',
+                        'healths'        => 'api/v1/health/backend/health',
+                        'devices'        => 'api/v1/device/backend/device',
+                        'socialnetworks' => 'api/v1/socialNetwork/backend/social-network',
                     ],
-                    'except' => ['create', 'delete', 'view']
-                ],
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'prefix' => 'api/v1/',
-                    'controller' => ['notifications' => 'api/v1/notification/backend/notification',],
-                    'except' => ['index', 'create'],
                 ],
             ],
         ],
     ],
-    'params' => $params,
+    'params'              => $params,
 ];

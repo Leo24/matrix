@@ -4,6 +4,7 @@ namespace common\modules\api\v1\block\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\data\ActiveDataProvider;
 use yii\behaviors\TimestampBehavior;
 
 /**
@@ -19,6 +20,8 @@ use yii\behaviors\TimestampBehavior;
  */
 class Block extends ActiveRecord
 {
+    const SCENARIO_CREATE_BLOCK = 'create';
+
     /**
      * Table name
      * @inheritdoc
@@ -29,13 +32,11 @@ class Block extends ActiveRecord
     }
 
     /**
-     * Primary key
+     * Primary key name
+     *
      * @inheritdoc
      */
-    public static function primaryKey()
-    {
-        return 'token';
-    }
+    public $primaryKey = 'token';
 
     /**
      * @inheritdoc
@@ -53,14 +54,30 @@ class Block extends ActiveRecord
     /**
      * @inheritdoc
      */
+    public function scenarios()
+    {
+        $scenarion = parent::scenarios();
+        $scenarion[self::SCENARIO_CREATE_BLOCK] = [
+            'token',
+            'user_id',
+            'created_at',
+            'expired_at',
+        ];
+
+        return $scenarion;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
             [
-                'class' => TimestampBehavior::className(),
+                'class'              => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => null,
-                'value' => function () {
+                'value'              => function () {
                     return time();
                 },
             ],
@@ -76,7 +93,7 @@ class Block extends ActiveRecord
             [['user_id', 'token', 'expired_at'], 'safe'],
             [['token'], 'string', 'max' => 255],
             [['expired_at'], 'integer'],
-            [['user_id', 'token', 'expired_at'], 'required'],
+            [['user_id', 'token', 'expired_at'], 'required', 'on' => self::SCENARIO_CREATE_BLOCK],
         ];
     }
 
@@ -87,10 +104,44 @@ class Block extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'user_id' => Yii::t('app', 'User ID'),
-            'token' => Yii::t('app', 'Token'),
+            'user_id'    => Yii::t('app', 'User ID'),
+            'token'      => Yii::t('app', 'Token'),
             'created_at' => Yii::t('app', 'Created at'),
             'expired_at' => Yii::t('app', 'Expired at'),
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function formName()
+    {
+        return '';
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function search($params)
+    {
+        $query = self::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere(['token' => $this->token]);
+
+        return $dataProvider;
     }
 }

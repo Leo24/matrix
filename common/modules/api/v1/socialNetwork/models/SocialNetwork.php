@@ -15,7 +15,7 @@ use common\modules\api\v1\user\models\User;
  * @property string $data
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
- * @package common\models
+ * @package common\modules\api\v1\socialNetwork\models
  */
 class SocialNetwork extends ActiveRecord
 {

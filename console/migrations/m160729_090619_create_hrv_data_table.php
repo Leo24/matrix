@@ -7,7 +7,7 @@ class m160729_090619_create_hrv_data_table extends Migration
     /**
      * @inheritdoc
      */
-    public function up()
+    public function safeUp()
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -15,13 +15,13 @@ class m160729_090619_create_hrv_data_table extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
         }
         $this->createTable('{{%hrv_data}}', [
-            'id' => $this->primaryKey(),
-            'user_id' => $this->integer(11)->notNull(),
-            'start_rmssd' => $this->float(),
-            'end_rmssd' => $this->float(),
+            'id'             => $this->primaryKey(),
+            'user_id'        => $this->integer(11)->notNull(),
+            'start_rmssd'    => $this->float(),
+            'end_rmssd'      => $this->float(),
             'total_recovery' => $this->float(),
             'recovery_ratio' => $this->float(),
-            'recovery_rate' => $this->float(),
+            'recovery_rate'  => $this->float(),
         ], $tableOptions);
 
         $this->createIndex('idx_hrv_data_user_id', '{{%hrv_data}}', 'user_id');
@@ -36,13 +36,14 @@ class m160729_090619_create_hrv_data_table extends Migration
             'CASCADE'
         );
     }
+
     /**
      * @inheritdoc
      */
-    public function down()
+    public function safeDown()
     {
-        $this->dropIndex('idx_hrv_data_user_id', '{{%hrv_data}}');
         $this->dropForeignKey('fk_tbl_hrv_data_tbl_user', '{{%hrv_data}}');
+        $this->dropIndex('idx_hrv_data_user_id', '{{%hrv_data}}');
         $this->dropTable('{{%hrv_data}}');
     }
 }

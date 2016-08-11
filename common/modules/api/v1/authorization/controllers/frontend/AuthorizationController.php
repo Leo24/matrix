@@ -22,7 +22,7 @@ class AuthorizationController extends Controller
     const USER_NOT_FOUND_CODE = 10;
     const FORBIDDEN_ACCESS_CODE = 11;
 
-     /**
+    /**
      * User login action
      *
      * @return null|static
@@ -34,12 +34,12 @@ class AuthorizationController extends Controller
     {
         /** @var $model User */
         $model = User::findOne(['email' => Yii::$app->getRequest()->getBodyParam('email')]);
+
         if (empty($model)) {
             throw new NotFoundHttpException('User not found', self::USER_NOT_FOUND_CODE);
         }
 
         $password = Yii::$app->getRequest()->getBodyParam('password');
-        //var_dump([$model->password, $password, $model->validatePassword($password)]); die();
 
         if (!empty($password) && $model->validatePassword($password)) {
             $model->scenario = 'login';

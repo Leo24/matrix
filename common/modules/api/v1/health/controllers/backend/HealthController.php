@@ -1,24 +1,24 @@
 <?php
 
-namespace common\modules\api\v1\device\controllers\backend;
+namespace common\modules\api\v1\health\controllers\backend;
 
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
-use common\modules\api\v1\device\models\Device;
+use common\modules\api\v1\health\models\Health;
 
 /**
- * Class DeviceController
+ * Class HealthController
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
- * @package common\modules\api\v1\device\controllers\backend
+ * @package common\modules\api\v1\health\controllers\backend
  */
-class DeviceController extends ActiveController
+class HealthController extends ActiveController
 {
     /**
      * @inheritdoc
      */
-    public $modelClass = Device::class;
+    public $modelClass = Health::class;
 
     /**
      * @inheritdoc
@@ -37,7 +37,6 @@ class DeviceController extends ActiveController
         $behaviors['bearerAuth'] = [
             'class' => HttpBearerAuth::className(),
         ];
-
         return $behaviors;
     }
 
@@ -57,7 +56,7 @@ class DeviceController extends ActiveController
      */
     public function indexDataProvider()
     {
-        /** @var $searchModel Device */
+        /** @var $searchModel Health */
         $searchModel = new $this->modelClass;
         return $searchModel->search(\Yii::$app->request->queryParams);
     }

@@ -1,17 +1,21 @@
 <?php
 namespace common\modules\api\v1\notification\controllers\backend;
 
+use common\modules\api\v1\notification\models\Notification;
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
-use common\models\Notification;
-use common\modules\api\v1\notification\controllers\backend\actions\ViewAction;
 
 /**
  * Notification controller
  */
 class NotificationController extends ActiveController
 {
+    public $serializer = [
+        'class'              => 'yii\rest\Serializer',
+        'collectionEnvelope' => 'items',
+    ];
+
     /**
      * @inheritdoc
      */
@@ -29,17 +33,21 @@ class NotificationController extends ActiveController
         return $behaviors;
     }
 
-
-    /**
-     * @return array
-     */
     public function actions()
     {
         $actions = parent::actions();
 
-        $actions['view']['class'] = ViewAction::class;
-
-
+        $actions['index']['prepareDataProvider'] = [$this, 'indexDataProvider'];
         return $actions;
+    }
+
+    /**
+     * @return \yii\data\ActiveDataProvider
+     */
+    public function indexDataProvider()
+    {
+        /** @var  $searchModel Notification */
+        $searchModel = new $this->modelClass;
+        return $searchModel->search(\Yii::$app->request->queryParams);
     }
 }

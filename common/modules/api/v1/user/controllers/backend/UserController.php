@@ -5,9 +5,9 @@ namespace common\modules\api\v1\user\controllers\backend;
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
-use yii\web\HttpException;
 use common\modules\api\v1\user\models\User;
 use common\modules\api\v1\user\controllers\backend\actions\user\DeleteAction;
+use common\modules\api\v1\user\controllers\backend\actions\user\PasswordAction;
 
 /**
  * Class UserController
@@ -41,36 +41,15 @@ class UserController extends ActiveController
     public function actions()
     {
         $actions = parent::actions();
-
-        // customize actions for templates
         $actions['delete']['class'] = DeleteAction::class;
 
-        return $actions;
-    }
+        $additional = [
+            'password' => [
+                'class'      => PasswordAction::class,
+                'modelClass' => User::class,
+            ]
+        ];
 
-    // todo почему не вынесен в отдельный action
-    /**
-     * Update user password action
-     *
-     * @throws HttpException
-     * @throws \yii\web\UnauthorizedHttpException
-     */
-    public function actionPassword()
-    {
-        $authorizationToken = (new User())->getAuthKey();
-        $current = Yii::$app->request->post('current_password');
-
-        /* @var User $model */
-        $model = User::findIdentityByAccessToken($authorizationToken);
-
-        if ($current != null && $model->validatePassword($current)) {
-            $model->scenario = User::SCENARIO_UPDATE_PASSWORD;
-            $model->attributes = Yii::$app->request->post();
-            if ($model->save()) {
-                throw new HttpException(200, 'Completed successfully');
-            }
-            throw new HttpException(422, 'Validation exception');
-        }
-        throw new HttpException(422, 'Current password invalid');
+        return $additional + $actions;
     }
 }

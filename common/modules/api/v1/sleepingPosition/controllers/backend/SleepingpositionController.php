@@ -1,20 +1,19 @@
 <?php
 
-namespace common\modules\api\v1\sleepingposition\controllers\backend;
+namespace common\modules\api\v1\sleepingPosition\controllers\backend;
 
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
-use common\modules\api\v1\sleepingposition\models\SleepingPosition;
+use common\modules\api\v1\sleepingPosition\models\SleepingPosition;
 
 /**
  * Class SleepingPosition controller
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
- * @package common\modules\api\v1\sleepingposition\controllers\backend
+ * @package common\modules\api\v1\sleepingPosition\controllers\backend
  */
-//todo camelCase
-class SleepingpositionController extends ActiveController
+class SleepingPositionController extends ActiveController
 {
     /**
      * @inheritdoc
