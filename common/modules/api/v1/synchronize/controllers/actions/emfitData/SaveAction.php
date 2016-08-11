@@ -80,7 +80,7 @@ class SaveAction extends Action
                 /** @var  $hrvDataModel HrvData.php */
                 $hrvDataModel = new HrvData();
 
-                $hrvDataModel->saveHrvData($json['hrv_data'], $user->id);
+                $hrvDataModel->saveHrvData($json['hrv_data'], $user->id, $json['from']);
 
             }
 

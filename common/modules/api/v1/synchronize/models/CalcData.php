@@ -6,6 +6,7 @@ use common\modules\api\v1\user\models\User;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use \yii\db\ActiveRecord;
+use yii\db\Query;
 
 /**
  * This is the model class for table "calc_data".
@@ -20,6 +21,12 @@ use \yii\db\ActiveRecord;
  */
 class CalcData extends ActiveRecord
 {
+    /** @var  $startDate */
+    public $startDate;
+
+    /** @var  $endDate */
+    public $endDate;
+
     /**
      * @inheritdoc
      */
@@ -38,6 +45,7 @@ class CalcData extends ActiveRecord
             [['user_id', 'activity'], 'integer'],
             [['timestamp'], 'integer'],
             [['heart_rate', 'respiration_rate'], 'number'],
+            [['startDate', 'endDate'], 'safe'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -55,6 +63,14 @@ class CalcData extends ActiveRecord
             'respiration_rate' => 'Respiration Rate',
             'activity'         => 'Activity',
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function formName()
+    {
+        return '';
     }
 
     /**
@@ -114,8 +130,23 @@ class CalcData extends ActiveRecord
             ->execute();
     }
 
-    private function countCurrentStep($timestamp, $currentTimestamp)
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    public function heartRateGraphData($params)
     {
-        return (int)$timestamp - (int)$currentTimestamp;
+        $this->load($params);
+        $query = (new Query())
+            ->select(['{{timestamp}}', '{{heart_rate}}'])
+            ->from('calc_data')
+            ->where(['user_id' => $this->user_id]);
+        if ($this->startDate && $this->endDate) {
+            $query->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
+        }
+        return $query->all();
     }
 }

@@ -38,7 +38,7 @@ class HrvData extends ActiveRecord
     {
         return [
             [['user_id'], 'required'],
-            [['user_id'], 'integer'],
+            [['user_id', 'timestamp'], 'integer'],
             [['start_rmssd', 'end_rmssd', 'total_recovery', 'recovery_ratio', 'recovery_rate'], 'number'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -91,9 +91,10 @@ class HrvData extends ActiveRecord
      *
      * @param $jsonHrvData
      * @param $userId
-     * @throws \Exception
+     * @param $timestamp
+     * @throws \yii\db\Exception
      */
-    public function saveHrvData($jsonHrvData, $userId)
+    public function saveHrvData($jsonHrvData, $userId, $timestamp)
     {
         $rows = [];
 
@@ -105,8 +106,9 @@ class HrvData extends ActiveRecord
                 'total_recovery' => isset($m[2]) ? (float)$m[2] : null,
                 'recovery_ratio' => isset($m[3]) ? (float)$m[3] : null,
                 'recovery_rate'  => isset($m[4]) ? (float)$m[4] : null,
-                'created_at'       => time(),
-                'updated_at'       => time()
+                'created_at'     => time(),
+                'updated_at'     => time(),
+                'timestamp'      => $timestamp
             ];
         }
 

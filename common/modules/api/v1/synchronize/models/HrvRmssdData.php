@@ -6,6 +6,7 @@ use common\modules\api\v1\user\models\User;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use \yii\db\ActiveRecord;
+use yii\db\Query;
 
 /**
  * This is the model class for table "hrv_rmssd_data".
@@ -21,6 +22,12 @@ use \yii\db\ActiveRecord;
  */
 class HrvRmssdData extends ActiveRecord
 {
+    /** @var  $startDate */
+    public $startDate;
+
+    /** @var  $endDate */
+    public $endDate;
+
     /**
      * @inheritdoc
      */
@@ -37,6 +44,7 @@ class HrvRmssdData extends ActiveRecord
         return [
             [['user_id'], 'required'],
             [['user_id', 'rmssd', 'low_frequency', 'high_frequency', 'timestamp'], 'integer'],
+            [['startDate', 'endDate'], 'safe'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -54,6 +62,14 @@ class HrvRmssdData extends ActiveRecord
             'low_frequency'  => 'Low Frequency',
             'high_frequency' => 'High Frequency',
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function formName()
+    {
+        return '';
     }
 
     /**
@@ -110,5 +126,25 @@ class HrvRmssdData extends ActiveRecord
         Yii::$app->db->createCommand()
             ->batchInsert(HrvRmssdData::tableName(), $attr, $rows)
             ->execute();
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    public function heartHealthGraphData($params)
+    {
+        $this->load($params);
+        $query = (new Query())
+            ->select(['{{timestamp}}', '{{rmssd}}'])
+            ->from('hrv_rmssd_data')
+            ->where(['user_id' => $this->user_id]);
+        if ($this->startDate && $this->endDate) {
+            $query->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
+        }
+        return $query->all();
     }
 }

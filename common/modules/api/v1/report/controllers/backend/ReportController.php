@@ -16,18 +16,26 @@ use common\modules\api\v1\report\controllers\backend\actions\HeartHealthAction;
  */
 class ReportController extends ActiveController
 {
-
-    public $serializer = [
-        'class'              => 'yii\rest\Serializer',
-        'collectionEnvelope' => 'items',
-    ];
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+        $behaviors['bearerAuth'] = [
+            'class' => HttpBearerAuth::className(),
+        ];
+        return $behaviors;
+    }
 
     /**
      * @inheritdoc
      */
     public $modelClass = HrvData::class;
 
-
+    /**
+     * @return array
+     */
     public function actions()
     {
 

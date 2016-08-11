@@ -6,6 +6,7 @@ use common\modules\api\v1\user\models\User;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use \yii\db\ActiveRecord;
+use yii\db\Query;
 
 /**
  * This is the model class for table "sleep_quality".
@@ -39,6 +40,15 @@ use \yii\db\ActiveRecord;
  */
 class SleepQuality extends ActiveRecord
 {
+    /** @var  $startDate */
+    public $startDate;
+
+    /** @var  $endDate */
+    public $endDate;
+
+    /** @var  $currentDate */
+    public $currentDate;
+
     /**
      * Primary key name
      *
@@ -87,7 +97,8 @@ class SleepQuality extends ActiveRecord
                 ],
                 'integer'
             ],
-            [['avg_hr', 'avg_rr', 'avg_act'], 'number']
+            [['avg_hr', 'avg_rr', 'avg_act'], 'number'],
+            [['startDate', 'endDate', 'currentDate'], 'safe']
         ];
     }
 
@@ -150,6 +161,79 @@ class SleepQuality extends ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * @return string
+     */
+    public function formName()
+    {
+        return '';
+    }
+
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return float
+     */
+    public function currentAverage($params)
+    {
+        $this->load($params);
+        $today = time();
+        $shortTerm = (new Query())->from('sleep_quality')
+            ->where(['user_id' => $this->user_id])
+            ->andWhere(['between', 'from', strtotime("-1 month", $today), $today]);
+        $longTerm = (new Query())->from('sleep_quality')
+            ->where(['user_id' => $this->user_id])
+            ->andWhere(['between', 'from', strtotime("-3 month", $today), $today]);
+
+        $shortTermAverage = $shortTerm->average('[[sleep_score]]');
+        $longTermAverage = $longTerm->average('[[sleep_score]]');
+
+        return ($shortTermAverage + $longTermAverage) / 2;
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    public function sleepQualityData($params)
+    {
+        $this->load($params);
+
+        $query = (new Query())
+            ->select(['{{from}}', '{{sleep_score}}'])
+            ->from('sleep_quality')
+            ->where(['user_id' => $this->user_id]);
+
+        if ($this->startDate && $this->endDate) {
+            $query->andWhere(['between', 'from', $this->startDate, $this->endDate]);
+        }
+        return $query->all();
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    public function lastNightHeartRateParams($params)
+    {
+        $this->load($params);
+        $query = (new Query())
+            ->select(['user_id', 'from as date','avg_hr as last_night', 'max_hr as highest', 'min_hr as lowest' ])
+            ->from('sleep_quality')
+            ->where(['user_id' => $this->user_id])
+            ->andWhere(['between', 'from', strtotime("-1 day", $this->currentDate), $this->currentDate]);
+        return $query->all();
     }
 
     /**
