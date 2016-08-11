@@ -2,6 +2,7 @@
 
 namespace common\modules\api\v1\report\controllers\backend\actions;
 
+use common\modules\api\v1\synchronize\models\HrvData;
 use Yii;
 use yii\web\HttpException;
 use common\modules\api\v1\synchronize\models\CalcData;
@@ -26,29 +27,29 @@ class HeartHealthAction extends Action
      */
     public function run()
     {
-        /** @var  $HrvRmssdDataModel HrvRmssdData */
 
         $graphData = [];
         $params = \Yii::$app->request->queryParams;
-        $HrvRmssdDataModel = new HrvRmssdData();
-//        $SleepQualityModel = new SleepQuality();
-        $HeartHealthGraphData = $HrvRmssdDataModel ->heartHealthGraphData($params);
 
+        /** @var  $hrvRmssdDataModel HrvRmssdData.php */
+        $hrvRmssdDataModel = new HrvRmssdData();
+        /** @var  $hrvDataModel HrvData.php */
+        $hrvDataModel = new HrvData();
+        $heartHealthGraphData = $hrvRmssdDataModel->heartHealthGraphData($params);
+        $lastNightHeartHealthParams = $hrvDataModel->lastNightHeartHealthParams($params);
+        if ($heartHealthGraphData) {
+            foreach ($heartHealthGraphData as $ln) {
+                $graphData[] = [
 
-//        $lastNightHeartRateParams = $SleepQualityModel->lastNightHeartRateParams($params);
-//
-//
-//
-//        foreach ($heartRateGraphData as $ln) {
-//            $graphData[] = [
-//
-//                'chart' => [
-//                    'axis_x'=> $ln['timestamp'],
-//                    'axis_y'=> $ln['heart_rate'],
-//                ],
-//            ];
-//        }
-//        $graphData[] = $lastNightHeartRateParams;
-        return $HeartHealthGraphData;
+                    'chart' => [
+                        'axis_x'=> $ln['timestamp'],
+                        'axis_y'=> $ln['heart_rate'],
+                    ],
+                ];
+            }
+            $graphData[] = $lastNightHeartHealthParams;
+        }
+
+        return $graphData;
     }
 }

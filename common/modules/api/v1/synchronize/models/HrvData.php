@@ -6,6 +6,7 @@ use common\modules\api\v1\user\models\User;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use \yii\db\ActiveRecord;
+use yii\db\Query;
 
 /**
  * This is the model class for table "hrv_data".
@@ -23,6 +24,13 @@ use \yii\db\ActiveRecord;
  */
 class HrvData extends ActiveRecord
 {
+
+    /** @var  $startDate */
+    public $startDate;
+
+    /** @var  $endDate */
+    public $endDate;
+
     /**
      * @inheritdoc
      */
@@ -31,6 +39,13 @@ class HrvData extends ActiveRecord
         return 'hrv_data';
     }
 
+    /**
+     * @return string
+     */
+    public function formName()
+    {
+        return '';
+    }
     /**
      * @inheritdoc
      */
@@ -41,6 +56,7 @@ class HrvData extends ActiveRecord
             [['user_id', 'timestamp'], 'integer'],
             [['start_rmssd', 'end_rmssd', 'total_recovery', 'recovery_ratio', 'recovery_rate'], 'number'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['startDate', 'endDate', 'currentDate'], 'safe']
         ];
     }
 
@@ -115,8 +131,34 @@ class HrvData extends ActiveRecord
         $attr = $this->attributes();
         unset($attr[0]);
 
-       Yii::$app->db->createCommand()
+        Yii::$app->db->createCommand()
             ->batchInsert(HrvData::tableName(), $attr, $rows)->execute();
-
     }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    public function lastNightHeartHealthParams($params)
+    {
+        $this->load($params);
+        $query = (new Query())
+            ->select([
+                'user_id',
+                '(start_rmssd + end_rmssd)/2 as last_night',
+                'start_rmssd as evening_average',
+                'end_rmssd as morning_average',
+                'recovery_ratio as recovery'
+              ])
+            ->from('hrv_data')
+            ->where(['user_id' => $this->user_id]);
+        if ($this->startDate && $this->endDate) {
+                $query->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
+        }
+        return $query->all();
+    }
+
 }
