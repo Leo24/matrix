@@ -32,9 +32,6 @@ return [
                         'report'            => [
                             'class' => 'common\modules\api\v1\report\Module'
                         ],
-                        'reasonUsingMatrix' => [
-                            'class' => 'common\modules\api\v1\reasonUsingMatrix\Module'
-                        ],
                         'device'            => [
                             'class' => 'common\modules\api\v1\device\Module'
                         ],
@@ -160,6 +157,7 @@ return [
                         'devices'        => 'api/v1/device/backend/device',
                         'socialnetworks' => 'api/v1/user/backend/social-network',
                         'sleeping-positions' => 'api/v1/user/backend/sleeping-position',
+                        'reason-using-matrix' => 'api/v1/user/backend/reason-using-matrix',
                     ],
                 ],
             ],

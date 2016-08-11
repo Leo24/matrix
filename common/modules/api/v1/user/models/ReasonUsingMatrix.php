@@ -1,6 +1,6 @@
 <?php
 
-namespace common\modules\api\v1\reasonUsingMatrix\models;
+namespace common\modules\api\v1\user\models;
 
 use Yii;
 use yii\db\ActiveRecord;
@@ -19,7 +19,7 @@ use common\modules\api\v1\user\models\User;
  * @property integer $updated_at
  *
  * @author Dmitriy Sobolevskiy <d.sabaleuski@andersenlab.com>
- * @package common\modules\api\v1\reasonUsingMatrix\models
+ * @package common\modules\api\v1\user\models
  */
 class ReasonUsingMatrix extends ActiveRecord
 {
