@@ -2,15 +2,13 @@
 
 namespace common\modules\api\v1\report\controllers\backend\actions;
 
-use common\modules\api\v1\synchronize\models\HrvData;
 use Yii;
 use yii\web\HttpException;
-use common\modules\api\v1\synchronize\models\CalcData;
-use common\modules\api\v1\synchronize\models\HrvRmssdData;
+use common\modules\api\v1\synchronize\models\SleepQuality;
 use \yii\rest\Action;
 
 /**
- * Class HeartRateAction
+ * Class AveragesAction
  * Custom Averages action for ReportController
  *
  * @package common\modules\api\v1\report\controllers\backend\actions
@@ -26,6 +24,9 @@ class AveragesAction extends Action
      */
     public function run()
     {
-        return 'This is AveragesAction';
+        $params = \Yii::$app->request->queryParams;
+        /** @var  $sleepQualityModel SleepQuality.php */
+        $sleepQualityModel = new SleepQuality();
+        return $sleepQualityModel->averages($params);
     }
 }

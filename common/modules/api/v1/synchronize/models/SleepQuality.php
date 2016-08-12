@@ -273,6 +273,27 @@ class SleepQuality extends ActiveRecord
     }
 
     /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    public function averages($params)
+    {
+        $this->load($params);
+        $query = (new Query())
+            ->select(['user_id', 'hrv_score as heart_rate', 'duration as duration', 'avg_rr as breathing', 'fm_count as movement' ])
+            ->from('sleep_quality')
+            ->where(['user_id' => $this->user_id]);
+        if ($this->currentDate) {
+            $query->andWhere(['between', 'from', strtotime("-1 day", $this->currentDate), $this->currentDate]);
+        } else {
+            return 'Param currentDate is Required.';
+        }
+        return $query->all();
+    }
+    /**
      * Method of saving sleep quality
      *
      * @param $data

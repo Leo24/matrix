@@ -10,8 +10,8 @@ use common\modules\api\v1\synchronize\models\SleepQuality;
 use \yii\rest\Action;
 
 /**
- * Class HeartRateAction
- * Custom Averages action for ReportController
+ * Class BreathingAction
+ * Custom BreathingAction action for ReportController
  *
  * @package common\modules\api\v1\report\controllers\backend\actions
  */
