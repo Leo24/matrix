@@ -32,8 +32,7 @@ class BreathingAction extends Action
         $calcDataModel = new CalcData();
         $sleepQualityModel = new SleepQuality();
 
-//        $breathingGraphData = $calcDataModel->breathingGraphData($params);
-        $breathingGraphData = '';
+        $breathingGraphData = $calcDataModel->breathingGraphData($params);
         $lastNightBreathingParams = $sleepQualityModel->lastNightBreathingParams($params);
 
         if ($breathingGraphData) {
