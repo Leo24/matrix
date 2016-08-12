@@ -2,10 +2,11 @@
 
 namespace common\modules\api\v1\synchronize\models;
 
-use common\modules\api\v1\user\models\User;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use \yii\db\ActiveRecord;
+use common\modules\api\v1\user\models\User;
+use yii\db\Query;
 
 /**
  * This is the model class for table "sleep_data".
@@ -23,6 +24,12 @@ class SleepData extends ActiveRecord
     const SLEEP_TYPE_LIGHT = 'light';
     const SLEEP_TYPE_REM   = 'rem';
     const SLEEP_TYPE_AWAKE = 'awake';
+
+    /** @var  $startDate */
+    public $startDate;
+
+    /** @var  $endDate */
+    public $endDate;
 
     /**
      * @inheritdoc
@@ -42,6 +49,7 @@ class SleepData extends ActiveRecord
             [['user_id', 'timestamp'], 'integer'],
             [['sleep_type'], 'in', 'range' => $this->getSleepTypeList()],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['startDate', 'endDate'], 'safe']
         ];
     }
 
@@ -76,6 +84,14 @@ class SleepData extends ActiveRecord
     }
 
     /**
+     * @return string
+     */
+    public function formName()
+    {
+        return '';
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getUser()
@@ -87,7 +103,7 @@ class SleepData extends ActiveRecord
      * @param $id
      * @return array
      */
-    public function getSleepTypeList($id)
+    public function getSleepTypeList($id = false)
     {
         $sleepTypes = [
             1 => self::SLEEP_TYPE_DEEP,
@@ -126,4 +142,50 @@ class SleepData extends ActiveRecord
             ->batchInsert(SleepData::tableName(), $attr, $rows)
             ->execute();
     }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    public function sleepCyclesGraphData($params)
+    {
+        $this->load($params);
+//        $numDays = abs($this->endDate - $this->startDate)/60/60/24;
+//        $days = [];
+//        for ($i = 1; $i < $numDays; $i++) {
+//            $days[] = [date('Y m d', strtotime("+{$i} day", $this->endDate))];
+//        }
+
+        $query = (new Query())
+            ->select(['timestamp', 'sleep_type'])
+            ->from('sleep_data')
+            ->where(['user_id' => $this->user_id])
+            ->andWhere(['between', 'timestamp', strtotime("-1 day", $this->startDate), $this->endDate]);
+
+        return $query->all();
+
+//        $sleepCyclesGraphData = $query->all();
+//
+//        foreach ($sleepCyclesGraphData as $ln) {
+//            if ($ln['sleep_type'] == 'awake') {
+//
+//            } elseif($ln['sleep_type'] == 'rem'){
+//
+//            } elseif($ln['sleep_type'] == 'light'){
+//
+//            } elseif($ln['sleep_type'] == 'deep'){
+//
+//            }
+//        }
+
+    }
+
+
+
+
+    
+    
 }
