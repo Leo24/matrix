@@ -14,6 +14,9 @@ use common\modules\api\v1\user\models\User;
  */
 class UserController extends Controller
 {
+    /** @var  $modelClass User.php */
+    public $modelClass = User::class;
+
     /**
      * Action register a new user
      *
@@ -22,6 +25,9 @@ class UserController extends Controller
      */
     public function actionRegister()
     {
-        return User::registerUser(Yii::$app->request->post());
+        /** @var  $user User.php */
+        $user = new $this->modelClass;
+
+        return $user->registerUser(Yii::$app->request->post());
     }
 }

@@ -6,7 +6,7 @@ use Yii;
 use yii\base\Exception;
 use yii\web\BadRequestHttpException;
 use yii\web\ServerErrorHttpException;
-use common\modules\api\v1\synchronize\models\SleepQuality;
+use common\modules\api\v1\emfit\models\SleepQuality;
 use \yii\rest\Action;
 
 /**

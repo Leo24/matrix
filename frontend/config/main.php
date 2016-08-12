@@ -23,32 +23,11 @@ return [
                         'authorization'     => [
                             'class' => 'common\modules\api\v1\authorization\Module'
                         ],
-                        'block'             => [
-                            'class' => 'common\modules\api\v1\block\Module'
-                        ],
-                        'profile'           => [
-                            'class' => 'common\modules\api\v1\profile\Module'
-                        ],
                         'sleepquality'      => [
                             'class' => 'common\modules\api\v1\sleepquality\Module'
                         ],
                         'report'            => [
                             'class' => 'common\modules\api\v1\report\Module'
-                        ],
-                        'socialNetwork'     => [
-                            'class' => 'common\modules\api\v1\socialNetwork\Module'
-                        ],
-                        'reasonUsingMatrix' => [
-                            'class' => 'common\modules\api\v1\reasonUsingMatrix\Module'
-                        ],
-                        'sleepingPosition'  => [
-                            'class' => 'common\modules\api\v1\sleepingPosition\Module'
-                        ],
-                        'device'            => [
-                            'class' => 'common\modules\api\v1\device\Module'
-                        ],
-                        'health'            => [
-                            'class' => 'common\modules\api\v1\health\Module'
                         ],
                         'notification'      => [
                             'class' => 'common\modules\api\v1\notification\Module'
@@ -59,8 +38,8 @@ return [
                         'user'              => [
                             'class' => 'common\modules\api\v1\user\Module'
                         ],
-                        'synchronize'         => [
-                            'class' => 'common\modules\api\v1\synchronize\Module'
+                        'emfit'         => [
+                            'class' => 'common\modules\api\v1\emfit\Module'
                         ],
                     ]
                 ],
@@ -102,7 +81,16 @@ return [
                     'maxFileSize'    => 1024 * 2,
                     'maxLogFiles'    => 20
                 ],
-
+                [
+                    'class'          => 'yii\log\FileTarget',
+                    'levels'         => ['error', 'trace'],
+                    'categories'     => ['register_user'],
+                    'logVars'        => [],
+                    'logFile'        => '@app/runtime/logs/register_user.log',
+                    'exportInterval' => 1,
+                    'maxFileSize'    => 1024 * 2,
+                    'maxLogFiles'    => 20
+                ]
             ],
         ],
         'urlManager' => [
@@ -141,19 +129,18 @@ return [
                 [
                     'class'      => 'yii\rest\UrlRule',
                     'prefix'     => 'api/v1/',
-                    'controller' => ['avatar/upload' => 'api/v1/profile/backend/avatar'],
+                    'controller' => ['avatar/upload' => 'api/v1/user/backend/avatar'],
                     'patterns'   => ['POST' => 'upload']
                 ],
                 [
                     'class'      => 'yii\rest\UrlRule',
                     'prefix'     => 'api/v1/',
                     'controller' => [
-                        'synchronize/emfitdata' => 'api/v1/synchronize/emfit-data'
+                        'synchronize/emfitdata' => 'api/v1/emfit/synchronize'
                     ],
                     'patterns'   => ['POST' => 'save-data'],
                     'except'     => ['update', 'view', 'delete', 'create', 'view']
                 ],
-
                 [
                     'class'      => 'yii\rest\UrlRule',
                     'prefix'     => 'api/v1/',
@@ -163,7 +150,7 @@ return [
                 [
                     'class'      => 'yii\rest\UrlRule',
                     'prefix'     => 'api/v1/',
-                    'controller' => ['blocks' => 'api/v1/block/backend/block'],
+                    'controller' => ['blocks' => 'api/v1/authorization/backend/block'],
                     'only'       => ['index']
                 ],
                 [
@@ -194,19 +181,46 @@ return [
                 ],
                 [
                     'class'      => 'yii\rest\UrlRule',
+                    'prefix'     => 'api/v1/',
+                    'controller' => ['devices' => 'api/v1/user/backend/device'],
+                    'except'       => ['delete']
+                ],
+                [
+                    'class'      => 'yii\rest\UrlRule',
+                    'prefix'     => 'api/v1/',
+                    'controller' => ['healths' => 'api/v1/user/backend/health'],
+                    'except'       => ['delete']
+                ],
+                [
+                    'class'      => 'yii\rest\UrlRule',
+                    'prefix'     => 'api/v1/',
+                    'controller' => ['profiles' => 'api/v1/user/backend/profile'],
+                    'only'       => ['view', 'update']
+                ],
+                [
+                    'class'      => 'yii\rest\UrlRule',
+                    'prefix'     => 'api/v1/',
+                    'controller' => ['sleeping-positions' => 'api/v1/user/backend/sleeping-position'],
+                    'except'     => ['delete']
+                ],
+                [
+                    'class'      => 'yii\rest\UrlRule',
+                    'prefix'     => 'api/v1/',
+                    'controller' => ['reason-using-matrix' => 'api/v1/user/backend/reason-using-matrix'],
+                    'except'     => ['delete']
+                ],
+                [
+                    'class'      => 'yii\rest\UrlRule',
                     'pluralize'  => false,
                     'prefix'     => 'api/v1/',
                     'controller' => [
-                        'profiles'       => 'api/v1/profile/backend/profile',
                         'users'          => 'api/v1/user/backend/user',
                         'notifications'  => 'api/v1/notification/backend/notification',
-                        'healths'        => 'api/v1/health/backend/health',
-                        'devices'        => 'api/v1/device/backend/device',
-                        'socialnetworks' => 'api/v1/socialNetwork/backend/social-network',
+                        'socialnetworks' => 'api/v1/user/backend/social-network',
                     ],
                 ],
             ],
         ],
     ],
-    'params'              => $params,
+    'params' => $params,
 ];

@@ -7,6 +7,7 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
+use yii\db\Exception;
 
 /**
  * This is the model class for table "setting_notification".
@@ -115,12 +116,14 @@ class SettingNotification extends ActiveRecord
      * Create new record of setting notification for new register user
      *
      * @param $userId
+     * @throws Exception
      */
     public function createDefaultRecordForNewRegisterUser($userId)
     {
-        $model = new SettingNotification();
-        $model->user_id = $userId;
-        $model->save();
+        $this->user_id = $userId;
+        if (!$this->save()) {
+            throw new Exception(implode(', ', $this->getFirstErrors()));
+        }
     }
 
     /**

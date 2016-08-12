@@ -18,6 +18,7 @@ class m160801_121813_create_reason_using_matrix_table extends Migration
             ? 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB' : null;
 
         $this->createTable('{{%reason_using_matrix}}', [
+            'id'                     => $this->primaryKey(),
             'user_id'                => $this->integer(11)->unique(),
             'overall_wellness'       => $this->boolean()->defaultValue(false),
             'sleep_related_issues'   => $this->boolean()->defaultValue(false),
@@ -25,7 +26,6 @@ class m160801_121813_create_reason_using_matrix_table extends Migration
             'athletic_training'      => $this->boolean()->defaultValue(false),
             'other'                  => $this->boolean()->defaultValue(false),
             'updated_at'             => $this->integer(11)->unsigned()->defaultValue(null),
-            'PRIMARY KEY(user_id)'
         ], $options);
 
         $this->createIndex('idx-reason-using-matrix-user-id', '{{%reason_using_matrix}}', 'user_id');

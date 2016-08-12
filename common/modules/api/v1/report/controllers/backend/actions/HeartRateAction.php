@@ -5,8 +5,8 @@ namespace common\modules\api\v1\report\controllers\backend\actions;
 use Yii;
 use yii\base\Exception;
 use yii\web\BadRequestHttpException;
-use common\modules\api\v1\synchronize\models\CalcData;
-use common\modules\api\v1\synchronize\models\SleepQuality;
+use common\modules\api\v1\emfit\models\CalcData;
+use common\modules\api\v1\emfit\models\SleepQuality;
 use \yii\rest\Action;
 use yii\web\ServerErrorHttpException;
 
