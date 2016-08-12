@@ -26,7 +26,6 @@ class BreathingAction extends Action
      */
     public function run()
     {
-
         $graphData = [];
         $params = \Yii::$app->request->queryParams;
         $calcDataModel = new CalcData();
@@ -35,7 +34,7 @@ class BreathingAction extends Action
         $breathingGraphData = $calcDataModel->breathingGraphData($params);
         $lastNightBreathingParams = $sleepQualityModel->lastNightBreathingParams($params);
 
-        if ($breathingGraphData) {
+        if (is_array($breathingGraphData)) {
             foreach ($breathingGraphData as $ln) {
                 $graphData[] = [
                     'chart' => [
@@ -44,8 +43,11 @@ class BreathingAction extends Action
                     ],
                 ];
             }
-            $graphData[] = $lastNightBreathingParams ;
+        } else {
+            $graphData[] = $breathingGraphData;
         }
+        $graphData[] = $lastNightBreathingParams;
+
         return $graphData;
     }
 }

@@ -38,10 +38,10 @@ class SleepQualityAction extends Action
 
         $currentAverage = $sleepQualityModel->currentAverage($params);
 
-        $sleepQualityData = $sleepQualityModel->sleepQualityData($params);
+        $sleepQualityGraphData = $sleepQualityModel->sleepQualityGraphData($params);
 
-        if ($sleepQualityData) {
-            foreach ($sleepQualityData as $ln) {
+        if (is_array($sleepQualityGraphData)) {
+            foreach ($sleepQualityGraphData as $ln) {
                 $graphData[] = [
                     'chart' => [
                         'axis_x'=> $ln['from'],
@@ -49,8 +49,10 @@ class SleepQualityAction extends Action
                     ],
                 ];
             }
-            $graphData[] = ['current_average' => $currentAverage];
+        } else {
+            $graphData[] = $sleepQualityGraphData;
         }
+        $graphData[] = ['current_average' => $currentAverage];
 
         return $graphData;
     }

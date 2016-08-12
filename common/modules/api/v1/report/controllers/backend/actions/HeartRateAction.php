@@ -35,7 +35,7 @@ class HeartRateAction extends Action
         $heartRateGraphData = $calcDataModel->heartRateGraphData($params);
         $lastNightHeartRateParams = $sleepQualityModel->lastNightHeartRateParams($params);
 
-        if ($heartRateGraphData) {
+        if (is_array($heartRateGraphData)) {
             foreach ($heartRateGraphData as $ln) {
                 $graphData[] = [
                     'chart' => [
@@ -44,8 +44,10 @@ class HeartRateAction extends Action
                     ],
                 ];
             }
-            $graphData[] = $lastNightHeartRateParams;
+        } else {
+            $graphData[] = $heartRateGraphData;
         }
+        $graphData[] = $lastNightHeartRateParams;
 
         return $graphData;
     }

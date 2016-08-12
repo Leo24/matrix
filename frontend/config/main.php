@@ -176,6 +176,7 @@ return [
                         'report/averages' => 'api/v1/report/backend/report',
                         'report/heart-rate' => 'api/v1/report/backend/report',
                         'report/heart-health' => 'api/v1/report/backend/report',
+                        'report/breathing' => 'api/v1/report/backend/report',
                     ],
                     'patterns' => [
                         'GET sleep-cycles' => 'sleep-cycles',

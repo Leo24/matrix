@@ -211,7 +211,7 @@ class SleepQuality extends ActiveRecord
      *
      * @return array
      */
-    public function sleepQualityData($params)
+    public function sleepQualityGraphData($params)
     {
         $this->load($params);
 

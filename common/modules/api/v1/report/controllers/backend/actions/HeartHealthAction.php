@@ -35,9 +35,11 @@ class HeartHealthAction extends Action
         $hrvRmssdDataModel = new HrvRmssdData();
         /** @var  $hrvDataModel HrvData.php */
         $hrvDataModel = new HrvData();
+        
         $heartHealthGraphData = $hrvRmssdDataModel->heartHealthGraphData($params);
         $lastNightHeartHealthParams = $hrvDataModel->lastNightHeartHealthParams($params);
-        if ($heartHealthGraphData) {
+        
+        if (is_array($heartHealthGraphData)) {
             foreach ($heartHealthGraphData as $ln) {
                 $graphData[] = [
 
@@ -47,8 +49,10 @@ class HeartHealthAction extends Action
                     ],
                 ];
             }
-            $graphData[] = $lastNightHeartHealthParams;
+        } else {
+            $graphData[] = $heartHealthGraphData;
         }
+        $graphData[] = $lastNightHeartHealthParams;
 
         return $graphData;
     }
