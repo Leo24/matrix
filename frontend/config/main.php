@@ -38,8 +38,8 @@ return [
                         'user'              => [
                             'class' => 'common\modules\api\v1\user\Module'
                         ],
-                        'synchronize'         => [
-                            'class' => 'common\modules\api\v1\synchronize\Module'
+                        'emfit'         => [
+                            'class' => 'common\modules\api\v1\emfit\Module'
                         ],
                     ]
                 ],
@@ -136,7 +136,7 @@ return [
                     'class'      => 'yii\rest\UrlRule',
                     'prefix'     => 'api/v1/',
                     'controller' => [
-                        'synchronize/emfitdata' => 'api/v1/synchronize/emfit-data'
+                        'synchronize/emfitdata' => 'api/v1/emfit/synchronize'
                     ],
                     'patterns'   => ['POST' => 'save-data'],
                     'except'     => ['update', 'view', 'delete', 'create', 'view']

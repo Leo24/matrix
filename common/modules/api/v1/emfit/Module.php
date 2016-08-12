@@ -1,6 +1,6 @@
 <?php
 
-namespace common\modules\api\v1\synchronize;
+namespace common\modules\api\v1\emfit;
 
 /**
  * Class Module
@@ -8,7 +8,7 @@ namespace common\modules\api\v1\synchronize;
  */
 class Module extends \yii\base\Module
 {
-    public $controllerNamespace = 'common\modules\api\v1\synchronize\controllers';
+    public $controllerNamespace = 'common\modules\api\v1\emfit\controllers';
 
     /**
      * @var string Major API version. Property should be filled

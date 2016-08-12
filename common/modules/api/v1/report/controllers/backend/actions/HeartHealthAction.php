@@ -2,11 +2,11 @@
 
 namespace common\modules\api\v1\report\controllers\backend\actions;
 
-use common\modules\api\v1\synchronize\models\HrvData;
+use common\modules\api\v1\emfit\models\HrvData;
 use Yii;
 use yii\base\Exception;
 use yii\web\BadRequestHttpException;
-use common\modules\api\v1\synchronize\models\HrvRmssdData;
+use common\modules\api\v1\emfit\models\HrvRmssdData;
 use \yii\rest\Action;
 use yii\web\ServerErrorHttpException;
 

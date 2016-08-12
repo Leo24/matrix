@@ -1,6 +1,6 @@
 <?php
 
-namespace common\modules\api\v1\synchronize\models;
+namespace common\modules\api\v1\emfit\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;

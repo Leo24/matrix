@@ -1,32 +1,31 @@
 <?php
 
-namespace common\modules\api\v1\synchronize\controllers\actions\emfitData;
+namespace common\modules\api\v1\emfit\controllers\actions\synchronize;
 
-use common\modules\api\v1\synchronize\models\CalcData;
-use common\modules\api\v1\synchronize\models\HrvData;
-use common\modules\api\v1\synchronize\models\HrvRmssdData;
-use common\modules\api\v1\synchronize\models\Movement;
-use common\modules\api\v1\synchronize\models\SleepData;
-use common\modules\api\v1\synchronize\models\SleepQuality;
+use common\modules\api\v1\emfit\models\CalcData;
+use common\modules\api\v1\emfit\models\HrvData;
+use common\modules\api\v1\emfit\models\HrvRmssdData;
+use common\modules\api\v1\emfit\models\Movement;
+use common\modules\api\v1\emfit\models\SleepData;
+use common\modules\api\v1\emfit\models\SleepQuality;
+use common\modules\api\v1\user\models\Device;
 use Yii;
 use yii\base\Exception;
 use yii\console\ErrorHandler;
 use yii\rest\Action;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
-use common\modules\api\v1\device\models\Device;
 use common\modules\api\v1\user\models\User;
 
 /**
  * Class SaveAction
- *
- * Action for saving emfit data in DB
- *
- * @package common\modules\api\v1\synchronize\controllers\actions\emfitData
+ * @package common\modules\api\v1\emfit\controllers\actions\synchronize
  */
 class SaveAction extends Action
 {
     /**
+     * Action for saving emfit data in DB
+     *
      * @parse data into database
      */
     public function run()
@@ -113,7 +112,7 @@ class SaveAction extends Action
 
             \Yii::error(ErrorHandler::convertExceptionToString($e), \Yii::$app->params['logger']['synchronize_emfit_data']['category']);
 
-            throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
+            throw new ServerErrorHttpException('Failed to synchronize emfit data for unknown reason.');
         }
     }
 }

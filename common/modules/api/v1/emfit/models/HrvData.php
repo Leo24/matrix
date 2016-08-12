@@ -1,6 +1,6 @@
 <?php
 
-namespace common\modules\api\v1\synchronize\models;
+namespace common\modules\api\v1\emfit\models;
 
 use common\modules\api\v1\user\models\User;
 use Yii;
