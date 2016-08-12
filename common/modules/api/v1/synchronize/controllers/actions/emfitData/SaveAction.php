@@ -5,6 +5,7 @@ namespace common\modules\api\v1\synchronize\controllers\actions\emfitData;
 use common\modules\api\v1\synchronize\models\CalcData;
 use common\modules\api\v1\synchronize\models\HrvData;
 use common\modules\api\v1\synchronize\models\HrvRmssdData;
+use common\modules\api\v1\synchronize\models\Movement;
 use common\modules\api\v1\synchronize\models\SleepData;
 use common\modules\api\v1\synchronize\models\SleepQuality;
 use Yii;
@@ -91,6 +92,15 @@ class SaveAction extends Action
                 $hrvRmssdDataModel = new HrvRmssdData();
 
                 $hrvRmssdDataModel->saveRmssdData($json['hrv_rmssd_data'], $user->id);
+            }
+
+            /** Saving Movement information in DB */
+            if (!empty($json['tossnturn_data'])) {
+
+                /** @var  $movementModel Movement.php */
+                $movementModel = new Movement();
+
+                $movementModel->saveMovement($json['tossnturn_data'], $user->id);
             }
 
             $transaction->commit();
