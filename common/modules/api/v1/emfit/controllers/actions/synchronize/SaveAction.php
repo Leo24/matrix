@@ -39,13 +39,14 @@ class SaveAction extends Action
         try {
             $json = Yii::$app->request->bodyParams;
 
-            /** @var  $device Device.php */
-            $device = Device::findOne(['sn' => $json['device']]);
-            if (!$device) {
-                throw new NotFoundHttpException('Device not found!');
-            }
+//            /** @var  $device Device.php */
+//            $device = Device::findOne(['sn' => $json['device']]);
+//            if (!$device) {
+//                throw new NotFoundHttpException('Device not found!');
+//            }
 
-            $user = User::findOne(['id' => $device->user_id]);
+            // todo заглушка временная
+            $user = User::findOne(['id' => 3]);
             if (!$user) {
                 throw new NotFoundHttpException('User not found!');
             }
