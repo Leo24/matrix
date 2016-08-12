@@ -12,14 +12,12 @@ use yii\web\ServerErrorHttpException;
 
 /**
  * Class HeartRateAction
- * 
- * Action for getting HeartRate average data from last night and data for graph
- *
  * @package common\modules\api\v1\report\controllers\backend\actions
  */
 class HeartRateAction extends Action
 {
     /**
+     * Action for getting HeartRate average data from last night and data for graph
      * @return array with graph data
      * @throws \yii\web\ServerErrorHttpException
      * @throws \yii\web\BadRequestHttpException
@@ -31,7 +29,6 @@ class HeartRateAction extends Action
         if (!isset($params['user_id']) || !isset($params['startDate']) || !isset($params['endDate']) || !isset($params['currentDate'])) {
             throw new BadRequestHttpException('Params startDate, endDate, currentDate and user_id are required.');
         }
-
         try {
             /** @var  $CalcDataModel CalcData */
             $calcDataModel = new CalcData();

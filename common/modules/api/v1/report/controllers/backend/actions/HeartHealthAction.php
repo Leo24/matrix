@@ -6,22 +6,18 @@ use common\modules\api\v1\synchronize\models\HrvData;
 use Yii;
 use yii\base\Exception;
 use yii\web\BadRequestHttpException;
-use yii\web\HttpException;
-use common\modules\api\v1\synchronize\models\CalcData;
 use common\modules\api\v1\synchronize\models\HrvRmssdData;
 use \yii\rest\Action;
 use yii\web\ServerErrorHttpException;
 
 /**
  * Class HeartHealthAction
- *
- * Action for getting HeartHealth average data from last night and data for graph
- *
  * @package common\modules\api\v1\report\controllers\backend\actions
  */
 class HeartHealthAction extends Action
 {
     /**
+     * Action for getting HeartHealth average data from last night and data for graph
      * @return array with graph data
      * @throws \yii\web\ServerErrorHttpException
      * @throws \yii\web\BadRequestHttpException

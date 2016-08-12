@@ -4,7 +4,6 @@ namespace common\modules\api\v1\synchronize\models;
 
 use common\modules\api\v1\user\models\User;
 use Yii;
-use yii\base\InvalidParamException;
 use yii\behaviors\TimestampBehavior;
 use \yii\db\ActiveRecord;
 use yii\db\Query;
@@ -193,6 +192,7 @@ class SleepQuality extends ActiveRecord
     {
         $this->load($params);
         $today = time();
+        
         $shortTerm = (new Query())->from('sleep_quality')
             ->where(['user_id' => $this->user_id])
             ->andWhere(['between', 'from', strtotime("-1 month", $today), $today]);
@@ -218,6 +218,7 @@ class SleepQuality extends ActiveRecord
         $this->load($params);
 
         $query = (new Query())
+            
             ->select(['{{from}}', '{{sleep_score}}'])
             ->from('sleep_quality')
             ->where(['user_id' => $this->user_id])
@@ -238,6 +239,7 @@ class SleepQuality extends ActiveRecord
         $this->load($params);
 
         $query = (new Query())
+            
             ->select(['user_id', 'from as date','avg_hr as last_night', 'max_hr as highest', 'min_hr as lowest' ])
             ->from('sleep_quality')
             ->where(['user_id' => $this->user_id])
@@ -276,15 +278,13 @@ class SleepQuality extends ActiveRecord
     public function averages($params)
     {
         $this->load($params);
+        
         $query = (new Query())
             ->select(['user_id', 'hrv_score as heart_rate', 'duration as duration', 'avg_rr as breathing', 'fm_count as movement' ])
             ->from('sleep_quality')
-            ->where(['user_id' => $this->user_id]);
-        if ($this->currentDate) {
-            $query->andWhere(['between', 'from', strtotime("-1 day", $this->currentDate), $this->currentDate]);
-        } else {
-            return 'Param currentDate is Required.';
-        }
+            ->where(['user_id' => $this->user_id])
+            ->andWhere(['between', 'from', strtotime("-1 day", $this->currentDate), $this->currentDate]);
+        
         return $query->all();
     }
     /**

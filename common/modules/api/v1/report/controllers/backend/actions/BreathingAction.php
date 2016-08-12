@@ -15,13 +15,13 @@ use yii\web\ServerErrorHttpException;
 /**
  * Class BreathingAction
  *
- * Action for getting Breathing average data from last night and data for graph
  *
  * @package common\modules\api\v1\report\controllers\backend\actions
  */
 class BreathingAction extends Action
 {
     /**
+     * Action for getting Breathing average data from last night and data for graph
      * @return array with graph data
      * @throws \yii\web\ServerErrorHttpException
      * @throws \yii\web\BadRequestHttpException
@@ -30,11 +30,9 @@ class BreathingAction extends Action
     {
         $graphData = [];
         $params = \Yii::$app->request->queryParams;
-
         if (!isset($params['user_id']) || !isset($params['startDate']) || !isset($params['endDate']) || !isset($params['currentDate'])) {
             throw new BadRequestHttpException('Params startDate, endDate, currentDate and user_id are required.');
         }
-
         try {
             /** @var  $calcDataModel CalcData.php */
             $calcDataModel = new CalcData();
