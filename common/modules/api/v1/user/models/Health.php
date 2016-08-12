@@ -120,8 +120,7 @@ class Health extends ActiveRecord
      */
     public function createDefaultRecordForNewRegisterUser($userId)
     {
-        $model = new Health();
-        $model->user_id = $userId;
+        $this->user_id = $userId;
         if (!$this->save()) {
             throw new Exception(implode(', ', $this->getFirstErrors()));
         }
