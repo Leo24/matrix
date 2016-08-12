@@ -13,6 +13,7 @@ use common\modules\api\v1\report\controllers\backend\actions\SleepCyclesAction;
 use common\modules\api\v1\report\controllers\backend\actions\HeartRateAction;
 use common\modules\api\v1\report\controllers\backend\actions\HeartHealthAction;
 use common\modules\api\v1\report\controllers\backend\actions\BreathingAction;
+use common\modules\api\v1\report\controllers\backend\actions\StressAction;
 
 /**
  * Report controller
@@ -72,6 +73,11 @@ class ReportController extends ActiveController
             ],
             'breathing' => [
                 'class'       => BreathingAction::class,
+                'modelClass'  => SleepData::class,
+                'checkAccess' => [$this, 'checkAccess']
+            ],
+            'stress' => [
+                'class'       => StressAction::class,
                 'modelClass'  => SleepData::class,
                 'checkAccess' => [$this, 'checkAccess']
             ],

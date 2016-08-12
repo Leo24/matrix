@@ -148,4 +148,24 @@ class HrvRmssdData extends ActiveRecord
 
         return $query->all();
     }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    public function stressGraphData($params)
+    {
+        $this->load($params);
+
+        $query = (new Query())
+            ->select(['timestamp', '(low_frequency + high_frequency)/2 as stress_data'])
+            ->from('hrv_rmssd_data')
+            ->where(['user_id' => $this->user_id])
+            ->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
+
+        return $query->all();
+    }
 }

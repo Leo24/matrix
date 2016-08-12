@@ -49,6 +49,7 @@ class HrvData extends ActiveRecord
     {
         return '';
     }
+
     /**
      * @inheritdoc
      */
@@ -69,14 +70,14 @@ class HrvData extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id'             => 'ID',
-            'user_id'        => 'User ID',
-            'timestamp'      => 'Timestamp',
-            'start_rmssd'    => 'Start Rmssd',
-            'end_rmssd'      => 'End Rmssd',
+            'id' => 'ID',
+            'user_id' => 'User ID',
+            'timestamp' => 'Timestamp',
+            'start_rmssd' => 'Start Rmssd',
+            'end_rmssd' => 'End Rmssd',
             'total_recovery' => 'Total Recovery',
             'recovery_ratio' => 'Recovery Ratio',
-            'recovery_rate'  => 'Recovery Rate',
+            'recovery_rate' => 'Recovery Rate',
         ];
     }
 
@@ -95,10 +96,10 @@ class HrvData extends ActiveRecord
     {
         return [
             [
-                'class'              => TimestampBehavior::className(),
+                'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => 'updated_at',
-                'value'              => function () {
+                'value' => function () {
                     return time();
                 },
             ],
@@ -119,15 +120,15 @@ class HrvData extends ActiveRecord
 
         foreach ($jsonHrvData as $k => $m) {
             $rows[$k] = [
-                'user_id'        => $userId,
-                'start_rmssd'    => isset($m[0]) ? (float)$m[0] : null,
-                'end_rmssd'      => isset($m[1]) ? (float)$m[1] : null,
+                'user_id' => $userId,
+                'start_rmssd' => isset($m[0]) ? (float)$m[0] : null,
+                'end_rmssd' => isset($m[1]) ? (float)$m[1] : null,
                 'total_recovery' => isset($m[2]) ? (float)$m[2] : null,
                 'recovery_ratio' => isset($m[3]) ? (float)$m[3] : null,
-                'recovery_rate'  => isset($m[4]) ? (float)$m[4] : null,
-                'created_at'     => time(),
-                'updated_at'     => time(),
-                'timestamp'      => $timestamp
+                'recovery_rate' => isset($m[4]) ? (float)$m[4] : null,
+                'created_at' => time(),
+                'updated_at' => time(),
+                'timestamp' => $timestamp
             ];
         }
 
@@ -156,14 +157,13 @@ class HrvData extends ActiveRecord
                 'start_rmssd as evening_average',
                 'end_rmssd as morning_average',
                 'recovery_ratio as recovery'
-              ])
+            ])
             ->from('hrv_data')
             ->where(['user_id' => $this->user_id])
             ->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
 
         return $query->all();
     }
-
 
     /**
      * Creates data provider instance with search query applied
@@ -177,12 +177,11 @@ class HrvData extends ActiveRecord
         $this->load($params);
 
         $query = (new Query())
-            ->select(['total_recovery as recovery', 'start_rmssd as evening_hrv', 'end_rmssd as morning_hrv', 'recovery_rate as increase'])->distinct()
+            ->select(['timestamp','total_recovery as recovery', 'start_rmssd as evening_hrv', 'end_rmssd as morning_hrv', 'recovery_rate as increase'])->distinct()
             ->from('hrv_data')
             ->where(['user_id' => $this->user_id])
             ->andWhere(['between', 'timestamp', strtotime("-1 day", $this->currentDate), $this->currentDate]);
 
         return $query->all();
     }
-
 }
