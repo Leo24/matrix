@@ -213,6 +213,8 @@ class SleepQuality extends ActiveRecord
 
         if ($this->startDate && $this->endDate) {
             $query->andWhere(['between', 'from', $this->startDate, $this->endDate]);
+        } else {
+            return 'Params startDate and endDate are Required.';
         }
         return $query->all();
     }
@@ -233,6 +235,8 @@ class SleepQuality extends ActiveRecord
             ->where(['user_id' => $this->user_id]);
         if ($this->currentDate) {
             $query->andWhere(['between', 'from', strtotime("-1 day", $this->currentDate), $this->currentDate]);
+        } else {
+            return 'Param current is Required.';
         }
         return $query->all();
     }

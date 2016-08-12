@@ -144,6 +144,8 @@ class HrvRmssdData extends ActiveRecord
             ->where(['user_id' => $this->user_id]);
         if ($this->startDate && $this->endDate) {
             $query->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
+        } else {
+            return 'Params startDate and endDate are Required.';
         }
         return $query->all();
     }
