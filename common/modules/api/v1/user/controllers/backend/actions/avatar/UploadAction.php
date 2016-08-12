@@ -33,17 +33,9 @@ class UploadAction extends Action
                 throw new NotFoundHttpException('Use not found');
             }
 
-            $profileModel->setScenario(Profile::SCENARIO_UPLOAD_AVATAR);
-            $profileModel->avatar = UploadedFile::getInstanceByName('avatar');
+            $uploadedFile = UploadedFile::getInstanceByName('avatar');
 
-            if ($profileModel->validate()) {
-                $profileModel->deleteAvatar();
-                $profileModel->avatar_url = $profileModel->getAvatarUrl($profileModel->uploadAvatar());
-                $profileModel->save();
-                return $profileModel;
-            }
-
-            throw new HttpException(422, 'Validation exception');
+            return $profileModel->uploadAvatar($uploadedFile);
         }
         throw new BadRequestHttpException('Bad request');
     }
