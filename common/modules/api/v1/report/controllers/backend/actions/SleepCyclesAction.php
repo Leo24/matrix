@@ -33,15 +33,14 @@ class SleepCyclesAction extends Action
         try {
             /** @var  $SleepDataModel SleepData.php */
             $sleepDataModel = new SleepData();
+            /** @var  $sleepQualityModel SleepQuality.php */
             $sleepQualityModel = new SleepQuality();
+            /** @var  $hrvDataModel HrvData.php */
             $hrvDataModel = new HrvData();
 
             $sleepQualityData = $sleepQualityModel->sleepQualityData($params);
             $sleepRecoveryData = $hrvDataModel->sleepRecoveryData($params);
             $sleepCyclesData = $sleepQualityModel->sleepCyclesData($params);
-
-
-            $currentAverage = $sleepQualityModel->currentAverage($params);
 
             $sleepCyclesGraphData = $sleepDataModel->sleepCyclesGraphData($params);
 
