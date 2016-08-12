@@ -287,6 +287,51 @@ class SleepQuality extends ActiveRecord
         
         return $query->all();
     }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    public function sleepQualityData($params)
+    {
+        $this->load($params);
+
+        $query = (new Query())
+            ->select(['sleep_score as sleep_quality', 'duration as duration', 'from as fall_asleep', 'tossnturn_count as tosses_turns', 'awakenings' ])
+            ->from('sleep_quality')
+            ->where(['user_id' => $this->user_id])
+            ->andWhere(['between', 'from', strtotime("-1 day", $this->currentDate), $this->currentDate]);
+
+        return $query->all();
+    }
+
+ 
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    public function sleepCyclesData($params)
+    {
+        $this->load($params);
+
+        $query = (new Query())
+            ->select(['duration_in_bed as time_asleep', 'from as fall_asleep', 'duration_in_light as light_sleep', 'duration_in_deep as deep_sleep', 'duration_in_rem as rem_sleep', 'awakenings'])
+            ->from('sleep_quality')
+            ->where(['user_id' => $this->user_id])
+            ->andWhere(['between', 'from', strtotime("-1 day", $this->currentDate), $this->currentDate]);
+
+        return $query->all();
+    }
+
+
+
     /**
      * Method of saving sleep quality
      *

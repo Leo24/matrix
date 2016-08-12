@@ -31,6 +31,9 @@ class HrvData extends ActiveRecord
     /** @var  $endDate */
     public $endDate;
 
+    /** @var  $currentDate */
+    public $currentDate;
+
     /**
      * @inheritdoc
      */
@@ -157,6 +160,27 @@ class HrvData extends ActiveRecord
             ->from('hrv_data')
             ->where(['user_id' => $this->user_id])
             ->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
+
+        return $query->all();
+    }
+
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    public function sleepRecoveryData($params)
+    {
+        $this->load($params);
+
+        $query = (new Query())
+            ->select(['total_recovery as recovery', 'start_rmssd as evening_hrv', 'end_rmssd as morning_hrv', 'recovery_rate as increase'])->distinct()
+            ->from('hrv_data')
+            ->where(['user_id' => $this->user_id])
+            ->andWhere(['between', 'timestamp', strtotime("-1 day", $this->currentDate), $this->currentDate]);
 
         return $query->all();
     }
