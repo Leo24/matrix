@@ -4,9 +4,11 @@ namespace common\modules\api\v1\synchronize\models;
 
 use common\modules\api\v1\user\models\User;
 use Yii;
+use yii\base\InvalidParamException;
 use yii\behaviors\TimestampBehavior;
 use \yii\db\ActiveRecord;
 use yii\db\Query;
+use yii\web\BadRequestHttpException;
 
 /**
  * This is the model class for table "sleep_quality".
@@ -207,9 +209,9 @@ class SleepQuality extends ActiveRecord
     /**
      * Creates data provider instance with search query applied
      *
-     * @param array $params
-     *
+     * @param $params
      * @return array
+     * @throws BadRequestHttpException
      */
     public function sleepQualityGraphData($params)
     {
@@ -218,35 +220,29 @@ class SleepQuality extends ActiveRecord
         $query = (new Query())
             ->select(['{{from}}', '{{sleep_score}}'])
             ->from('sleep_quality')
-            ->where(['user_id' => $this->user_id]);
+            ->where(['user_id' => $this->user_id])
+            ->andWhere(['between', 'from', $this->startDate, $this->endDate]);
 
-        if ($this->startDate && $this->endDate) {
-            $query->andWhere(['between', 'from', $this->startDate, $this->endDate]);
-        } else {
-            return 'Params startDate and endDate are Required.';
-        }
         return $query->all();
     }
 
     /**
-     * Creates data provider instance with search query applied
+     *  Creates data provider instance with search query applied
      *
-     * @param array $params
-     *
+     * @param $params
      * @return array
+     * @throws BadRequestHttpException
      */
     public function lastNightHeartRateParams($params)
     {
         $this->load($params);
+
         $query = (new Query())
             ->select(['user_id', 'from as date','avg_hr as last_night', 'max_hr as highest', 'min_hr as lowest' ])
             ->from('sleep_quality')
-            ->where(['user_id' => $this->user_id]);
-        if ($this->currentDate) {
-            $query->andWhere(['between', 'from', strtotime("-1 day", $this->currentDate), $this->currentDate]);
-        } else {
-            return 'Param currentDate is Required.';
-        }
+            ->where(['user_id' => $this->user_id])
+            ->andWhere(['between', 'from', strtotime("-1 day", $this->currentDate), $this->currentDate]);
+
         return $query->all();
     }
 
@@ -260,15 +256,13 @@ class SleepQuality extends ActiveRecord
     public function lastNightBreathingParams($params)
     {
         $this->load($params);
+
         $query = (new Query())
             ->select(['user_id', 'from as date','avg_rr as last_night', 'max_rr as highest', 'min_rr as lowest' ])
             ->from('sleep_quality')
-            ->where(['user_id' => $this->user_id]);
-        if ($this->currentDate) {
-            $query->andWhere(['between', 'from', strtotime("-1 day", $this->currentDate), $this->currentDate]);
-        } else {
-            return 'Param currentDate is Required.';
-        }
+            ->where(['user_id' => $this->user_id])
+            ->andWhere(['between', 'from', strtotime("-1 day", $this->currentDate), $this->currentDate]);
+
         return $query->all();
     }
 
