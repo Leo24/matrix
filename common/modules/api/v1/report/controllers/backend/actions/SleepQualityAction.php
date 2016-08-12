@@ -12,7 +12,8 @@ use yii\web\ServerErrorHttpException;
 
 /**
  * Class SleepCycles
- * Custom SleepCycles action for ReportController
+ *
+ * Action for getting SleepQuality average data from last night and data for graph *
  *
  * @package common\modules\api\v1\report\controllers\backend\actions
  */
@@ -24,11 +25,9 @@ class SleepQualityAction extends Action
     public $modelClass = SleepQuality::class;
 
     /**
-     * Displays a model.
-     *
-     * @return \yii\db\ActiveRecordInterface the model being displayed
-     * @throws HttpException
-     * @throws \yii\web\NotFoundHttpException
+     * @return array with graph data
+     * @throws \yii\web\ServerErrorHttpException
+     * @throws \yii\web\BadRequestHttpException
      */
     public function run()
     {

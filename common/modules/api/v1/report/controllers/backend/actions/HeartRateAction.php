@@ -5,7 +5,6 @@ namespace common\modules\api\v1\report\controllers\backend\actions;
 use Yii;
 use yii\base\Exception;
 use yii\web\BadRequestHttpException;
-use yii\web\HttpException;
 use common\modules\api\v1\synchronize\models\CalcData;
 use common\modules\api\v1\synchronize\models\SleepQuality;
 use \yii\rest\Action;
@@ -13,17 +12,17 @@ use yii\web\ServerErrorHttpException;
 
 /**
  * Class HeartRateAction
- * Custom HeartRate action for ReportController
+ * 
+ * Action for getting HeartRate average data from last night and data for graph
  *
  * @package common\modules\api\v1\report\controllers\backend\actions
  */
 class HeartRateAction extends Action
 {
     /**
-     * Displays a model.
-     * @return \yii\db\ActiveRecordInterface the model being displayed
-     * @throws HttpException
-     * @throws \yii\web\NotFoundHttpException
+     * @return array with graph data
+     * @throws \yii\web\ServerErrorHttpException
+     * @throws \yii\web\BadRequestHttpException
      */
     public function run()
     {

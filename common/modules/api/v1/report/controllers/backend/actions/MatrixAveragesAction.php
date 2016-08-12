@@ -8,8 +8,9 @@ use common\modules\api\v1\synchronize\models\SleepQuality;
 use \yii\rest\Action;
 
 /**
- * Class AveragesAction
- * Custom Averages action for ReportController
+ * Class MatrixAverages
+ *
+ * Action for getting MatrixAverages
  *
  * @package common\modules\api\v1\report\controllers\backend\actions
  */
@@ -17,10 +18,9 @@ use \yii\rest\Action;
 class MatrixAveragesAction extends Action
 {
     /**
-     * Displays a model.
-     * @return \yii\db\ActiveRecordInterface the model being displayed
-     * @throws HttpException
-     * @throws \yii\web\NotFoundHttpException
+     * @return array with matrix averages
+     * @throws \yii\web\ServerErrorHttpException
+     * @throws \yii\web\BadRequestHttpException
      */
     public function run()
     {

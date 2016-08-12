@@ -13,19 +13,18 @@ use \yii\rest\Action;
 use yii\web\ServerErrorHttpException;
 
 /**
- * Class HeartRateAction
- * Custom HeartRate action for ReportController
+ * Class HeartHealthAction
+ *
+ * Action for getting HeartHealth average data from last night and data for graph
  *
  * @package common\modules\api\v1\report\controllers\backend\actions
  */
 class HeartHealthAction extends Action
 {
-
     /**
-     * Displays a model.
-     * @return \yii\db\ActiveRecordInterface the model being displayed
-     * @throws HttpException
-     * @throws \yii\web\NotFoundHttpException
+     * @return array with graph data
+     * @throws \yii\web\ServerErrorHttpException
+     * @throws \yii\web\BadRequestHttpException
      */
     public function run()
     {
