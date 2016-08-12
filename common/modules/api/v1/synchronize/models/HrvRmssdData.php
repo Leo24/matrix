@@ -4,6 +4,7 @@ namespace common\modules\api\v1\synchronize\models;
 
 use common\modules\api\v1\user\models\User;
 use Yii;
+use yii\base\InvalidParamException;
 use yii\behaviors\TimestampBehavior;
 use \yii\db\ActiveRecord;
 use yii\db\Query;
@@ -138,15 +139,13 @@ class HrvRmssdData extends ActiveRecord
     public function heartHealthGraphData($params)
     {
         $this->load($params);
+
         $query = (new Query())
             ->select(['{{timestamp}}', '{{rmssd}}'])
             ->from('hrv_rmssd_data')
-            ->where(['user_id' => $this->user_id]);
-        if ($this->startDate && $this->endDate) {
-            $query->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
-        } else {
-            return 'Params startDate and endDate are Required.';
-        }
+            ->where(['user_id' => $this->user_id])
+            ->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
+
         return $query->all();
     }
 }

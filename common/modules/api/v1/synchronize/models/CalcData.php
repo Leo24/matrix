@@ -140,15 +140,13 @@ class CalcData extends ActiveRecord
     public function heartRateGraphData($params)
     {
         $this->load($params);
+
         $query = (new Query())
             ->select(['{{timestamp}}', '{{heart_rate}}'])
             ->from('calc_data')
-            ->where(['user_id' => $this->user_id]);
-        if ($this->startDate && $this->endDate) {
-            $query->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
-        } else {
-            return 'Params startDate and endDate are Required.';
-        }
+            ->where(['user_id' => $this->user_id])
+            ->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
+
         return $query->all();
     }
 
@@ -162,15 +160,13 @@ class CalcData extends ActiveRecord
     public function breathingGraphData($params)
     {
         $this->load($params);
+
         $query = (new Query())
             ->select(['{{timestamp}}', '{{respiration_rate}}'])
             ->from('calc_data')
-            ->where(['user_id' => $this->user_id]);
-        if ($this->startDate && $this->endDate) {
-            $query->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
-        } else {
-            return 'Params startDate and endDate are Required.';
-        }
+            ->where(['user_id' => $this->user_id])
+            ->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
+
         return $query->all();
     }
 }

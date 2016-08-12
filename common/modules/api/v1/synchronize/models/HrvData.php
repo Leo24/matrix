@@ -145,6 +145,7 @@ class HrvData extends ActiveRecord
     public function lastNightHeartHealthParams($params)
     {
         $this->load($params);
+
         $query = (new Query())
             ->select([
                 'user_id',
@@ -154,12 +155,9 @@ class HrvData extends ActiveRecord
                 'recovery_ratio as recovery'
               ])
             ->from('hrv_data')
-            ->where(['user_id' => $this->user_id]);
-        if ($this->startDate && $this->endDate) {
-                $query->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
-        } else {
-            return 'Params startDate and endDate are Required.';
-        }
+            ->where(['user_id' => $this->user_id])
+            ->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
+
         return $query->all();
     }
 
