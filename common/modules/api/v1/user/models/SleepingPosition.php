@@ -3,6 +3,7 @@
 namespace common\modules\api\v1\user\models;
 
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 
@@ -49,16 +50,28 @@ class SleepingPosition extends ActiveRecord
     /**
      * @inheritdoc
      */
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[User::SCENARIO_REGISTER] = ['back_sleeper', 'side_sleeper', 'stomach_sleeper', 'user_id'];
+
+        return $scenarios;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
             [['back_sleeper', 'side_sleeper', 'stomach_sleeper'], 'boolean'],
-            [['back_sleeper', 'side_sleeper', 'stomach_sleeper'], 'safe'],
+            [['back_sleeper', 'side_sleeper', 'stomach_sleeper', 'user_id'], 'safe'],
             [
                 'user_id',
                 'unique',
                 'targetClass' => self::className(),
-                'message'     => Yii::t('app', 'Sleeping position data exists')
+                'message'     => Yii::t('app', 'Sleeping position data exists'),
+                'on'          => User::SCENARIO_REGISTER
             ],
         ];
     }
@@ -69,5 +82,45 @@ class SleepingPosition extends ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    /**
+     * @return string
+     */
+    public function formName()
+    {
+        return '';
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function search($params)
+    {
+        $query = self::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere([
+            'user_id'         => $this->user_id,
+            'back_sleeper'    => $this->back_sleeper,
+            'side_sleeper'    => $this->side_sleeper,
+            'stomach_sleeper' => $this->stomach_sleeper,
+            'updated_at'      => $this->updated_at,
+        ]);
+
+        return $dataProvider;
     }
 }
