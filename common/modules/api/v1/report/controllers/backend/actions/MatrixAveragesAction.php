@@ -14,7 +14,7 @@ use \yii\rest\Action;
  * @package common\modules\api\v1\report\controllers\backend\actions
  */
 
-class AveragesAction extends Action
+class MatrixAveragesAction extends Action
 {
     /**
      * Displays a model.

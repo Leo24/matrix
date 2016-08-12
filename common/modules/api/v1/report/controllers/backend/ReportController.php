@@ -7,7 +7,7 @@ use yii\filters\auth\HttpBearerAuth;
 use common\modules\api\v1\synchronize\models\SleepData;
 use common\modules\api\v1\synchronize\models\SleepQuality;
 use common\modules\api\v1\synchronize\models\HrvData;
-use common\modules\api\v1\report\controllers\backend\actions\AveragesAction;
+use common\modules\api\v1\report\controllers\backend\actions\MatrixAveragesAction;
 use common\modules\api\v1\report\controllers\backend\actions\SleepQualityAction;
 use common\modules\api\v1\report\controllers\backend\actions\HeartRateAction;
 use common\modules\api\v1\report\controllers\backend\actions\HeartHealthAction;
@@ -44,8 +44,8 @@ class ReportController extends ActiveController
         $actions = parent::actions();
         
         $additional = [
-            'averages' => [
-                'class'       => AveragesAction::class,
+            'matrix-averages' => [
+                'class'       => MatrixAveragesAction::class,
                 'modelClass'  => SleepData::class,
                 'checkAccess' => [$this, 'checkAccess']
             ],
