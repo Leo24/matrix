@@ -45,6 +45,11 @@ class SaveAction extends Action
 //                throw new NotFoundHttpException('Device not found!');
 //            }
 
+            // todo убрать в будущем. Чисто для теста
+            $device = new Device();
+            $device->sn = $json['device'];
+            $device->save(false);
+
             // todo заглушка временная
             $user = User::findOne(['id' => 3]);
             if (!$user) {
