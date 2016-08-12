@@ -239,14 +239,14 @@ class User extends ActiveRecord implements IdentityInterface
      * @param $modelErrors
      * @param bool $code
      * @return bool
-     * @throws HttpException
+     * @throws ExceptionDb
      */
     private function validationExceptionFirstMessage($modelErrors, $code = false)
     {
         if (is_array($modelErrors) && !empty($modelErrors)) {
             $fields = array_keys($modelErrors);
             $first_message = current($modelErrors[$fields[0]]);
-            throw new HttpException(422, "Validation exception: {$first_message}", $code);
+            throw new ExceptionDb("Validation exception: {$first_message}", $code);
         }
 
         return false;
@@ -332,6 +332,8 @@ class User extends ActiveRecord implements IdentityInterface
             \Yii::error(ErrorHandler::convertExceptionToString($e), \Yii::$app->params['logger']['register_user']['category']);
             throw new ServerErrorHttpException('Failed to register user for unknown reason.');
         }
+
+        throw new ServerErrorHttpException('Failed to register user for unknown reason.');
     }
 
     /**
