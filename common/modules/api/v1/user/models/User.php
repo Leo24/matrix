@@ -2,23 +2,19 @@
 
 namespace common\modules\api\v1\user\models;
 
-
 use Yii;
+use yii\base\ErrorHandler;
 use yii\base\Exception;
+use yii\db\Exception as ExceptionDb;
 use yii\db\ActiveRecord;
 use yii\web\HttpException;
 use yii\web\IdentityInterface;
 use yii\behaviors\TimestampBehavior;
-use common\modules\api\v1\block\models\Block;
-use common\modules\api\v1\device\models\Device;
-use common\modules\api\v1\health\models\Health;
-use common\modules\api\v1\profile\models\Profile;
+use common\modules\api\v1\authorization\models\Block;
 use common\modules\api\v1\notification\models\Notification;
-use common\modules\api\v1\socialNetwork\models\SocialNetwork;
 use common\modules\api\v1\settings\models\SettingNotification;
-use common\modules\api\v1\sleepingPosition\models\SleepingPosition;
-use common\modules\api\v1\reasonUsingMatrix\models\ReasonUsingMatrix;
 use common\modules\api\v1\user\traits\AuthorizationJwtTrait;
+use yii\web\ServerErrorHttpException;
 
 /**
  * This is the model class for table 'user'
@@ -243,14 +239,14 @@ class User extends ActiveRecord implements IdentityInterface
      * @param $modelErrors
      * @param bool $code
      * @return bool
-     * @throws HttpException
+     * @throws ExceptionDb
      */
-    public static function validationExceptionFirstMessage($modelErrors, $code = false)
+    private function validationExceptionFirstMessage($modelErrors, $code = false)
     {
         if (is_array($modelErrors) && !empty($modelErrors)) {
             $fields = array_keys($modelErrors);
             $first_message = current($modelErrors[$fields[0]]);
-            throw new HttpException(422, "Validation exception: {$first_message}", $code);
+            throw new ExceptionDb("Validation exception: {$first_message}", $code);
         }
 
         return false;
@@ -264,103 +260,80 @@ class User extends ActiveRecord implements IdentityInterface
      * @throws HttpException
      * @throws \yii\db\Exception
      */
-    public static function registerUser($data)
+    public function registerUser($data)
     {
-        /** @var $userModel User */
-        $userModel = new User;
-        $userModel->setScenario(self::SCENARIO_REGISTER);
-        $userModel->attributes = $data;
-        if ($userModel->validate()) {
-            $transaction = Yii::$app->db->beginTransaction();
-            try {
-                if ($userModel->save(false)) {
-                    $data['user_id'] = isset($userModel->id) ? $userModel->id : null;
+        $this->setScenario(self::SCENARIO_REGISTER);
+        $this->attributes = $data;
 
-                    /** @var $sleepingPositionModel SleepingPosition */
-                    $sleepingPositionModel = new SleepingPosition;
-                    $sleepingPositionModel->attributes = isset($data['sleeping_position']) ? $data['sleeping_position'] : null;
-                    $sleepingPositionModel->user_id = $data['user_id'];
+        $transaction = Yii::$app->db->beginTransaction();
 
-                    /** @var $reasonUsingMatrixModel ReasonUsingMatrix */
-                    $reasonUsingMatrixModel = new ReasonUsingMatrix;
-                    $reasonUsingMatrixModel->attributes = isset($data['reason_using_matrix']) ? $data['reason_using_matrix'] : null;
-                    $reasonUsingMatrixModel->user_id = $data['user_id'];
+        try {
+            if ($this->save()) {
 
-                    /** @var $deviceModel Device */
-                    $deviceModel = new Device;
-                    $deviceModel->attributes = isset($data['device']) ? $data['device'] : null;
-                    $deviceModel->user_id = $data['user_id'];
+                /** @var $sleepingPositionModel SleepingPosition */
+                $sleepingPositionModel = new SleepingPosition();
+                /** Saving "sleeping position" information for new register user  */
+                $sleepingPositionModel->saveSleepingPosition($data, $this->id);
 
-                    /** @var $profileModel Profile */
-                    $profileModel = new Profile;
-                    $profileModel->attributes = $data;
-                    $socialNetworksResponseData = [];
-                    if (isset($data['social_networks'])) {
-                        foreach ($data['social_networks'] as $socialNetwork) {
+                /** @var $reasonUsingMatrixModel ReasonUsingMatrix */
+                $reasonUsingMatrixModel = new ReasonUsingMatrix();
+                /** Saving "reason using matrix" information for new register user  */
+                $reasonUsingMatrixModel->saveReasonUsingMatrix($data, $this->id);
 
-                            /** @var $socialNetworkModel SocialNetwork */
-                            $socialNetworkModel = new SocialNetwork;
-                            $socialNetworkModel->setScenario(self::SCENARIO_REGISTER);
-                            $socialNetworkModel->attributes = $socialNetwork;
-                            $socialNetworkModel->user_id = $data['user_id'];
-                            if (!SocialNetwork::existSocialNetwork($userModel->id,
-                                $socialNetwork['social_network_type'])
-                            ) {
-                                if ($socialNetworkModel->save()) {
-                                    $socialNetworksResponseData[] = $socialNetworkModel;
-                                }
-                            }
-                        }
-                    }
+                /** @var $deviceModel Device */
+                $deviceModel = new Device();
+                /** Saving device information  */
+                $deviceModel->saveDevice($data, $this->id);
 
-                    /** @var  $settingNotification SettingNotification */
-                    $settingNotification = new SettingNotification();
-                    /** Saving default setting of notification for new register user */
-                    $settingNotification->createDefaultRecordForNewRegisterUser($data['user_id']);
+                /** @var  $settingNotification SettingNotification */
+                $settingNotification = new SettingNotification();
+                /** Saving default setting of notification for new register user */
+                $settingNotification->createDefaultRecordForNewRegisterUser($this->id);
 
-                    /** @var $healthModel Health */
-                    $healthModel = new Health();
-                    $healthModel->createDefaultRecordForNewRegisterUser($data['user_id']);
+                /** @var $healthModel Health */
+                $healthModel = new Health();
+                /** Saving default Health information for new register user */
+                $healthModel->createDefaultRecordForNewRegisterUser($this->id);
 
-                    if ($sleepingPositionModel->validate()
-                        && $reasonUsingMatrixModel->validate()
-                        && $profileModel->validate()
-                        && $deviceModel->validate()
-                    ) {
-                        $sleepingPositionModel->save(false);
-                        $reasonUsingMatrixModel->save(false);
-                        $deviceModel->save(false);
-                        $profileModel->save(false);
-                        $transaction->commit();
+                /** @var $profileModel Profile */
+                $profileModel = new Profile();
+                /** Saving profile information for new register user */
+                $profileModel->saveProfile($data, $this->id);
 
-                        return [
-                            'token'               => $userModel->getJWT(),
-                            'user'                => $userModel,
-                            'profile'             => $profileModel,
-                            'device'              => $deviceModel,
-                            'sleeping_position'   => $sleepingPositionModel,
-                            'reason_using_matrix' => $reasonUsingMatrixModel,
-                            'social_network'      => $socialNetworksResponseData,
-                        ];
-                    } else {
-                        $errors = array_merge(
-                            $userModel->errors,
-                            $reasonUsingMatrixModel->errors,
-                            $sleepingPositionModel->errors,
-                            $deviceModel->errors,
-                            $profileModel->errors
-                        );
-                        self::validationExceptionFirstMessage($errors);
+                $socialNetworksResponseData = [];
+                if (isset($data['social_networks'])) {
+                    /** Saving social_network information for new register user */
+                    foreach ($data['social_networks'] as $socialNetwork) {
+                        /** @var $socialNetworkModel SocialNetwork */
+                        $socialNetworkModel = new SocialNetwork();
+                        $socialNetworksResponseData[] = $socialNetworkModel->saveSocialNetwork($socialNetwork, $this->id);
                     }
                 }
-            } catch (Exception $e) {
-                $transaction->rollBack();
-                throw new HttpException(422, $e->getMessage());
+
+                $transaction->commit();
+
+                return [
+                    'token'               => $this->getJWT(),
+                    'user'                => $this,
+                    'profile'             => $profileModel,
+                    'device'              => $deviceModel,
+                    'sleeping_position'   => $sleepingPositionModel,
+                    'reason_using_matrix' => $reasonUsingMatrixModel,
+                    'social_network'      => $socialNetworksResponseData,
+                ];
+            } else {
+                $this->validationExceptionFirstMessage($this->errors);
             }
-        } else {
-            self::validationExceptionFirstMessage($userModel->errors);
+        } catch (ExceptionDb $e) {
+            $transaction->rollBack();
+            throw new HttpException(422, $e->getMessage());
+        } catch (Exception $e) {
+            $transaction->rollBack();
+            \Yii::error(ErrorHandler::convertExceptionToString($e), \Yii::$app->params['logger']['register_user']['category']);
+            throw new ServerErrorHttpException('Failed to register user for unknown reason.');
         }
-        throw new HttpException(500, 'Internal server error.');
+
+        throw new ServerErrorHttpException('Failed to register user for unknown reason.');
     }
 
     /**

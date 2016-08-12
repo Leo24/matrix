@@ -111,7 +111,7 @@ class SaveAction extends Action
         } catch (Exception $e) {
             $transaction->rollBack();
 
-            \Yii::error(ErrorHandler::convertExceptionToString($e), \Yii::$app->params['synchronize']['emfit_data']['loggerCategory']);
+            \Yii::error(ErrorHandler::convertExceptionToString($e), \Yii::$app->params['logger']['synchronize_emfit_data']['category']);
 
             throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
         }
