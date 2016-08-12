@@ -14,7 +14,8 @@ use yii\web\ServerErrorHttpException;
 
 /**
  * Class BreathingAction
- * Custom BreathingAction action for ReportController
+ *
+ * Action for getting Breathing average data from last night and data for graph
  *
  * @package common\modules\api\v1\report\controllers\backend\actions
  */

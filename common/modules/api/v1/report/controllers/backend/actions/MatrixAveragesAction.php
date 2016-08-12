@@ -8,8 +8,9 @@ use common\modules\api\v1\synchronize\models\SleepQuality;
 use \yii\rest\Action;
 
 /**
- * Class AveragesAction
- * Custom Averages action for ReportController
+ * Class MatrixAverages
+ *
+ * Action for getting MatrixAverages
  *
  * @package common\modules\api\v1\report\controllers\backend\actions
  */
