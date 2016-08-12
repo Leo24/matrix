@@ -155,17 +155,42 @@ return [
                 ],
                 [
                     'class'      => 'yii\rest\UrlRule',
+                    'prefix'     => 'api/v1/',
+                    'controller' => ['devices' => 'api/v1/user/backend/device'],
+                    'except'       => ['delete']
+                ],
+                [
+                    'class'      => 'yii\rest\UrlRule',
+                    'prefix'     => 'api/v1/',
+                    'controller' => ['healths' => 'api/v1/user/backend/health'],
+                    'except'       => ['delete']
+                ],
+                [
+                    'class'      => 'yii\rest\UrlRule',
+                    'prefix'     => 'api/v1/',
+                    'controller' => ['profiles' => 'api/v1/user/backend/profile'],
+                    'only'       => ['view', 'update']
+                ],
+                [
+                    'class'      => 'yii\rest\UrlRule',
+                    'prefix'     => 'api/v1/',
+                    'controller' => ['sleeping-positions' => 'api/v1/user/backend/sleeping-position'],
+                    'except'     => ['delete']
+                ],
+                [
+                    'class'      => 'yii\rest\UrlRule',
+                    'prefix'     => 'api/v1/',
+                    'controller' => ['reason-using-matrix' => 'api/v1/user/backend/reason-using-matrix'],
+                    'except'     => ['delete']
+                ],
+                [
+                    'class'      => 'yii\rest\UrlRule',
                     'pluralize'  => false,
                     'prefix'     => 'api/v1/',
                     'controller' => [
-                        'profiles'       => 'api/v1/user/backend/profile',
                         'users'          => 'api/v1/user/backend/user',
                         'notifications'  => 'api/v1/notification/backend/notification',
-                        'healths'        => 'api/v1/user/backend/health',
-                        'devices'        => 'api/v1/user/backend/device',
                         'socialnetworks' => 'api/v1/user/backend/social-network',
-                        'sleeping-positions' => 'api/v1/user/backend/sleeping-position',
-                        'reason-using-matrix' => 'api/v1/user/backend/reason-using-matrix',
                     ],
                 ],
             ],

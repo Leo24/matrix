@@ -5,6 +5,7 @@ namespace common\modules\api\v1\user\models;
 use Yii;
 use yii\base\Exception;
 use \yii\db\Exception as ExceptionDb;
+use yii\web\HttpException;
 use yii\db\ActiveRecord;
 use yii\helpers\BaseUrl;
 use yii\helpers\BaseFileHelper;
@@ -250,18 +251,28 @@ class Profile extends ActiveRecord
      * @return mixed
      * @throws \yii\base\Exception
      */
-    public function uploadAvatar()
+    public function uploadAvatar($uploadedFile)
     {
+        $this->setScenario(Profile::SCENARIO_UPLOAD_AVATAR);
+        $this->avatar = $uploadedFile;
+
         if (!is_dir(self::getAvatarPath())) {
             BaseFileHelper::createDirectory(self::getAvatarPath(), $mode = 509, $recursive = true);
         }
+
         $fileName = $this->createAvatarFileName();
         $avatarFilePath = self::getAvatarPath() . $fileName;
 
-        if ($this->avatar->saveAs($avatarFilePath)) {
-            return $fileName;
+        if ($this->validate()) {
+                $this->deleteAvatar();
+                $this->avatar->saveAs($avatarFilePath);
+                $this->avatar_url = $this->getAvatarUrl($fileName);
+                $this->save();
+
+                return $this;
         }
-        return false;
+
+        throw new HttpException(422, 'Validation exception');
     }
 
     /**

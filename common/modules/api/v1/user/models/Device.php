@@ -25,8 +25,6 @@ use yii\db\Exception;
  */
 class Device extends ActiveRecord
 {
-    const SCENARIO_REGISTER = 'register';
-
     public $sleeping_position;
 
     /**
@@ -71,7 +69,7 @@ class Device extends ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_REGISTER] = [
+        $scenarios[User::SCENARIO_REGISTER] = [
             'name',
             'position',
             'pin',
@@ -109,7 +107,7 @@ class Device extends ActiveRecord
             [
                 ['name', 'pin', 'pw', 'sn'],
                 'required',
-                'on' => self::SCENARIO_REGISTER
+                'on' => User::SCENARIO_REGISTER
             ],
             [['name', 'pin', 'pw', 'sn', 'position'], 'string', 'max' => 255],
             [['name', 'pin', 'pw', 'sn', 'position', 'user_id'], 'safe'],
@@ -119,7 +117,7 @@ class Device extends ActiveRecord
                 'unique',
                 'targetClass' => self::className(),
                 'message'     => Yii::t('app', 'Device exists'),
-                'on'          => self::SCENARIO_REGISTER
+                'on'          => User::SCENARIO_REGISTER
             ],
         ];
     }

@@ -91,7 +91,7 @@ class Health extends ActiveRecord
             ],
             [['user_id'], 'required'],
             [['height'], 'number'],
-            [['blood_type'], 'string', 'max' => 3],
+            ['blood_type', 'in', 'range' => ['A', 'B', 'AB', 'O']],
             ['user_id', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('app', 'User Id exists')],
         ];
     }
