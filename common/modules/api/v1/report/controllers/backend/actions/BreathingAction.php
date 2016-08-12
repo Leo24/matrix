@@ -2,6 +2,7 @@
 
 namespace common\modules\api\v1\report\controllers\backend\actions;
 
+use common\modules\api\v1\synchronize\models\HrvData;
 use Yii;
 use yii\web\HttpException;
 use common\modules\api\v1\synchronize\models\CalcData;
@@ -10,11 +11,12 @@ use \yii\rest\Action;
 
 /**
  * Class HeartRateAction
- * Custom HeartRate action for ReportController
+ * Custom Averages action for ReportController
  *
  * @package common\modules\api\v1\report\controllers\backend\actions
  */
-class HeartRateAction extends Action
+
+class BreathingAction extends Action
 {
     /**
      * Displays a model.
@@ -27,26 +29,24 @@ class HeartRateAction extends Action
 
         $graphData = [];
         $params = \Yii::$app->request->queryParams;
-        /** @var  $CalcDataModel CalcData */
         $calcDataModel = new CalcData();
-        /** @var  $SleepQualityModel $SleepQuality */
         $sleepQualityModel = new SleepQuality();
 
-        $heartRateGraphData = $calcDataModel->heartRateGraphData($params);
-        $lastNightHeartRateParams = $sleepQualityModel->lastNightHeartRateParams($params);
+//        $breathingGraphData = $calcDataModel->breathingGraphData($params);
+        $breathingGraphData = '';
+        $lastNightBreathingParams = $sleepQualityModel->lastNightBreathingParams($params);
 
-        if ($heartRateGraphData) {
-            foreach ($heartRateGraphData as $ln) {
+        if ($breathingGraphData) {
+            foreach ($breathingGraphData as $ln) {
                 $graphData[] = [
                     'chart' => [
                         'axis_x' => $ln['timestamp'],
-                        'axis_y' => $ln['heart_rate'],
+                        'axis_y' => $ln['respiration_rate'],
                     ],
                 ];
             }
-            $graphData[] = $lastNightHeartRateParams;
+            $graphData[] = $lastNightBreathingParams ;
         }
-
         return $graphData;
     }
 }

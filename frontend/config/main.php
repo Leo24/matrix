@@ -173,14 +173,17 @@ return [
                     'controller' => [
                         'report' => 'api/v1/report/backend/report',
                         'report/sleep-quality' => 'api/v1/report/backend/report',
+                        'report/averages' => 'api/v1/report/backend/report',
                         'report/heart-rate' => 'api/v1/report/backend/report',
                         'report/heart-health' => 'api/v1/report/backend/report',
                     ],
                     'patterns' => [
                         'GET sleep-cycles' => 'sleep-cycles',
+                        'GET averages' => 'averages',
                         'GET sleep-quality' => 'sleep-quality',
                         'GET heart-rate' => 'heart-rate',
                         'GET heart-health' => 'heart-health',
+                        'GET breathing' => 'breathing',
                     ]
 
                 ],

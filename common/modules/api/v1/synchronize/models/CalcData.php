@@ -148,7 +148,29 @@ class CalcData extends ActiveRecord
             $query->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
         } else {
             return 'Params startDate and endDate are Required.';
-        } 
+        }
+        return $query->all();
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    public function breathingGraphData($params)
+    {
+        $this->load($params);
+        $query = (new Query())
+            ->select(['{{timestamp}}', '{{respiration_rate}}'])
+            ->from('calc_data')
+            ->where(['user_id' => $this->user_id]);
+        if ($this->startDate && $this->endDate) {
+            $query->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
+        } else {
+            return 'Params startDate and endDate are Required.';
+        }
         return $query->all();
     }
 }

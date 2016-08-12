@@ -236,7 +236,29 @@ class SleepQuality extends ActiveRecord
         if ($this->currentDate) {
             $query->andWhere(['between', 'from', strtotime("-1 day", $this->currentDate), $this->currentDate]);
         } else {
-            return 'Param current is Required.';
+            return 'Param currentDate is Required.';
+        }
+        return $query->all();
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    public function lastNightBreathingParams($params)
+    {
+        $this->load($params);
+        $query = (new Query())
+            ->select(['user_id', 'from as date','avg_rr as last_night', 'max_rr as highest', 'min_rr as lowest' ])
+            ->from('sleep_quality')
+            ->where(['user_id' => $this->user_id]);
+        if ($this->currentDate) {
+            $query->andWhere(['between', 'from', strtotime("-1 day", $this->currentDate), $this->currentDate]);
+        } else {
+            return 'Param currentDate is Required.';
         }
         return $query->all();
     }
