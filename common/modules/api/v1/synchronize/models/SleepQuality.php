@@ -36,7 +36,11 @@ use yii\db\Query;
  * @property integer $max_hr
  * @property integer $min_rr
  * @property integer $max_rr
- *
+ * @property float $hrv_score
+ * @property float $hrv_lf
+ * @property float $hrv_hf
+ * @property float $hrv_rmssd_evening
+ * @property float $hrv_rmssd_morning
  */
 class SleepQuality extends ActiveRecord
 {
@@ -97,7 +101,7 @@ class SleepQuality extends ActiveRecord
                 ],
                 'integer'
             ],
-            [['avg_hr', 'avg_rr', 'avg_act'], 'number'],
+            [['avg_hr', 'avg_rr', 'avg_act', 'hrv_score', 'hrv_lf', 'hrv_hf', 'hrv_rmssd_evening', 'hrv_rmssd_morning'], 'number'],
             [['startDate', 'endDate', 'currentDate'], 'safe']
         ];
     }
@@ -134,7 +138,12 @@ class SleepQuality extends ActiveRecord
             'min_hr'               => 'Min_hr',
             'max_hr'               => 'Max_hr',
             'min_rr'               => 'Min_rr',
-            'max_rr'               => 'Max_rr'
+            'max_rr'               => 'Max_rr',
+            'hrv_score'            => 'Hrv Score',
+            'hrv_lf'               => 'Hrv Lf',
+            'hrv_hf'               => 'Hrv hf',
+            'hrv_rmssd_evening'    => 'Hrv rmssd evening',
+            'hrv_rmssd_morning'    => 'Hrv rmssd morning'
         ];
     }
 
@@ -269,6 +278,11 @@ class SleepQuality extends ActiveRecord
         $this->max_hr = $data['max_hr'];
         $this->min_rr = $data['min_rr'];
         $this->max_rr = $data['max_rr'];
+        $this->hrv_score = $data['hrv_score'];
+        $this->hrv_hf = $data['hrv_hf'];
+        $this->hrv_lf = $data['hrv_lf'];
+        $this->hrv_rmssd_evening = $data['hrv_rmssd_evening'];
+        $this->hrv_rmssd_morning = $data['hrv_rmssd_morning'];
 
         if (!$this->save()) {
             throw new \Exception(implode(', ', $this->getFirstErrors()));
