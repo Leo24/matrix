@@ -6,6 +6,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\data\ActiveDataProvider;
 use yii\behaviors\TimestampBehavior;
+use yii\db\Exception;
 
 /**
  * This is the model class for table 'health'
@@ -115,12 +116,15 @@ class Health extends ActiveRecord
      * Create new record of health information for new register user
      *
      * @param $userId
+     * @throws Exception
      */
     public function createDefaultRecordForNewRegisterUser($userId)
     {
         $model = new Health();
         $model->user_id = $userId;
-        $model->save();
+        if (!$this->save()) {
+            throw new Exception(implode(', ', $this->getFirstErrors()));
+        }
     }
 
     /**

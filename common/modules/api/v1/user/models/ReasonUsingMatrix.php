@@ -5,6 +5,7 @@ namespace common\modules\api\v1\user\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
+use yii\db\Exception;
 
 /**
  * This is the model class for table 'reason_using_matrix'
@@ -112,5 +113,20 @@ class ReasonUsingMatrix extends ActiveRecord
                 'message'     => Yii::t('app', 'Sleeping position data exists')
             ],
         ];
+    }
+
+    /**
+     * @param $data
+     * @param $userId
+     * @throws \Exception
+     */
+    public function saveReasonUsingMatrix($data, $userId)
+    {
+        $this->attributes = isset($data['reason_using_matrix']) ? $data['reason_using_matrix'] : null;
+        $this->user_id = $userId;
+
+        if (!$this->save()) {
+            throw new Exception(implode(', ', $this->getFirstErrors()));
+        }
     }
 }

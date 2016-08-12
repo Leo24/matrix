@@ -4,6 +4,7 @@ namespace common\modules\api\v1\user\models;
 
 use Yii;
 use yii\base\Exception;
+use \yii\db\Exception as ExceptionDb;
 use yii\db\ActiveRecord;
 use yii\helpers\BaseUrl;
 use yii\helpers\BaseFileHelper;
@@ -179,6 +180,21 @@ class Profile extends ActiveRecord
             return true;
         } else {
             return false;
+        }
+    }
+
+    /**
+     * @param $data
+     * @param $userId
+     * @throws \Exception
+     */
+    public function saveProfile($data, $userId)
+    {
+        $this->attributes = $data;
+        $this->user_id = $userId;
+
+        if (!$this->save()) {
+            throw new ExceptionDb(implode(', ', $this->getFirstErrors()));
         }
     }
 

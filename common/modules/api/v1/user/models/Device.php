@@ -6,6 +6,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\data\ActiveDataProvider;
 use yii\behaviors\TimestampBehavior;
+use yii\db\Exception;
 
 /**
  * This is the model class for table 'device'
@@ -170,5 +171,20 @@ class Device extends ActiveRecord
         ]);
 
         return $dataProvider;
+    }
+
+    /**
+     * @param $data
+     * @param $userId
+     * @throws \Exception
+     */
+    public function saveDevice($data, $userId)
+    {
+        $this->attributes = isset($data['device']) ? $data['device'] : null;
+        $this->user_id = $userId;
+
+        if (!$this->save()) {
+            throw new Exception(implode(', ', $this->getFirstErrors()));
+        }
     }
 }

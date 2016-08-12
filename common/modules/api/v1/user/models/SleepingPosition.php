@@ -5,6 +5,7 @@ namespace common\modules\api\v1\user\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
+use yii\db\Exception;
 
 /**
  * This is the model class for table 'sleeping_position'
@@ -69,5 +70,20 @@ class SleepingPosition extends ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    /**
+     * @param $data
+     * @param $userId
+     * @throws \Exception
+     */
+    public function saveSleepingPosition($data, $userId)
+    {
+        $this->attributes = isset($data['sleeping_position']) ? $data['sleeping_position'] : null;
+        $this->user_id = $userId;
+
+        if (!$this->save()) {
+            throw new Exception(implode(', ', $this->getFirstErrors()));
+        }
     }
 }

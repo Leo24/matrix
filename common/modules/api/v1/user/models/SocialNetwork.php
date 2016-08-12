@@ -4,6 +4,7 @@ namespace common\modules\api\v1\user\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Exception;
 
 /**
  * This is the model class for table 'social_network'.
@@ -130,5 +131,27 @@ class SocialNetwork extends ActiveRecord
         }
 
         return false;
+    }
+
+    /**
+     * @param $data
+     * @param $userId
+     * @return $this
+     * @throws \Exception
+     */
+    public function saveSocialNetwork($data, $userId)
+    {
+        $this->setScenario(self::SCENARIO_REGISTER);
+        $this->attributes = $data;
+        $this->user_id = $userId;
+
+        if (!self::existSocialNetwork($this->id, $data['social_network_type'])
+        ) {
+            if ($this->save()) {
+                return $this;
+            } else {
+                throw new Exception(implode(', ', $this->getFirstErrors()));
+            }
+        }
     }
 }

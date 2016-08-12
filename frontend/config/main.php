@@ -81,7 +81,16 @@ return [
                     'maxFileSize'    => 1024 * 2,
                     'maxLogFiles'    => 20
                 ],
-
+                [
+                    'class'          => 'yii\log\FileTarget',
+                    'levels'         => ['error', 'trace'],
+                    'categories'     => ['register_user'],
+                    'logVars'        => [],
+                    'logFile'        => '@app/runtime/logs/register_user.log',
+                    'exportInterval' => 1,
+                    'maxFileSize'    => 1024 * 2,
+                    'maxLogFiles'    => 20
+                ]
             ],
         ],
         'urlManager' => [
