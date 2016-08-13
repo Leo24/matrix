@@ -74,9 +74,9 @@ return [
                 [
                     'class'          => 'yii\log\FileTarget',
                     'levels'         => ['error', 'trace'],
-                    'categories'     => ['emfit_data'],
+                    'categories'     => ['error_emfit_data'],
                     'logVars'        => [],
-                    'logFile'        => '@app/runtime/logs/synchronize_emfit_data.log',
+                    'logFile'        => '@app/runtime/logs/error_emfit_data.log',
                     'exportInterval' => 1,
                     'maxFileSize'    => 1024 * 2,
                     'maxLogFiles'    => 20

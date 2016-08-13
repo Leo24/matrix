@@ -330,8 +330,6 @@ class SleepQuality extends ActiveRecord
         return $query->all();
     }
 
-
-
     /**
      * Method of saving sleep quality
      *
@@ -341,35 +339,8 @@ class SleepQuality extends ActiveRecord
      */
     public function saveSleepQualityData($data, $userId)
     {
+        $this->attributes = $data;
         $this->user_id = $userId;
-        $this->from = $data['from'];
-        $this->to = $data['to'];
-        $this->sleep_score = $data['sleep_score'];
-        $this->duration = $data['duration'];
-        $this->duration_in_bed = $data['duration_in_bed'];
-        $this->duration_awake = $data['duration_awake'];
-        $this->duration_in_sleep = $data['duration_in_sleep'];
-        $this->duration_in_rem = $data['duration_in_rem'];
-        $this->duration_in_light = $data['duration_in_light'];
-        $this->duration_in_deep = $data['duration_in_deep'];
-        $this->duration_sleep_onset = $data['duration_sleep_onset'];
-        $this->bedexit_duration = $data['bedexit_duration'];
-        $this->bedexit_count = $data['bedexit_count'];
-        $this->tossnturn_count = $data['tossnturn_count'];
-        $this->fm_count = $data['fm_count'];
-        $this->awakenings = $data['awakenings'];
-        $this->avg_hr = $data['avg_hr'];
-        $this->avg_rr = $data['avg_rr'];
-        $this->avg_act = $data['avg_act'];
-        $this->min_hr = $data['min_hr'];
-        $this->max_hr = $data['max_hr'];
-        $this->min_rr = $data['min_rr'];
-        $this->max_rr = $data['max_rr'];
-        $this->hrv_score = $data['hrv_score'];
-        $this->hrv_hf = $data['hrv_hf'];
-        $this->hrv_lf = $data['hrv_lf'];
-        $this->hrv_rmssd_evening = (isset($data['hrv_rmssd_evening'])) ? $data['hrv_rmssd_evening'] : null;
-        $this->hrv_rmssd_morning = (isset($data['hrv_rmssd_morning'])) ? $data['hrv_rmssd_morning'] : null;
 
         if (!$this->save()) {
             throw new \Exception(implode(', ', $this->getFirstErrors()));

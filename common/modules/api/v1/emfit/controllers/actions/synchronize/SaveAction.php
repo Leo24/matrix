@@ -118,7 +118,7 @@ class SaveAction extends Action
         } catch (Exception $e) {
             $transaction->rollBack();
 
-            \Yii::error(ErrorHandler::convertExceptionToString($e), \Yii::$app->params['logger']['synchronize_emfit_data']['category']);
+            \Yii::error(ErrorHandler::convertExceptionToString($e), \Yii::$app->params['logger']['error_emfit_data']['category']);
 
             throw new ServerErrorHttpException('Failed to synchronize emfit data for unknown reason.');
         }
