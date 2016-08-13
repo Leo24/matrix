@@ -39,6 +39,8 @@ class SaveAction extends Action
         try {
             $json = Yii::$app->request->bodyParams;
 
+            \Yii::error($json, \Yii::$app->params['logger']['emfit_data']['category']);
+
 //            /** @var  $device Device.php */
 //            $device = Device::findOne(['sn' => $json['device']]);
 //            if (!$device) {

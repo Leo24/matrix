@@ -90,6 +90,16 @@ return [
                     'exportInterval' => 1,
                     'maxFileSize'    => 1024 * 2,
                     'maxLogFiles'    => 20
+                ],
+                [
+                    'class'          => 'yii\log\FileTarget',
+                    'levels'         => ['error', 'trace'],
+                    'categories'     => ['emfit_data'],
+                    'logVars'        => [],
+                    'logFile'        => '@app/runtime/logs/emfit_data.log',
+                    'exportInterval' => 1,
+                    'maxFileSize'    => 1024 * 2,
+                    'maxLogFiles'    => 20
                 ]
             ],
         ],
@@ -172,8 +182,7 @@ return [
                         'GET sleep-quality' => 'sleep-quality',
                         'GET heart-rate' => 'heart-rate',
                         'GET heart-health' => 'heart-health',
-                        'GET breathing' => 'breathing',
-                        'GET breathing' => 'breathing',
+                        'GET breathing' => 'breathing'
                     ]
 
                 ],

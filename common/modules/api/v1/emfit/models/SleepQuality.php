@@ -368,8 +368,8 @@ class SleepQuality extends ActiveRecord
         $this->hrv_score = $data['hrv_score'];
         $this->hrv_hf = $data['hrv_hf'];
         $this->hrv_lf = $data['hrv_lf'];
-        $this->hrv_rmssd_evening = $data['hrv_rmssd_evening'];
-        $this->hrv_rmssd_morning = $data['hrv_rmssd_morning'];
+        $this->hrv_rmssd_evening = (isset($data['hrv_rmssd_evening'])) ? $data['hrv_rmssd_evening'] : null;
+        $this->hrv_rmssd_morning = (isset($data['hrv_rmssd_morning'])) ? $data['hrv_rmssd_morning'] : null;
 
         if (!$this->save()) {
             throw new \Exception(implode(', ', $this->getFirstErrors()));

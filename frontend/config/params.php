@@ -11,6 +11,9 @@ return [
         ],
         'register_user' => [
             'category' => 'register_user'
+        ],
+        'emfit_data' => [
+            'category' => 'emfit_data'
         ]
     ]
 ];
