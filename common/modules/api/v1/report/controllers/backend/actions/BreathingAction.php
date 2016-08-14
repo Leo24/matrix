@@ -2,6 +2,7 @@
 
 namespace common\modules\api\v1\report\controllers\backend\actions;
 
+use common\modules\api\v1\report\helper\ReportHelper;
 use Yii;
 use yii\base\Exception;
 use yii\web\BadRequestHttpException;
@@ -13,19 +14,22 @@ use yii\web\ServerErrorHttpException;
 /**
  * Class BreathingAction
  *
- *
  * @package common\modules\api\v1\report\controllers\backend\actions
  */
 class BreathingAction extends Action
 {
     /**
      * Action for getting Breathing average data from last night and data for graph
+     *
      * @return array with graph data
      * @throws \yii\web\ServerErrorHttpException
      * @throws \yii\web\BadRequestHttpException
      */
     public function run()
     {
+        /** @var  $reportHelper ReportHelper.php */
+        $reportHelper = new ReportHelper();
+
         $graphData = [];
         $params = \Yii::$app->request->queryParams;
         if (!isset($params['user_id']) || !isset($params['startDate']) || !isset($params['endDate']) || !isset($params['currentDate'])) {
@@ -38,8 +42,9 @@ class BreathingAction extends Action
             /** @var  $sleepQualityModel SleepQuality.php */
             $sleepQualityModel = new SleepQuality();
 
-            $breathingGraphData = $calcDataModel->breathingGraphData($params);
             $lastNightBreathingParams = $sleepQualityModel->lastNightBreathingParams($params);
+
+            $breathingGraphData = $calcDataModel->breathingGraphData($params, $lastNightBreathingParams);
 
             if ($breathingGraphData) {
                 foreach ($breathingGraphData as $ln) {
@@ -50,7 +55,8 @@ class BreathingAction extends Action
                         ],
                     ];
                 }
-                $graphData[] = $lastNightBreathingParams ;
+                $lastNightBreathingParams['message'] = $reportHelper->getBreathingMessage((int) $lastNightBreathingParams['last_night']);
+                $graphData[] = $lastNightBreathingParams;
             }
             return $graphData;
         } catch (Exception $e) {

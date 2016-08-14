@@ -2,6 +2,7 @@
 
 namespace common\modules\api\v1\emfit\models;
 
+use common\modules\api\v1\report\helper\ReportHelper;
 use common\modules\api\v1\user\models\User;
 use Yii;
 use yii\behaviors\TimestampBehavior;
@@ -131,42 +132,83 @@ class CalcData extends ActiveRecord
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Getting Heart Rate data for graph
      *
      * @param array $params
+     * @param array $lastNightHeartRateParams
      *
      * @return array
      */
-    public function heartRateGraphData($params)
+    public function heartRateGraphData($params, $lastNightHeartRateParams)
     {
+        $heartRateData = [];
+
         $this->load($params);
 
         $query = (new Query())
-            ->select(['{{timestamp}}', '{{heart_rate}}'])
+            ->select(['timestamp', 'heart_rate'])
             ->from('calc_data')
             ->where(['user_id' => $this->user_id])
+            ->andWhere(['not', ['heart_rate' => null]])
             ->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
 
-        return $query->all();
+        $result = $query->all();
+
+        if (!empty($result)) {
+
+            foreach ($result as $heartRate) {
+                if ($heartRate['heart_rate'] > 120) {
+                    $heartRate['heart_rate'] = ($highest + 10) / 10;
+                }
+                $heartRateData[] = [
+                    'timestamp'        => $heartRate['timestamp'],
+                    'heart_rate' => $heartRate['heart_rate']
+                ];
+            }
+        }
+
+        return $heartRateData;
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Getting Breathing data for graph
      *
      * @param array $params
-     *
+     * @param array $lastNightBreathingParams
      * @return array
      */
-    public function breathingGraphData($params)
+    public function breathingGraphData($params, $lastNightBreathingParams)
     {
+        $breathingData = [];
+
         $this->load($params);
 
         $query = (new Query())
-            ->select(['{{timestamp}}', '{{respiration_rate}}'])
+            ->select(['timestamp', 'respiration_rate'])
             ->from('calc_data')
             ->where(['user_id' => $this->user_id])
+            ->andWhere(['not', ['respiration_rate' => null]])
             ->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
 
-        return $query->all();
+        $result = $query->all();
+
+        if (!empty($result)) {
+            $highest = isset($lastNightBreathingParams['highest']) ?
+                $lastNightBreathingParams['highest'] : ReportHelper::getMaxValue($result, 'respiration_rate');
+            foreach ($result as $breathing) {
+                if ($breathing['respiration_rate'] > 30) {
+                    // todo уточнить что значит "http://joxi.ru/12M17Bntxxg72J".
+                    // todo Параметр message будет рассчитываться на фронтенде
+                    $breathing['respiration_rate'] = ($highest + 10) / 10;
+                }
+                $breathingData[] = [
+                    'timestamp'        => $breathing['timestamp'],
+                    'respiration_rate' => $breathing['respiration_rate']
+                ];
+            }
+        }
+
+
+        return $breathingData;
     }
 }

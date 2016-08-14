@@ -115,8 +115,8 @@ class HrvRmssdData extends ActiveRecord
                 'rmssd'          => isset($m[1]) ? $m[1] : null,
                 'low_frequency'  => isset($m[2]) ? $m[2] : null,
                 'high_frequency' => isset($m[3]) ? $m[3] : null,
-                'created_at'       => time(),
-                'updated_at'       => time()
+                'created_at'     => time(),
+                'updated_at'     => time()
             ];
         }
 
@@ -129,7 +129,7 @@ class HrvRmssdData extends ActiveRecord
     }
 
     /**
-     * Creates data provider instance with search query applied
+     *
      *
      * @param array $params
      *
@@ -137,19 +137,51 @@ class HrvRmssdData extends ActiveRecord
      */
     public function heartHealthGraphData($params)
     {
+        $heartHealthData = [];
+
         $this->load($params);
 
         $query = (new Query())
-            ->select(['{{timestamp}}', '{{rmssd}}'])
+            ->select(['timestamp', 'rmssd as heart_rate'])
             ->from('hrv_rmssd_data')
             ->where(['user_id' => $this->user_id])
             ->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
 
-        return $query->all();
+        $result = $query->all();
+
+        if (!empty($result)) {
+            $highest = $this->getMaxHeartHealthForLastNight($result);
+            foreach ($result as $heartHealth) {
+                if ($heartHealth['heart_rate'] > 120) {
+                    $heartHealth['heart_rate'] = ($highest + 10) / 10;
+                }
+                $heartHealthData[] = [
+                    'timestamp'  => $heartHealth['timestamp'],
+                    'heart_rate' => $heartHealth['heart_rate']
+                ];
+            }
+        }
+
+        return $heartHealthData;
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * @param $data
+     * @return int
+     */
+    private function getMaxHeartHealthForLastNight($data)
+    {
+        $heartHealthMax = 0;
+        foreach ($data as $heartHealth) {
+            if ($heartHealth['heart_rate'] > $heartHealthMax) {
+                $heartHealthMax = $heartHealth['heart_rate'];
+            }
+        }
+        return $heartHealthMax;
+    }
+
+    /**
+     *
      *
      * @param array $params
      *

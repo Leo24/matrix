@@ -3,6 +3,7 @@
 namespace common\modules\api\v1\report\controllers\backend\actions;
 
 use common\modules\api\v1\emfit\models\HrvData;
+use common\modules\api\v1\report\helper\ReportHelper;
 use Yii;
 use yii\base\Exception;
 use yii\web\BadRequestHttpException;
@@ -24,6 +25,9 @@ class HeartHealthAction extends Action
      */
     public function run()
     {
+        /** @var  $reportHelper ReportHelper.php */
+        $reportHelper = new ReportHelper();
+
         $graphData = [];
         $params = \Yii::$app->request->queryParams;
 
@@ -52,6 +56,9 @@ class HeartHealthAction extends Action
                         ],
                     ];
                 }
+
+                $recovery = (float) $lastNightHeartHealthParams['morning_average'] - (float) $lastNightHeartHealthParams['evening_average'];
+                $lastNightHeartHealthParams['message'] = $reportHelper->getHeartHealthMessage($recovery);
                 $graphData[] = $lastNightHeartHealthParams;
             }
 

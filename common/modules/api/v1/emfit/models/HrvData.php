@@ -140,7 +140,7 @@ class HrvData extends ActiveRecord
     }
 
     /**
-     * Creates data provider instance with search query applied
+     *
      *
      * @param array $params
      *
@@ -162,11 +162,11 @@ class HrvData extends ActiveRecord
             ->where(['user_id' => $this->user_id])
             ->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
 
-        return $query->all();
+        return $query->one();
     }
 
     /**
-     * Creates data provider instance with search query applied
+     *
      *
      * @param array $params
      *
@@ -182,6 +182,6 @@ class HrvData extends ActiveRecord
             ->where(['user_id' => $this->user_id])
             ->andWhere(['between', 'timestamp', strtotime("-1 day", $this->currentDate), $this->currentDate]);
 
-        return $query->all();
+        return $query->one();
     }
 }

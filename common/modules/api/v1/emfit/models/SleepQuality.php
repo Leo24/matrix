@@ -219,7 +219,7 @@ class SleepQuality extends ActiveRecord
 
         $query = (new Query())
             
-            ->select(['{{from}}', '{{sleep_score}}'])
+            ->select(['from', 'sleep_score'])
             ->from('sleep_quality')
             ->where(['user_id' => $this->user_id])
             ->andWhere(['between', 'from', $this->startDate, $this->endDate]);
@@ -245,11 +245,11 @@ class SleepQuality extends ActiveRecord
             ->where(['user_id' => $this->user_id])
             ->andWhere(['between', 'from', strtotime("-1 day", $this->currentDate), $this->currentDate]);
 
-        return $query->all();
+        return $query->one();
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Getting Breathing average data from last night
      *
      * @param array $params
      *
@@ -265,11 +265,11 @@ class SleepQuality extends ActiveRecord
             ->where(['user_id' => $this->user_id])
             ->andWhere(['between', 'from', strtotime("-1 day", $this->currentDate), $this->currentDate]);
 
-        return $query->all();
+        return $query->one();
     }
 
     /**
-     * Creates data provider instance with search query applied
+     *
      *
      * @param array $params
      *
@@ -289,7 +289,7 @@ class SleepQuality extends ActiveRecord
     }
 
     /**
-     * Creates data provider instance with search query applied
+     *
      *
      * @param array $params
      *
@@ -305,13 +305,13 @@ class SleepQuality extends ActiveRecord
             ->where(['user_id' => $this->user_id])
             ->andWhere(['between', 'from', strtotime("-1 day", $this->currentDate), $this->currentDate]);
 
-        return $query->all();
+        return $query->one();
     }
 
  
 
     /**
-     * Creates data provider instance with search query applied
+     *
      *
      * @param array $params
      *
@@ -322,12 +322,13 @@ class SleepQuality extends ActiveRecord
         $this->load($params);
 
         $query = (new Query())
-            ->select(['duration_in_bed as time_asleep', 'from as fall_asleep', 'duration_in_light as light_sleep', 'duration_in_deep as deep_sleep', 'duration_in_rem as rem_sleep', 'awakenings'])
+            ->select(['duration_in_bed as time_asleep', 'from as fall_asleep',
+                'duration_in_light as light_sleep', 'duration_in_deep as deep_sleep', 'duration_in_rem as rem_sleep', 'awakenings'])
             ->from('sleep_quality')
             ->where(['user_id' => $this->user_id])
             ->andWhere(['between', 'from', strtotime("-1 day", $this->currentDate), $this->currentDate]);
 
-        return $query->all();
+        return $query->one();
     }
 
 
