@@ -74,9 +74,9 @@ return [
                 [
                     'class'          => 'yii\log\FileTarget',
                     'levels'         => ['error', 'trace'],
-                    'categories'     => ['emfit_data'],
+                    'categories'     => ['error_emfit_data'],
                     'logVars'        => [],
-                    'logFile'        => '@app/runtime/logs/synchronize_emfit_data.log',
+                    'logFile'        => '@app/runtime/logs/error_emfit_data.log',
                     'exportInterval' => 1,
                     'maxFileSize'    => 1024 * 2,
                     'maxLogFiles'    => 20
@@ -87,6 +87,16 @@ return [
                     'categories'     => ['register_user'],
                     'logVars'        => [],
                     'logFile'        => '@app/runtime/logs/register_user.log',
+                    'exportInterval' => 1,
+                    'maxFileSize'    => 1024 * 2,
+                    'maxLogFiles'    => 20
+                ],
+                [
+                    'class'          => 'yii\log\FileTarget',
+                    'levels'         => ['error', 'trace'],
+                    'categories'     => ['emfit_data'],
+                    'logVars'        => [],
+                    'logFile'        => '@app/runtime/logs/emfit_data.log',
                     'exportInterval' => 1,
                     'maxFileSize'    => 1024 * 2,
                     'maxLogFiles'    => 20
@@ -174,8 +184,7 @@ return [
                         'GET stress' => 'stress',
                         'GET heart-rate' => 'heart-rate',
                         'GET heart-health' => 'heart-health',
-                        'GET breathing' => 'breathing',
-                        'GET breathing' => 'breathing',
+                        'GET breathing' => 'breathing'
                     ]
 
                 ],

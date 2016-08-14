@@ -6,11 +6,14 @@ return [
     'algorithmJWT' => 'HS256',
     'tokenExpireDays' => 7,
     'logger' => [
-        'synchronize_emfit_data' => [
-            'category' => 'emfit_data'
+        'error_emfit_data' => [
+            'category' => 'error_emfit_data'
         ],
         'register_user' => [
             'category' => 'register_user'
+        ],
+        'emfit_data' => [
+            'category' => 'emfit_data'
         ]
     ]
 ];
