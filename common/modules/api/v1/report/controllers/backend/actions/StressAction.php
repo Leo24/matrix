@@ -48,7 +48,7 @@ class StressAction extends Action
                     $graphData[] = [
                         'chart' => [
                             'axis_x' => $ln['timestamp'],
-                            'axis_y' => $ln['respiration_rate'],
+                            'axis_y' => $ln['stress_data'],
                         ],
                     ];
                 }
