@@ -106,18 +106,22 @@ class HrvRmssdData extends ActiveRecord
      */
     public function saveRmssdData($jsonHrvRmssdData, $userId)
     {
+        $currentTimestamp = $jsonHrvRmssdData[0][0];
         $rows = [];
         foreach ($jsonHrvRmssdData as $k => $m) {
-            // todo интервал должен быть 10 минут
-            $rows[$k] = [
-                'user_id'        => $userId,
-                'timestamp'      => isset($m[0]) ? $m[0] : null,
-                'rmssd'          => isset($m[1]) ? $m[1] : null,
-                'low_frequency'  => isset($m[2]) ? $m[2] : null,
-                'high_frequency' => isset($m[3]) ? $m[3] : null,
-                'created_at'     => time(),
-                'updated_at'     => time()
-            ];
+            /** Increase time interval - 10 minutes */
+            if ($m[0] > $currentTimestamp + 600) {
+                $currentTimestamp = $m[0];
+                $rows[$k] = [
+                    'user_id'        => $userId,
+                    'timestamp'      => isset($m[0]) ? $m[0] : null,
+                    'rmssd'          => isset($m[1]) ? $m[1] : null,
+                    'low_frequency'  => isset($m[2]) ? $m[2] : null,
+                    'high_frequency' => isset($m[3]) ? $m[3] : null,
+                    'created_at'     => time(),
+                    'updated_at'     => time()
+                ];
+            }
         }
 
         $attr = $this->attributes();

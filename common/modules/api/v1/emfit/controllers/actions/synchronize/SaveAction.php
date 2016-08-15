@@ -40,24 +40,38 @@ class SaveAction extends Action
         try {
             $json = Yii::$app->request->bodyParams;
 
-            \Yii::error($json, \Yii::$app->params['logger']['emfit_data']['category']);
-
-//            /** @var  $device Device.php */
-//            $device = Device::findOne(['sn' => $json['device']]);
-//            if (!$device) {
+            /** @var  $device Device.php */
+            $device = Device::findOne(['sn' => $json['device']]);
+            if (!$device) {
 //                throw new NotFoundHttpException('Device not found!');
-//            }
-
-            // todo убрать в будущем. Чисто для теста
-            $device = new Device();
-            $device->sn = $json['device'];
-            $device->save(false);
-
-            // todo заглушка временная
-            $user = User::findOne(['id' => 3]);
-            if (!$user) {
-                throw new NotFoundHttpException('User not found!');
+                // todo  delete in the future
+                $user = new User();
+                $data = [
+                    "email"     => "ratkus{$json['device']}@example.com",
+                    "password"  => "test1",
+                    "confirm"   => "test1",
+                    "firstname" => "piter",
+                    "lastname"  => "pen",
+                    "gender"    => "male",
+                    "birthday"  => "541026660",
+                    "state"     => "wff",
+                    "city"      => "sad",
+                    "device"    => [
+                        "name"     => "device-{$json['device']}",
+                        "position" => "left",
+                        "pin"      => "297163796219365912",
+                        "pw"       => "HDWW87DW7",
+                        "sn"       => $json['device']
+                    ]
+                ];
+                $user->registerUser($data);
+            } else {
+                $user = User::findOne(['id' => $device->user_id]);
             }
+
+//            if (!$user) {
+//                throw new NotFoundHttpException('User not found!');
+//            }
 
             /** @var  $sleepQualityModel SleepQuality.php */
             $sleepQualityModel = new $this->modelClass();

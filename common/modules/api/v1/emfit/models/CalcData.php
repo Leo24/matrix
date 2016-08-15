@@ -108,19 +108,22 @@ class CalcData extends ActiveRecord
      */
     public function saveCalcData($jsonCalcData, $userId)
     {
-//        $currentTimestamp = $jsonCalcData[0][0];
+        $currentTimestamp = $jsonCalcData[0][0];
         $rows = [];
         foreach ($jsonCalcData as $k => $m) {
-            // todo интервал должен быть 10 минут
-            $rows[$k] = [
-                'user_id'          => $userId,
-                'timestamp'        => isset($m[0]) ? $m[0] : null,
-                'heart_rate'       => isset($m[1]) ? $m[1] : null,
-                'respiration_rate' => isset($m[2]) ? $m[2] : null,
-                'activity'         => isset($m[3]) ? $m[3] : null,
-                'created_at'       => time(),
-                'updated_at'       => time()
-            ];
+            /** Increase time interval - 10 minutes */
+            if ($m[0] > $currentTimestamp + 600) {
+                $currentTimestamp = $m[0];
+                $rows[$k] = [
+                    'user_id'          => $userId,
+                    'timestamp'        => isset($m[0]) ? $m[0] : null,
+                    'heart_rate'       => isset($m[1]) ? $m[1] : null,
+                    'respiration_rate' => isset($m[2]) ? $m[2] : null,
+                    'activity'         => isset($m[3]) ? $m[3] : null,
+                    'created_at'       => time(),
+                    'updated_at'       => time()
+                ];
+            }
         }
 
         $attr = $this->attributes();
