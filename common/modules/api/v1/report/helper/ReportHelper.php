@@ -120,27 +120,27 @@ class ReportHelper
     {
         if ($lf >= 45 && $lf <= 55 && $hf >= 45 && $hf <= 55) {
             return [
-                'confirmation text' => 'Extremely Low :D',
+                'confirmation text' => 'Extremely Low',
                 'category'          => 'VERY GOOD'
             ];
         } elseif ((($lf >= 35 && $lf <= 45) && ($hf >= 55 && $hf <= 65)) || (($lf >= 55 && $lf <= 65) && ($hf >= 35 && $hf <= 45))) {
             return [
-                'confirmation text' => 'Relatively Low :)',
+                'confirmation text' => 'Relatively Low',
                 'category'          => 'GOOD'
             ];
         } elseif ((($lf >= 25 && $lf <= 35) && ($hf >= 65 && $hf <= 75)) || (($lf >= 65 && $lf <= 75) && ($hf >= 25 && $hf <= 35))) {
             return [
-                'confirmation text' => 'Average :|',
+                'confirmation text' => 'Average',
                 'category'          => 'OKAY'
             ];
         } elseif ((($lf >= 75 && $lf <= 85) && ($hf >= 15 && $hf <= 25)) || (($lf >= 15 && $lf <= 25) && ($hf >= 75 && $hf <= 85))) {
             return [
-                'confirmation text' => 'Relatively High :/',
+                'confirmation text' => 'Relatively High',
                 'category'          => 'NOT GOOD'
             ];
         } elseif (($lf <= 15 && $hf >= 85) || ($lf >= 85 && $hf <= 15)) {
             return [
-                'confirmation text' => 'Unusually High :(',
+                'confirmation text' => 'Unusually High',
                 'category'          => 'BAD'
             ];
         }

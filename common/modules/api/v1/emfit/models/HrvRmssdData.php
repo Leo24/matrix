@@ -28,6 +28,8 @@ class HrvRmssdData extends ActiveRecord
     /** @var  $endDate */
     public $endDate;
 
+    /** @var  $endDate */
+    public $currentDate;
     /**
      * @inheritdoc
      */
@@ -44,7 +46,7 @@ class HrvRmssdData extends ActiveRecord
         return [
             [['user_id'], 'required'],
             [['user_id', 'rmssd', 'low_frequency', 'high_frequency', 'timestamp'], 'integer'],
-            [['startDate', 'endDate'], 'safe'],
+            [['startDate', 'endDate', 'currentDate'], 'safe'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -217,7 +219,7 @@ class HrvRmssdData extends ActiveRecord
         $query = (new Query())
             ->from('hrv_rmssd_data')
             ->where(['user_id' => $this->user_id])
-            ->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
+            ->andWhere(['between', 'timestamp', strtotime("-1 day", $this->currentDate), $this->currentDate]);
 
         $average = $query->average('rmssd');
 
