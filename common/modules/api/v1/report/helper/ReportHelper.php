@@ -108,4 +108,26 @@ class ReportHelper
             return 'Poor Night';
         }
     }
+
+    /**
+     * Get message for Stress daily report
+     *
+     * @param $lf
+     * @param $hf
+     * @return string
+     */
+    public function getStressMessage($lf, $hf)
+    {
+        if (($lf > 45 && $lf < 55) && ($hf > 45 && $hf < 55)) {
+            return 'Extremely Low';
+        } elseif ((($lf > 35 && $lf < 45) && ($hf > 55 && $hf < 65)) || (($lf > 55 && $lf < 65) && ($hf > 35 && $hf < 45))) {
+            return 'Relatively Low';
+        } elseif ((($lf > 25 && $lf < 35) && ($hf > 65 && $hf < 75)) || (($lf > 65 && $lf < 75) && ($hf > 25 && $hf < 35))) {
+            return 'Average';
+        } elseif ((($lf > 75 && $lf < 85) && ($hf > 15 && $hf < 25)) || (($lf > 15 && $lf < 25) && ($hf > 75 && $hf < 85))) {
+            return 'Relatively High';
+        } elseif (($lf < 15 && $hf > 85) || ($lf > 85 && $hf < 15))  {
+            return 'Unusually High';
+        }
+    }
 }
