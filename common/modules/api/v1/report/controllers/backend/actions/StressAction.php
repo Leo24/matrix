@@ -6,11 +6,11 @@ use common\modules\api\v1\emfit\models\HrvData;
 use Yii;
 use yii\base\Exception;
 use yii\web\BadRequestHttpException;
-use yii\web\HttpException;
-use common\modules\api\v1\emfit\models\SleepQuality;
 use \yii\rest\Action;
 use yii\web\ServerErrorHttpException;
 use common\modules\api\v1\emfit\models\HrvRmssdData;
+use common\modules\api\v1\report\helper\ReportHelper;
+
 
 /**
  * Class StressAction
@@ -27,6 +27,9 @@ class StressAction extends Action
      */
     public function run()
     {
+        /** @var  $reportHelper ReportHelper.php */
+        $reportHelper = new ReportHelper();
+
         $graphData = [];
         $params = \Yii::$app->request->queryParams;
         if (!isset($params['user_id']) || !isset($params['startDate']) || !isset($params['endDate']) || !isset($params['currentDate'])) {
@@ -41,7 +44,8 @@ class StressAction extends Action
 
             $stressGraphData = $hrvRmssdDataModel->stressGraphData($params);
 
-            $lastNightStressParams = $hrvDataModel->lastNightHeartHealthParams($params);
+            $lastNightStressParams = $hrvDataModel->lastNightStressParams($params);
+            $lastNightStressParams['last_night']= $hrvRmssdDataModel->lastNightAverageStressLevel($params);
 
             if ($stressGraphData) {
                 foreach ($stressGraphData as $ln) {
@@ -53,6 +57,7 @@ class StressAction extends Action
                         ],
                     ];
                 }
+                $lastNightStressParams['message'] = $reportHelper->getStressMessage($lastNightStressParams['evening_average'], $lastNightStressParams['morning_average']);
                 $graphData[] = $lastNightStressParams;
             }
             return $graphData;

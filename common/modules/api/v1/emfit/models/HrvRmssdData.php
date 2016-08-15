@@ -203,4 +203,24 @@ class HrvRmssdData extends ActiveRecord
 
         return $query->all();
     }
+
+    /**
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    public function lastNightAverageStressLevel($params)
+    {
+        $this->load($params);
+
+        $query = (new Query())
+            ->from('hrv_rmssd_data')
+            ->where(['user_id' => $this->user_id])
+            ->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
+
+        $average = $query->average('rmssd');
+
+        return $average;
+    }
 }
