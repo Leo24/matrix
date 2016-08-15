@@ -159,7 +159,7 @@ class HrvRmssdData extends ActiveRecord
             $highest = $this->getMaxHeartHealthForLastNight($result);
             foreach ($result as $heartHealth) {
                 if ($heartHealth['heart_rate'] > 120) {
-                    $heartHealth['heart_rate'] = ($highest + 10) / 10;
+                    $heartHealth['heart_rate'] = round($highest + 10);
                 }
                 $heartHealthData[] = [
                     'timestamp'  => $heartHealth['timestamp'],

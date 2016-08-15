@@ -158,13 +158,14 @@ class CalcData extends ActiveRecord
         $result = $query->all();
 
         if (!empty($result)) {
-
+            $highest = isset($lastNightHeartRateParams['highest']) ?
+                $lastNightHeartRateParams['highest'] : ReportHelper::getMaxValue($result, 'heart_rate');
             foreach ($result as $heartRate) {
                 if ($heartRate['heart_rate'] > 120) {
-                    $heartRate['heart_rate'] = ($highest + 10) / 10;
+                    $heartRate['heart_rate'] = round($highest + 10);
                 }
                 $heartRateData[] = [
-                    'timestamp'        => $heartRate['timestamp'],
+                    'timestamp'  => $heartRate['timestamp'],
                     'heart_rate' => $heartRate['heart_rate']
                 ];
             }
@@ -201,7 +202,7 @@ class CalcData extends ActiveRecord
             foreach ($result as $breathing) {
                 if ($breathing['respiration_rate'] > 30) {
                     // todo уточнить что значит "http://joxi.ru/12M17Bntxxg72J".
-                    $breathing['respiration_rate'] = ($highest + 10) / 10;
+                    $breathing['respiration_rate'] = round($highest + 10);
                 }
                 $breathingData[] = [
                     'timestamp'        => $breathing['timestamp'],
