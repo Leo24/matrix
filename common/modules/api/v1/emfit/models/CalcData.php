@@ -201,7 +201,6 @@ class CalcData extends ActiveRecord
             foreach ($result as $breathing) {
                 if ($breathing['respiration_rate'] > 30) {
                     // todo уточнить что значит "http://joxi.ru/12M17Bntxxg72J".
-                    // todo Параметр message будет рассчитываться на фронтенде
                     $breathing['respiration_rate'] = ($highest + 10) / 10;
                 }
                 $breathingData[] = [
