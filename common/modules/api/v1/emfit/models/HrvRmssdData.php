@@ -192,7 +192,7 @@ class HrvRmssdData extends ActiveRecord
         $this->load($params);
 
         $query = (new Query())
-            ->select(['timestamp', '(low_frequency + high_frequency)/2 as stress_data'])
+            ->select(['timestamp', 'low_frequency as LF', 'high_frequency as HF'])
             ->from('hrv_rmssd_data')
             ->where(['user_id' => $this->user_id])
             ->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
