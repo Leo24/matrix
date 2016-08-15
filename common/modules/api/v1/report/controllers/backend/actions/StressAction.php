@@ -45,19 +45,20 @@ class StressAction extends Action
             $stressGraphData = $hrvRmssdDataModel->stressGraphData($params);
 
             $lastNightStressParams = $hrvDataModel->lastNightStressParams($params);
-            $lastNightStressParams['last_night']= $hrvRmssdDataModel->lastNightAverageStressLevel($params);
+            $lastNightStressParams['last_night'] = $hrvRmssdDataModel->lastNightAverageStressLevel($params);
 
             if ($stressGraphData) {
                 foreach ($stressGraphData as $ln) {
                     $graphData[] = [
                         'chart' => [
-                            'axis_x' => $ln['timestamp'],
+                            'axis_x'    => $ln['timestamp'],
                             'axis_y_LF' => $ln['LF'],
                             'axis_y_HF' => $ln['HF'],
-                        ],
+                        ]
                     ];
                 }
-                $lastNightStressParams['message'] = $reportHelper->getStressMessage($lastNightStressParams['evening_average'], $lastNightStressParams['morning_average']);
+                $lastNightStressParams['message'] = $reportHelper->getStressMessage($lastNightStressParams['evening_average'],
+                    $lastNightStressParams['morning_average']);
                 $graphData[] = $lastNightStressParams;
             }
             return $graphData;

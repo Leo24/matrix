@@ -118,33 +118,30 @@ class ReportHelper
      */
     public function getStressMessage($lf, $hf)
     {
-        $LF = $lf / ( $lf + $hf ) * 100;
-        $HF = $hf / ( $lf + $hf ) * 100;
-
-        if ($LF>=45 && $LF<=55 && $HF>=45 && $HF<=55) {
+        if ($lf >= 45 && $lf <= 55 && $hf >= 45 && $hf <= 55) {
             return [
                 'confirmation text' => 'Extremely Low :D',
-                'category' => 'VERY GOOD'
+                'category'          => 'VERY GOOD'
             ];
-        } elseif (($LF>=35 && $LF<=45) && ($HF>=55 && $HF<=65) || ($LF>=55 && $LF<=65) && ($HF>=35 && $HF<=45)) {
+        } elseif ((($lf >= 35 && $lf <= 45) && ($hf >= 55 && $hf <= 65)) || (($lf >= 55 && $lf <= 65) && ($hf >= 35 && $hf <= 45))) {
             return [
-                    'confirmation text' => 'Relatively Low :)',
-                    'category' => 'GOOD'
+                'confirmation text' => 'Relatively Low :)',
+                'category'          => 'GOOD'
             ];
-        } elseif (($LF>=25 && $LF<=35) && ($HF>=65 && $HF<=75) || ($LF>=65 && $LF<=75) && ($HF>=25 && $HF<=35)) {
+        } elseif ((($lf >= 25 && $lf <= 35) && ($hf >= 65 && $hf <= 75)) || (($lf >= 65 && $lf <= 75) && ($hf >= 25 && $hf <= 35))) {
             return [
-                    'confirmation text' => 'Average :|',
-                    'category' => 'OKAY'
+                'confirmation text' => 'Average :|',
+                'category'          => 'OKAY'
             ];
-        } elseif (($LF>=75 && $LF<=85) && ($HF>=15 && $HF<=25) || ($LF>=15 && $LF<=25) && ($HF>=75 && $HF<=85)) {
+        } elseif ((($lf >= 75 && $lf <= 85) && ($hf >= 15 && $hf <= 25)) || (($lf >= 15 && $lf <= 25) && ($hf >= 75 && $hf <= 85))) {
             return [
-                    'confirmation text' => 'Relatively High :/',
-                    'category' => 'NOT GOOD'
+                'confirmation text' => 'Relatively High :/',
+                'category'          => 'NOT GOOD'
             ];
-        } elseif (($LF<=15 && $HF>=85) || ($LF>=85 && $HF<=15)) {
+        } elseif (($lf <= 15 && $hf >= 85) || ($lf >= 85 && $hf <= 15)) {
             return [
-                    'confirmation text' => 'Unusually High :(',
-                    'category' => 'BAD'
+                'confirmation text' => 'Unusually High :(',
+                'category'          => 'BAD'
             ];
         }
     }
