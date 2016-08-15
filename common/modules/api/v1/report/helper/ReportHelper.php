@@ -109,82 +109,43 @@ class ReportHelper
         }
     }
 
-
     /**
-     * Get message for Heart Rate daily report
+     * Get message for Stress daily report
      *
-     * @param $average
-     * @return string
+     * @param $lf
+     * @param $hf
+     * @return array
      */
-    public function getStressMessage($LF, $HF)
+    public function getStressMessage($lf, $hf)
     {
+        $LF = $lf / ( $lf + $hf ) * 100;
+        $HF = $hf / ( $lf + $hf ) * 100;
 
-        $LFpercent = $LF / ( $LF + $HF ) * 100;
-        $HFpercent = $HF / ( $LF + $HF ) * 100;
-
-        if ($LFpercent>=45 && $LFpercent<=55 && $HFpercent>=45 && $HFpercent<=55) {
+        if ($LF>=45 && $LF<=55 && $HF>=45 && $HF<=55) {
             return [
                 'confirmation text' => 'Extremely Low :D',
                 'category' => 'VERY GOOD'
             ];
-        } elseif (($LFpercent>=35 && $LFpercent<=45 && $HFpercent>=55 && $HFpercent<=65)
-            ||
-            ($LFpercent>=55 && $LFpercent<=65 && $HFpercent>=35 && $HFpercent<=45)
-        ) {
+        } elseif (($LF>=35 && $LF<=45) && ($HF>=55 && $HF<=65) || ($LF>=55 && $LF<=65) && ($HF>=35 && $HF<=45)) {
             return [
                     'confirmation text' => 'Relatively Low :)',
                     'category' => 'GOOD'
-                ];
-        } elseif (($LFpercent>=25 && $LFpercent<=35 && $HFpercent>=65 && $HFpercent<=75)
-            ||
-            ($LFpercent>=65 && $LFpercent<=75 && $HFpercent>=25 && $HFpercent<=35)) {
+            ];
+        } elseif (($LF>=25 && $LF<=35) && ($HF>=65 && $HF<=75) || ($LF>=65 && $LF<=75) && ($HF>=25 && $HF<=35)) {
             return [
                     'confirmation text' => 'Average :|',
                     'category' => 'OKAY'
-                ];
-        } elseif (($LFpercent>=75 && $LFpercent<=85 && $HFpercent>=15 && $HFpercent<=25)
-            ||
-            ($LFpercent>=15 && $LFpercent<=25 && $HFpercent>=75 && $HFpercent<=85)
-        ) {
+            ];
+        } elseif (($LF>=75 && $LF<=85) && ($HF>=15 && $HF<=25) || ($LF>=15 && $LF<=25) && ($HF>=75 && $HF<=85)) {
             return [
                     'confirmation text' => 'Relatively High :/',
                     'category' => 'NOT GOOD'
-                ];
-        } elseif (($LFpercent<=15 && $HFpercent>=85)
-            ||
-            ($LFpercent>=85 && $HFpercent<=15)) {
+            ];
+        } elseif (($LF<=15 && $HF>=85) || ($LF>=85 && $HF<=15)) {
             return [
                     'confirmation text' => 'Unusually High :(',
                     'category' => 'BAD'
-                ];
+            ];
         }
-
-
-
-
-        /*
-         * VERY GOOD 45 < %LF < 55 / 45 <
-%HF < 55 Extremely Low :D
-GOOD 35 < %LF < 45 / 55 <
-%HF < 65
-55 < %LF < 65 / 35 <
-%HF < 45 Relatively Low :)
-OKAY 25 < %LF < 35 / 65 <
-%HF < 75
-65 < %LF < 75 / 25 <
-%HF < 35 Average :|
-NOT GOOD 75 < %LF < 85 / 15 <
-%HF < 25
-15 < %LF < 25 / 75 <
-%HF < 85 Relatively High :/
-BAD %LF < 15 / %HF > 85
-%LF > 85 / %HF < 15 Unusually High :(
-         * */
-
-
-
     }
-    
-    
-    
 }
