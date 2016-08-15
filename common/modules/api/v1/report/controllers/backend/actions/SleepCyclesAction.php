@@ -3,6 +3,7 @@
 namespace common\modules\api\v1\report\controllers\backend\actions;
 
 use common\modules\api\v1\emfit\models\HrvData;
+use common\modules\api\v1\report\helper\ReportHelper;
 use Yii;
 use yii\base\Exception;
 use yii\web\BadRequestHttpException;
@@ -25,11 +26,16 @@ class SleepCyclesAction extends Action
      */
     public function run()
     {
+        /** @var  $reportHelper ReportHelper.php */
+        $reportHelper = new ReportHelper();
+
         $graphData = [];
         $params = \Yii::$app->request->queryParams;
+
         if (!isset($params['user_id']) || !isset($params['startDate']) || !isset($params['endDate']) || !isset($params['currentDate'])) {
             throw new BadRequestHttpException('Params startDate, endDate and user_id are required.');
         }
+
         try {
             /** @var  $SleepDataModel SleepData.php */
             $sleepDataModel = new SleepData();
@@ -45,14 +51,15 @@ class SleepCyclesAction extends Action
             $sleepCyclesGraphData = $sleepDataModel->sleepCyclesGraphData($params);
 
             if ($sleepCyclesGraphData) {
-                foreach ($sleepQualityData as $ln) {
+                foreach ($sleepCyclesGraphData as $ln) {
                     $graphData[] = [
                         'chart' => [
                             'axis_x'=> $ln['timestamp'],
-                            'axis_y'=> $ln['sleep_type'],
+                            'axis_y'=> $ln['sleep_type']
                         ],
                     ];
                 }
+                $sleepCyclesData['message'] = $reportHelper->getSleepCyclesMessage($sleepCyclesData['rem_sleep']);
                 $graphData[] = ['sleep_quality' => $sleepQualityData];
                 $graphData[] = ['sleep_recovery' => $sleepRecoveryData];
                 $graphData[] = ['sleep_cycles' => $sleepCyclesData];

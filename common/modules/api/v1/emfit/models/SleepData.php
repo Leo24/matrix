@@ -144,7 +144,7 @@ class SleepData extends ActiveRecord
     }
 
     /**
-     * Creates data provider instance with search query applied
+     *
      *
      * @param array $params
      *
@@ -153,11 +153,6 @@ class SleepData extends ActiveRecord
     public function sleepCyclesGraphData($params)
     {
         $this->load($params);
-//        $numDays = abs($this->endDate - $this->startDate)/60/60/24;
-//        $days = [];
-//        for ($i = 1; $i < $numDays; $i++) {
-//            $days[] = [date('Y m d', strtotime("+{$i} day", $this->endDate))];
-//        }
 
         $query = (new Query())
             ->select(['timestamp', 'sleep_type'])
@@ -166,26 +161,6 @@ class SleepData extends ActiveRecord
             ->andWhere(['between', 'timestamp', strtotime("-1 day", $this->startDate), $this->endDate]);
 
         return $query->all();
-
-//        $sleepCyclesGraphData = $query->all();
-//
-//        foreach ($sleepCyclesGraphData as $ln) {
-//            if ($ln['sleep_type'] == 'awake') {
-//
-//            } elseif($ln['sleep_type'] == 'rem'){
-//
-//            } elseif($ln['sleep_type'] == 'light'){
-//
-//            } elseif($ln['sleep_type'] == 'deep'){
-//
-//            }
-//        }
-
     }
 
-
-
-
-    
-    
 }

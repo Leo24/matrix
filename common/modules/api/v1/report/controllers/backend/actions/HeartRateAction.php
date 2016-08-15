@@ -2,6 +2,7 @@
 
 namespace common\modules\api\v1\report\controllers\backend\actions;
 
+use common\modules\api\v1\report\helper\ReportHelper;
 use Yii;
 use yii\base\Exception;
 use yii\web\BadRequestHttpException;
@@ -24,6 +25,9 @@ class HeartRateAction extends Action
      */
     public function run()
     {
+        /** @var  $reportHelper ReportHelper.php */
+        $reportHelper = new ReportHelper();
+
         $graphData = [];
         $params = \Yii::$app->request->queryParams;
         if (!isset($params['user_id']) || !isset($params['startDate']) || !isset($params['endDate']) || !isset($params['currentDate'])) {
@@ -35,8 +39,9 @@ class HeartRateAction extends Action
             /** @var  $SleepQualityModel $SleepQuality */
             $sleepQualityModel = new SleepQuality();
 
-            $heartRateGraphData = $calcDataModel->heartRateGraphData($params);
             $lastNightHeartRateParams = $sleepQualityModel->lastNightHeartRateParams($params);
+
+            $heartRateGraphData = $calcDataModel->heartRateGraphData($params, $lastNightHeartRateParams);
 
             if ($heartRateGraphData) {
                 foreach ($heartRateGraphData as $ln) {
@@ -47,6 +52,8 @@ class HeartRateAction extends Action
                         ],
                     ];
                 }
+
+                $lastNightHeartRateParams['message'] = $reportHelper->getHeartRateMessage($lastNightHeartRateParams['last_night']);
                 $graphData[] = $lastNightHeartRateParams;
             }
             return $graphData;
