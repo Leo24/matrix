@@ -22,11 +22,9 @@ use \yii\db\ActiveRecord;
  */
 class Notification extends ActiveRecord
 {
-    const BAD_TYPE = 'bad';
-    const NOT_GOOD_TYPE = 'not_good';
-    const OKEY_TYPE = 'okey';
-    const GOOD_TYPE = 'good';
-    const VERY_GOOD_TYPE = 'very_good';
+    const POSITIVITY_TYPE = 'positivity';
+    const NEGATIVITY_TYPE = 'negativity';
+    const NEUTRALITY_TYPE = 'neutrality';
 
     const REPORT_TAG = 'report';
     const EXPERIMENT_TAG = 'experiment';
@@ -106,11 +104,9 @@ class Notification extends ActiveRecord
     public function getTypeList()
     {
         return [
-            self::BAD_TYPE,
-            self::NOT_GOOD_TYPE,
-            self::OKEY_TYPE,
-            self::GOOD_TYPE,
-            self::VERY_GOOD_TYPE,
+            self::POSITIVITY_TYPE,
+            self::NEGATIVITY_TYPE,
+            self::NEUTRALITY_TYPE
         ];
     }
 

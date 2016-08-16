@@ -18,7 +18,7 @@ class m160802_074416_create_notification_table extends Migration
             'title'       => $this->string(255)->notNull(),
             'description' => $this->text()->defaultValue(null),
             'viewed'      => $this->boolean()->defaultValue(false),
-            'type'        => "ENUM('bad', 'not_good', 'okey', 'good', 'very_good') NOT NULL DEFAULT 'okey'",
+            'type'        => "ENUM('positivity', 'negativity', 'neutrality') NOT NULL DEFAULT 'neutrality'",
             'tag'         => "ENUM('report', 'experiment', 'tip', 'matrix', 'goal') NOT NULL DEFAULT 'report'",
             'created_at'  => $this->integer(11)->unsigned()->defaultValue(null),
             'updated_at'  => $this->integer(11)->unsigned()->defaultValue(null),
