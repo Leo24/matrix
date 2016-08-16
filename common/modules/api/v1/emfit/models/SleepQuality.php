@@ -284,8 +284,10 @@ class SleepQuality extends ActiveRecord
             ->from('sleep_quality')
             ->where(['user_id' => $this->user_id])
             ->andWhere(['between', 'from', strtotime("-1 day", $this->currentDate), $this->currentDate]);
-        
-        return $query->all();
+
+        /**todo уточнить какой параметр получать последний или предпоследний*/
+
+        return $query->one();
     }
 
     /**

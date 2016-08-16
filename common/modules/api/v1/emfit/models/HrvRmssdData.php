@@ -28,6 +28,8 @@ class HrvRmssdData extends ActiveRecord
     /** @var  $endDate */
     public $endDate;
 
+    /** @var  $endDate */
+    public $currentDate;
     /**
      * @inheritdoc
      */
@@ -44,7 +46,7 @@ class HrvRmssdData extends ActiveRecord
         return [
             [['user_id'], 'required'],
             [['user_id', 'rmssd', 'low_frequency', 'high_frequency', 'timestamp'], 'integer'],
-            [['startDate', 'endDate'], 'safe'],
+            [['startDate', 'endDate', 'currentDate'], 'safe'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -157,7 +159,7 @@ class HrvRmssdData extends ActiveRecord
             $highest = $this->getMaxHeartHealthForLastNight($result);
             foreach ($result as $heartHealth) {
                 if ($heartHealth['heart_rate'] > 120) {
-                    $heartHealth['heart_rate'] = ($highest + 10) / 10;
+                    $heartHealth['heart_rate'] = round($highest + 10);
                 }
                 $heartHealthData[] = [
                     'timestamp'  => $heartHealth['timestamp'],
@@ -196,11 +198,31 @@ class HrvRmssdData extends ActiveRecord
         $this->load($params);
 
         $query = (new Query())
-            ->select(['timestamp', '(low_frequency + high_frequency)/2 as stress_data'])
+            ->select(['timestamp', 'low_frequency as LF', 'high_frequency as HF'])
             ->from('hrv_rmssd_data')
             ->where(['user_id' => $this->user_id])
             ->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
 
         return $query->all();
+    }
+
+    /**
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    public function lastNightAverageStressLevel($params)
+    {
+        $this->load($params);
+
+        $query = (new Query())
+            ->from('hrv_rmssd_data')
+            ->where(['user_id' => $this->user_id])
+            ->andWhere(['between', 'timestamp', strtotime("-1 day", $this->currentDate), $this->currentDate]);
+
+        $average = $query->average('rmssd');
+
+        return $average;
     }
 }

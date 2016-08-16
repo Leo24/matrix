@@ -164,6 +164,30 @@ class HrvData extends ActiveRecord
 
         return $query->one();
     }
+    /**
+     *
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    public function lastNightStressParams($params)
+    {
+        $this->load($params);
+
+        $query = (new Query())
+            ->select([
+                'user_id',
+                'start_rmssd as evening_average',
+                'end_rmssd as morning_average',
+                'total_recovery as recovery'
+            ])
+            ->from('hrv_data')
+            ->where(['user_id' => $this->user_id])
+            ->andWhere(['between', 'timestamp', $this->startDate, $this->endDate]);
+
+        return $query->one();
+    }
 
     /**
      *
